@@ -35,7 +35,7 @@ Just so we can have some formatting consistency, let's all try and follow the sa
 
  - **class methods** - should be **mixedCase** (these are the same as functions)
 
- - **variables** - variable names should be **mixedCase**.
+ - **variables** - variable names should be **mixedCase**. An exception is if a variable name includes vector names (xyz, enu) in which case these can remain lower case.
 
 
 ## Project Structure ##

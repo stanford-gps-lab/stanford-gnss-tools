@@ -1,76 +1,80 @@
-function los_enub=find_los_enub(los_xyzb, usr_ehat, usr_nhat, usr_uhat, losmask)
+function losenub = findLOSenub(losxyzb, usereHat, usernHat, useruHat,...
+    losMask)
 
-%*************************************************************************
-%*     Copyright c 2001 The board of trustees of the Leland Stanford     *
-%*                      Junior University. All rights reserved.          *
-%*     This script file may be distributed and used freely, provided     *
-%*     this copyright notice is always kept with it.                     *
-%*                                                                       *
-%*     Questions and comments should be directed to Todd Walter at:      *
-%*     twalter@stanford.edu                                              *
-%*************************************************************************
+%findLOSenub converts 4D line of sight vectors from XYZ to East North Up
+%   (ENU)
 %
-%FIND_LOS_ENUB converts 4D line of sight vectors from XYZ to East North Up
-%
-%LOS_ENUB=FIND_LOS_XYZB(LOS_XYZB, USR_EHAT, USR_NHAT, USR_UHAT);
-%   Given n_los line of sight vectors in ECEF WGS-84 coordinates (X in first
+%losenub = findLOSenub(losxyzb, uesreHat, usernHat, useruHat)
+%   Given N line of sight (LOS) vectors in ECEF WGS-84 coordinates (X in first
 %   column, Y in second column, Z in the third column and 1 in the fourth) in
-%   LOS_XYZB and n_usr east, north, and up unit vectors (at the user location)
-%   in E_HAT, N_HAT, and U_HAT respectively this function returns the n_los
-%   line of sight unit vectors augmented by a one at the end in the East, North
+%   losxyzb and N east, north, and up unit vectors (at the user location)
+%   in usereHat, usernHat, and useruHat respectively this function returns the N
+%   LOS unit vectors augmented by a one at the end in the East, North
 %   and Up frame.  These LOS vectors may then be used to form the position
-%   solution.  Optional LOSMASK is a vector of indices (1 to n_usr*n_sat) 
-%   that specifies which LOS vectors to selectively compute.
-%  
-%   See also: FIND_LOS_XYZB CALC_LOS_ENUB
+%   solution.
+%
+%losenub = findLOSenub(losxyzb, uesreHat, usernHat, useruHat, losMask)
+%  losMask is an optional input vector [N*Mx1] of indices (1 to N*M) that
+%  specifies which LOS vectors to selectively compute.
+%
+%   See also: findLOSxyzb
+%
+%Copyright 2019 Stanford University GPS Laboratory
+%   This file is part of stanford-gnss-toolbox which is released under the
+%   MIT License. See `LICENSE.txt` for full license details.
+%   Questions and comments should be directed to the project at:
+%   https://github.com/stanford-gps-lab/stanford-gnss-tools
 
-%2001Mar26 Created by Todd Walter
-%2001Apr26 Modified by Wyant Chan   -   Added losmask feature
+[numLOS, ~] = size(losxyzb);
+[numUser, ~] = size(usereHat);
+numSat = numLOS/numUser;
 
-[n_los tmp]=size(los_xyzb);
-[n_usr tmp]=size(usr_ehat);
-n_sat=n_los/n_usr;
+% Check if losMask argument is present
 if (nargin==4)
-    losmask = [1:n_los]';
+    losMask = [1:numLOS]';
 end
-n_mask = size(losmask,1);    
-sat_idx=1:n_sat;
+numMask = length(losMask);
+satelliteID = 1:numSat;
 
-%expand the user east unit vector to match the lines of sight
-[t1 t2]=meshgrid(usr_ehat(:,3),sat_idx);
-e_hat(:,3)=reshape(t1,n_los,1);
+% expand the user east unit vector to match the lines of sight
+[temp1, ~] = meshgrid(usereHat(:,3), satelliteID);
+eHat(:,3) = reshape(temp1, numLOS, 1);
 
-[t1 t2]=meshgrid(usr_ehat(:,2),sat_idx);
-e_hat(:,2)=reshape(t1,n_los,1);
+[temp1, ~] = meshgrid(usereHat(:,2), satelliteID);
+eHat(:,2) = reshape(temp1, numLOS, 1);
 
-[t1 t2]=meshgrid(usr_ehat(:,1),sat_idx);
-e_hat(:,1)=reshape(t1,n_los,1);
-
-
-%expand the user north unit vector to match the lines of sight
-[t1 t2]=meshgrid(usr_nhat(:,3),sat_idx);
-n_hat(:,3)=reshape(t1,n_los,1);
-
-[t1 t2]=meshgrid(usr_nhat(:,2),sat_idx);
-n_hat(:,2)=reshape(t1,n_los,1);
-
-[t1 t2]=meshgrid(usr_nhat(:,1),sat_idx);
-n_hat(:,1)=reshape(t1,n_los,1);
+[temp1, ~] = meshgrid(usereHat(:,1), satelliteID);
+eHat(:,1) = reshape(temp1, numLOS, 1);
 
 
-%expand the user up unit vector to match the lines of sight
-[t1 t2]=meshgrid(usr_uhat(:,3),sat_idx);
-u_hat(:,3)=reshape(t1,n_los,1);
+% expand the user north unit vector to match the lines of sight
+[temp1, ~] = meshgrid(usernHat(:,3), satelliteID);
+nHat(:,3) = reshape(temp1, numLOS, 1);
 
-[t1 t2]=meshgrid(usr_uhat(:,2),sat_idx);
-u_hat(:,2)=reshape(t1,n_los,1);
+[temp1, ~] = meshgrid(usernHat(:,2), satelliteID);
+nHat(:,2) = reshape(temp1, numLOS, 1);
 
-[t1 t2]=meshgrid(usr_uhat(:,1),sat_idx);
-u_hat(:,1)=reshape(t1,n_los,1);
+[temp1, ~] = meshgrid(usernHat(:,1), satelliteID);
+nHat(:,1) = reshape(temp1, numLOS, 1);
 
-%calculate the LOS vectors in the ENU frame
-los_enub=calc_los_enub(los_xyzb(losmask,:), ...
-        e_hat(losmask,:), n_hat(losmask,:), u_hat(losmask,:));
+
+% expand the user up unit vector to match the lines of sight
+[temp1, ~] = meshgrid(useruHat(:,3), satelliteID);
+uHat(:,3) = reshape(temp1, numLOS, 1);
+
+[temp1, ~] = meshgrid(useruHat(:,2), satelliteID);
+uHat(:,2) = reshape(temp1, numLOS, 1);
+
+[temp1, ~] = meshgrid(useruHat(:,1), satelliteID);
+uHat(:,1) = reshape(temp1, numLOS, 1);
+
+% calculate the LOS vectors in the ENU frame
+
+% dot the east unit vector with the los vector to determine 
+% -cos(elev)*sin(azim)
+losenub(:,1)=sum((-eHat.*losxyzb(:,1:3))')';
+
+end
 
 
 
