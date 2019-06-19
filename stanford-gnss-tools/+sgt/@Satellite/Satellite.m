@@ -1,31 +1,26 @@
 classdef Satellite < matlab.mixin.Copyable
 % Satellite     an almanac based representation of a satellite in orbit.
-%   TODO: more detailed description as needed
 %
-%   s = maast.tools.Satellite(prn, e, toa, inc, rora, sqrta, raan, w,
-%   m0, af0, af1) create a satellite, or a list of satellites
+%   s = sgt.Satellite(prn, e, toa, inc, rora, sqrta, raan, w,
+%   m0, af0, af1, varargin) create a satellite, or a list of satellites
 %   from the specified almanac parameters.  Each parameter can
 %   either be a scalar or a column vector of length N for
 %   creating a list of N satellites.  If creating an array of
 %   satellites, all the inputs must be column vectors of the
 %   same length.
 %
-%   TODO: add documentation for the static constructors for creating a
-%   satellite from the alm matrix or from a yuma file
+%   varargin arguments:
 %
-%   See Also: maast.tools.Satellite.fromAlmMatrix,
-%   maast.tools.Satellite.fromYuma
+%   See Also: sgt.Satellite.fromAlmMatrix,
+%   sgt.Satellite.fromYuma
 
 % Copyright 2019 Stanford University GPS Laboratory
-%   This file is part of MAAST which is released under the MIT License.
-%   See `LICENSE.txt` for full license details.
+%   This file is part of stanford-gnss-tools which is released under the 
+%   MIT License. See `LICENSE.txt` for full license details.
 %   Questions and comments should be directed to the project at:
 %   https://github.com/stanford-gps-lab/maast
 
     % the almanac properties -> can only be set in the constructor
-    % TODO: decide if want these to actually be immutable or just
-    % private...
-    % TODO: add more description to the parameters as needed
     properties(SetAccess = immutable)
         % PRN - the satellite PRN code
         PRN
@@ -64,16 +59,15 @@ classdef Satellite < matlab.mixin.Copyable
     end
 
     % the derived properties
-    properties (Dependent, SetAccess = private)
+    properties (Dependent, SetAccess = protected)
         % Period - the orbital period of the satellite in [sec]
         Period
         
         % the mean motion of the satellite in [1/sec]
         n
-        % TODO: define any additional dependent properties for a satellite
-        % here
     end
 
+    % Constructor
     methods
 
         function obj = Satellite(prn, e, toa, inc, rora, sqrta, raan, w, m0, af0, af1)
@@ -89,13 +83,10 @@ classdef Satellite < matlab.mixin.Copyable
                 error('not enough input parameters');
             end
 
-            % TODO: need to do much more formal checking on the inputs,
-            % right now assuming that everything is properly entered...
-            % (bad assumption)
             Nsats = length(prn);
 
             % create a list of satellites given the number of satellites
-            obj(Nsats) = maast.tools.Satellite();
+            obj(Nsats) = sgt.Satellite();
 
             % convert each row of information to satellite data
             for i = 1:Nsats
@@ -116,25 +107,20 @@ classdef Satellite < matlab.mixin.Copyable
         % define the dependent property 
         
         function period = get.Period(obj)
-            % TODO: implement this
             period = NaN;
         end
 
         function n = get.n(obj)
-            % TODO: implement this
             n = NaN;
         end
 
     end
 
-    % non-static method signatures
+    % non-static methods
     methods
-        % NOTE: this only computes the position, not the velocity which is
-        % also needed
+        % Get Position in ECEF at time t
         pos = getPosition(obj, t)
-        % TODO: add a plotting function
-        % TODO: add a function to get position in different frames (e.g.
-        % LLA or ECI)
+
     end
 
     % static methods
