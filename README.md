@@ -1,4 +1,4 @@
-# stanford-gnss-tools (sgt)
+# stanfordgnsstools (sgt)
 This is a toolbox with functions useful for coordinate transformations, data parsing and a host of other needs. MAAST users will be required to have this toolbox in their path.
 
 For now, you can find some helpful tips and overview in the following sections:
