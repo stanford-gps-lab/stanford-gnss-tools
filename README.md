@@ -10,7 +10,7 @@ For now, you can find some helpful tips and overview in the following sections:
 
 ## Setup ##
 
-The easiest way to "setup" everything to be able to use the toolbox seamlessly in MATLAB is to add the `stanford-gnss-tools` directory to your MATLAB path.  This will make everything within that directory accessible to you anywhere in MATLAB.
+The easiest way to "setup" everything to be able to use the toolbox seamlessly in MATLAB is to add the `stanfordgnsstools` directory to your MATLAB path.  This will make everything within that directory accessible to you anywhere in MATLAB.
 
 
 ## Git Branch Structure ##
