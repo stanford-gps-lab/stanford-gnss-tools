@@ -1,8 +1,9 @@
 classdef Satellite < matlab.mixin.Copyable
 % Satellite     an almanac based representation of a satellite in orbit.
 %
-%   s = sgt.Satellite(prn, e, toa, inc, rora, sqrta, raan, w,
-%   m0, af0, af1, varargin) create a satellite, or a list of satellites
+%   s = sgt.Satellite(prn, eccentricity, toa, inclination, 
+%   rateOfRightAscension, sqrta, raan, argumentOfPerigee, meanAnomaly, af0, 
+%   af1, varargin) create a satellite, or a list of satellites
 %   from the specified almanac parameters.  Each parameter can
 %   either be a scalar or a column vector of length N for
 %   creating a list of N satellites.  If creating an array of
@@ -43,7 +44,7 @@ classdef Satellite < matlab.mixin.Copyable
         
         % RightAscension - right ascension at the time of applicability
         % (Omega_0) in [rad]
-        RightAscension
+        RAAN
         
         % ArgumentOfPerigee - argume of perigee (omega) in [rad]
         ArgumentOfPerigee
@@ -70,7 +71,9 @@ classdef Satellite < matlab.mixin.Copyable
     % Constructor
     methods
 
-        function obj = Satellite(prn, e, toa, inc, rora, sqrta, raan, w, m0, af0, af1)
+        function obj = Satellite(prn, eccentricity, toa, inclination,...
+                rateOfRightAscension, sqrta, raan, argumentOfPerigee,...
+                meanAnomaly, af0, af1, varargin)
             
             % need to allow for an empty constructor for list creation
             if nargin == 0
@@ -91,14 +94,14 @@ classdef Satellite < matlab.mixin.Copyable
             % convert each row of information to satellite data
             for i = 1:Nsats
                 obj(i).PRN = prn(i);
-                obj(i).Eccentricity = e(i);
+                obj(i).Eccentricity = eccentricity(i);
                 obj(i).TOA = toa(i);
-                obj(i).Inclination = inc(i);
-                obj(i).RateOfRightAscension = rora(i);
+                obj(i).Inclination = inclination(i);
+                obj(i).RateOfRightAscension = rateOfRightAscension(i);
                 obj(i).SqrtA = sqrta(i);
-                obj(i).RightAscension = raan(i);
-                obj(i).ArgumentOfPerigee = w(i);
-                obj(i).MeanAnomaly = m0(i);
+                obj(i).RAAN = raan(i);
+                obj(i).ArgumentOfPerigee = argumentOfPerigee(i);
+                obj(i).MeanAnomaly = meanAnomaly(i);
                 obj(i).AF0 = af0(i);
                 obj(i).AF1 = af1(i);
             end
