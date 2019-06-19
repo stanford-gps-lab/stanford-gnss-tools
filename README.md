@@ -44,12 +44,12 @@ Just to help navigate the folder structure and what some of the symbols mean, he
 
 The top level directory (where this is file is) contains 1 directory:
 
- - `stanford-gnss-tools` - the toolbox itself.  This is what you should add to your MATLAB path.  See the details below on how this is structured.
+ - `stanfordgnsstools` - the toolbox itself.  This is what you should add to your MATLAB path.  See the details below on how this is structured.
 
 
 ### The Toolbox ###
 
-As mentioned above, the toolbox itself is contained in the `stanford-gnss-tools` directory.  The toolbox uses some specific MATLAB syntax to name some of the directories (for specific details, check out [this link](https://www.mathworks.com/help/matlab/matlab_oop/scoping-classes-with-packages.html)).
+As mentioned above, the toolbox itself is contained in the `stanfordgnsstools` directory.  The toolbox uses some specific MATLAB syntax to name some of the directories (for specific details, check out [this link](https://www.mathworks.com/help/matlab/matlab_oop/scoping-classes-with-packages.html)).
 
 A short summary of MATLAB directory syntax:
 
