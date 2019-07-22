@@ -59,15 +59,6 @@ classdef Satellite < matlab.mixin.Copyable
         AF1
     end
 
-    % the derived properties
-    properties (Dependent, SetAccess = protected)
-        % Period - the orbital period of the satellite in [sec]
-        Period
-        
-        % the mean motion of the satellite in [1/sec]
-        n
-    end
-
     % Constructor
     methods
 
@@ -107,15 +98,6 @@ classdef Satellite < matlab.mixin.Copyable
             end
         end
 
-        % define the dependent property 
-        
-        function period = get.Period(obj)
-            period = NaN;
-        end
-
-        function n = get.n(obj)
-            n = NaN;
-        end
 
     end
 

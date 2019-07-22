@@ -1,16 +1,16 @@
 function sats = fromYuma(filename)
 % fromYuma  reads in a yuma almanac file and creates a list of Satellites
 % based on the almanac parameters.
-%   sats = maast.tools.Satellite.fromYuma(filename) creates the satellite
+%   sats = sgt.Satellite.fromYuma(filename) creates the satellite
 %   list from the yuma almanac file given in filename.  Filename can be
 %   either a single filename of a cell array of filenames.  If the input is
 %   a cell array of length N, the sats output will be a cell array of
 %   length N of satellite lists.
 %
-% See Also: maast.tools.Satellite.fromAlmMatrix, maast.tools.Satellite
+% See Also: sgt.Satellite.fromAlmMatrix, sgt.Satellite
 
 % Copyright 2019 Stanford University GPS Laboratory
-%   This file is part of MAAST which is released under the MIT License.
+%   This file is part of Stanford GNSS Tools which is released under the MIT License.
 %   See `LICENSE.txt` for full license details.
 %   Questions and comments should be directed to the project at:
 %   https://github.com/stanford-gps-lab/maast
@@ -41,7 +41,7 @@ else
     [prn, e, toa, inc, rora, sqrta, raan, w, m0, af0, af1] = parseFile(filename);
     
     % create the satellite list
-    sats = maast.tools.Satellite(prn, e, toa, inc, rora, ...
+    sats = sgt.Satellite(prn, e, toa, inc, rora, ...
         sqrta, raan, w, m0, af0, af1);
 end
 
