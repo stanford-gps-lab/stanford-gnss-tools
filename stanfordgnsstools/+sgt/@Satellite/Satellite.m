@@ -1,7 +1,7 @@
 classdef Satellite < matlab.mixin.Copyable
 % Satellite     an almanac based representation of a satellite in orbit.
 %
-%   s = sgt.Satellite(prn, eccentricity, toa, inclination, 
+%   satellite = sgt.Satellite(prn, eccentricity, toa, inclination, 
 %   rateOfRightAscension, sqrta, raan, argumentOfPerigee, meanAnomaly, af0, 
 %   af1, varargin) create a satellite, or a list of satellites
 %   from the specified almanac parameters.  Each parameter can
@@ -121,8 +121,8 @@ classdef Satellite < matlab.mixin.Copyable
 
     % non-static methods
     methods
-        % Get Position in ECEF at time t
-        pos = getPosition(obj, t)
+        % Get Position in ECEF at specified time
+        position = getPositionECEF(obj, time, frame)
 
     end
 

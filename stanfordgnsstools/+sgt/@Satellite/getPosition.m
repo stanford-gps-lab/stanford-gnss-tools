@@ -1,22 +1,21 @@
-function satPos = getPosition(obj, time)
+function satellitePosition = getPosition(obj, time, frame)
 % getPosition   get the SatellitePosition of the satellite for a given time
 %   compute the SatellitePosition (combined ECEF and LLH position) of the
 %   satellite from the alamanac data that defines the orbit of the
 %   satellite for a given time or a set of times provided.
 %
-%   satPos = getPosition(satellite, time) computes the SatellitePosition of
-%   a satellite (or an array of satellites) at the time(s) provided.  For
-%   an array of S satellites and T times, the resulting position matrix
-%   will be an SxT matrix of satellite positions defined as
-%   SatellitePosition.
-%
-% See Also: maast.SatellitePosition
+%   satellitePosition = getPosition(satellite, time, frame) computes the 
+%   SatellitePosition of a satellite (or an array of satellites) at the 
+%   time(s) provided. For an array of S satellites and T times, the 
+%   resulting position matrix will be an SxT matrix of satellite positions 
+%   defined as SatellitePosition.
+
 
 % Copyright 2019 Stanford University GPS Laboratory
-%   This file is part of MAAST which is released under the MIT License.
-%   See `LICENSE.txt` for full license details.
+%   This file is part of the Stanford GNSS Tools which is released under 
+%   the MIT License. See `LICENSE.txt` for full license details.
 %   Questions and comments should be directed to the project at:
-%   https://github.com/stanford-gps-lab/maast
+%   https://github.com/stanford-gps-lab/stanford-gnss-tools
 
 
 
@@ -70,7 +69,7 @@ Mk = mean_anomaly + n0.*Tk;  % dim: SxT
 E0 = Mk + 100;
 Ek = Mk;
 i = 1;
-while(abs(Ek-E0) > 1e-12 & i < 250)
+while (abs(Ek-E0) > 1e-12 && i < 250)
   E0 = Ek;
   Ek = Mk + eccen.*sin(E0);
   i = i + 1;
@@ -129,7 +128,7 @@ posecef(:,3,:) = yyk.*sini;
 % NOTE: need to squeeze the posecef matrix to remove any singleton
 % dimensions since that's how the constructor for SatellitePosition is
 % built
-satPos = pppanal.SatellitePosition(obj, time(1,:), 'ecef', squeeze(posecef));
+satellitePosition = pppanal.SatellitePosition(obj, time(1,:), 'ecef', squeeze(posecef));
 
 
 % original code for creating the position vector:
