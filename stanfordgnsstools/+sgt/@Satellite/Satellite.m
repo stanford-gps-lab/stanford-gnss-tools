@@ -19,7 +19,7 @@ classdef Satellite < matlab.mixin.Copyable
 %   This file is part of stanford-gnss-tools which is released under the 
 %   MIT License. See `LICENSE.txt` for full license details.
 %   Questions and comments should be directed to the project at:
-%   https://github.com/stanford-gps-lab/maast
+%   https://github.com/stanford-gps-lab/stanford-gnss-tools
 
     % the almanac properties -> can only be set in the constructor
     properties(SetAccess = immutable)

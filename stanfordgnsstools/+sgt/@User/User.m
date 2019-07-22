@@ -1,23 +1,20 @@
-classdef User < handle
+classdef User < matlab.mixin.Copyable
 % User 	a model for a user at a specific location.
 %   A user is a container for a fixed location from which observations or
 %   frame transformations can take place.
-%   TODO: more detailed description as needed.
 %
-%   user = maast.tools.User(posllh) creates user(s) at the (lat, lon, alt)
+%   user = sgt.User(posllh) creates user(s) at the (lat, lon, alt)
 %   positions specified in posllh.  posllh should be an Nx3 matrix for the
 %   creation of N users with each row containing the (lat, lon, alt) of the
 %   user in [deg, deg, m].
 %
-% Examples:
-%   TODO: add examples
 %
 
 % Copyright 2019 Stanford University GPS Laboratory
-%   This file is part of MAAST which is released under the MIT License.
-%   See `LICENSE.txt` for full license details.
+%   This file is part of the Stanford GNSS Tools which is released under 
+%   the MIT License. See `LICENSE.txt` for full license details.
 %   Questions and comments should be directed to the project at:
-%   https://github.com/stanford-gps-lab/maast
+%   https://github.com/stanford-gps-lab/stanford-gnss-tools
 
 	properties
         % ID - the ID of the user
@@ -70,17 +67,17 @@ classdef User < handle
 
             % get the number of sites
             [Nsites, ~] = size(posllh);
-            obj(Nsites) = maast.tools.User();
+            obj(Nsites) = sgt.User();
 
             latRad = posllh(:,1)*pi/180;
             lonRad = posllh(:,2)*pi/180;
 
             % bulk convert the LLH positions to ECEF positions
-%             posECEF = maast.constants.EarthConstants.R*[
+%             posECEF = sgt.constants.EarthConstants.R*[
 % 			    cos(latRad).*cos(lonRad), ...
 % 			    cos(latRad).*sin(lonRad), ...
 % 			    sin(latRad)];
-            posECEF = maast.tools.llh2ecef(posllh);
+            posECEF = sgt.tools.llh2ecef(posllh);
 
             % default to a sequential id set if no ID information passed
             ids = res.ID;

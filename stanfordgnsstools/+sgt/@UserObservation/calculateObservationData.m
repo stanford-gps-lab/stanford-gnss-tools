@@ -53,4 +53,4 @@ obj.AzimuthAngles = atan2(losenu(1,svInView)', losenu(2,svInView)');
 %
 % compute the range measurement to the satellites in view
 %
-obj.RangeMeasurement = r';
+obj.Range = r';

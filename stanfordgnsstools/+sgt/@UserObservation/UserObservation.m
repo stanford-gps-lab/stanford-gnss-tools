@@ -54,9 +54,9 @@ classdef UserObservation < handle
         % NumSatellitesInView - the number of satellites in view
         NumSatellitesInView
         
-        % RangeMeasurement - the range measurement to each of the
+        % Range - the range measurement to each of the
         % satellites in view as a column vector of length Sinview
-        RangeMeasurement
+        Range
     end
     
 
@@ -69,12 +69,12 @@ classdef UserObservation < handle
                 return;
             end
 
-            % NOTE: satPos is an SxT matrix which will return a 1xT array
-            % of observations
+            % NOTE: satPos is a SatellitePosition object which will return 
+            % a 1xT array of observations
             [~, T] = size(satPos);
             
             
-            obj(T) = maast.tools.UserObservation();
+            obj(T) = sgt.UserObservation();
             for i = 1:T
                 % set the properties
                 obj(i).User = user;
