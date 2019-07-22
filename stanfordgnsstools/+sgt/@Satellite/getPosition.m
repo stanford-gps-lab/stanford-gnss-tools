@@ -13,6 +13,8 @@ function satellitePosition = getPosition(obj, time, frame)
 %   contains an array which will be [X; Y; Z] for 'ECEF' and
 %   [Latitude; Longitude; Altitude] for 'LLH'.
 %   Current frames supported are: 'ECEF', 'LLH'
+%
+% See also: sgt.SatellitePosition
 
 
 % Copyright 2019 Stanford University GPS Laboratory

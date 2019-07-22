@@ -10,8 +10,8 @@ classdef EarthConstants
 	properties (Constant)
 
 		R = 6.37813649e6;        	% mean equitorial radius [m]
-		mu = 3.986004418e14;      	% Gravitational Parameter (mu = G*M_earth) [m^3/s^2]
-		omega = 7.29211585530e-5; 	% mean angular velocity [rad/s]
+		mu = 3.986005e14;      	% Gravitational Parameter (mu = G*M_earth) [m^3/s^2]
+		omega = 7.292115e-5; 	% mean angular velocity [rad/s]
 		J_2 = 1.0826300e-3;        	% second zonal harmonic [-]
 		E2 = 0.006694385000;      	% eccentricity^ 2[-]
 
