@@ -65,7 +65,6 @@ classdef UserObservation < matlab.mixin.Copyable
         Range
     end
     
-
     methods
 
         function obj = UserObservation(user, satPos)
