@@ -9,6 +9,12 @@ function [trise] = findTRise(t, satellites, users)
 %
 % TODO: need to decide on an output format here that works best...
 
+% Copyright 2019 Stanford University GPS Laboratory
+%   This file is part of the Stanford GNSS Tools which is released under 
+%   the MIT License. See `LICENSE.txt` for full license details.
+%   Questions and comments should be directed to the project at:
+%   https://github.com/stanford-gps-lab/stanford-gnss-tools
+
 % get some dimensions
 S = length(satellites);
 U = length(users);

@@ -16,7 +16,6 @@ function satellitePosition = getPosition(obj, time, frame)
 %
 % See also: sgt.SatellitePosition
 
-
 % Copyright 2019 Stanford University GPS Laboratory
 %   This file is part of the Stanford GNSS Tools which is released under
 %   the MIT License. See `LICENSE.txt` for full license details.

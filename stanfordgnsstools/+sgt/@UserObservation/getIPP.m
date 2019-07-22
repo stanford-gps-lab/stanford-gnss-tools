@@ -6,6 +6,12 @@ function ipp = getIPP(obj)
 % NOTE: currently only works for a single observation (single user)
 % TODO: get this to work on a set of observations at once
 
+% Copyright 2019 Stanford University GPS Laboratory
+%   This file is part of the Stanford GNSS Tools which is released under 
+%   the MIT License. See `LICENSE.txt` for full license details.
+%   Questions and comments should be directed to the project at:
+%   https://github.com/stanford-gps-lab/stanford-gnss-tools
+
 % convert angles to radian
 el = obj.ElevationAngles * pi/180;
 az = obj.AzimuthAngles * pi/180;

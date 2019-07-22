@@ -8,6 +8,12 @@ function usrs = createFromLLHFile(llhfile, polyfile)
 %   users from the LLH information in the file.
 %
 
+% Copyright 2019 Stanford University GPS Laboratory
+%   This file is part of the Stanford GNSS Tools which is released under 
+%   the MIT License. See `LICENSE.txt` for full license details.
+%   Questions and comments should be directed to the project at:
+%   https://github.com/stanford-gps-lab/stanford-gnss-tools
+
 % if a polygon file was provided for the bounds for the user, load in the
 % polygon vertices to be able to determine the bounds for the polygon
 if nargin < 2

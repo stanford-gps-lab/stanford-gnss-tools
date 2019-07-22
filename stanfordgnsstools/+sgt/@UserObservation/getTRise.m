@@ -8,6 +8,12 @@ function trise = getTRise(obj)
 % TODO: make this work on a list of user observations (for a single user)
 % and then make this work on even more dimensionality
 
+% Copyright 2019 Stanford University GPS Laboratory
+%   This file is part of the Stanford GNSS Tools which is released under 
+%   the MIT License. See `LICENSE.txt` for full license details.
+%   Questions and comments should be directed to the project at:
+%   https://github.com/stanford-gps-lab/stanford-gnss-tools
+
 % NOTE: for now U should be 1, if it isn't this script will fail
 U = length(obj);
 S = length(obj.SatellitePositions);
