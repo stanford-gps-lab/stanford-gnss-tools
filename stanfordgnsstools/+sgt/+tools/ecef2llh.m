@@ -42,7 +42,7 @@ end
 % constant (would just expand it here).
 
 % setup
-f = maast.constants.EarthConstants.f;
+f = sgt.constants.EarthConstants.f;
 e2 = (2 - f) * f;
 p = sqrt(x.^2 + y.^2);
 
@@ -52,7 +52,7 @@ lon = atan2(y, x);
 
 % setup the iterations that are required for computing latitude and height
 lat = atan2(z./p, 0.01);
-r_N = maast.constants.EarthConstants.R./sqrt(1 - e2*sin(lat).^2);
+r_N = sgt.constants.EarthConstants.R./sqrt(1 - e2*sin(lat).^2);
 h = p./cos(lat) - r_N;
 
 % iterate until end condition is met (height value change is <1e-4)
@@ -69,7 +69,7 @@ while abs(h - oldH) > 1e-4
 		lat = atan2(num, den);
 
 		% compute height
-		r_N = maast.constants.EarthConstants.R./sqrt(1 - e2*sin(lat).^2);
+		r_N = sgt.constants.EarthConstants.R./sqrt(1 - e2*sin(lat).^2);
 		h = p./cos(lat) - r_N;
 end
 

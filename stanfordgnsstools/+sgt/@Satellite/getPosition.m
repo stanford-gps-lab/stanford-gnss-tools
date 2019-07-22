@@ -54,7 +54,7 @@ meanAnomaly = repmat([obj(:).MeanAnomaly]', 1, T);
 argumentOfPerigee = repmat([obj(:).ArgumentOfPerigee]', 1, T);
 inclination = repmat([obj(:).Inclination]', 1, T);
 rora = repmat([obj(:).RateOfRightAscension]', 1, T);
-rightAscension = repmat([obj(:).RightAscension]', 1, T);
+raan = repmat([obj(:).RAAN]', 1, T);
 
 % expand the time vector
 time = repmat(time, S, 1);
@@ -120,7 +120,7 @@ ykOrbital = rk.*sinuk;  % dim: SxT
 
 % Compute corrected longitude of ascending node
 Omegakdot = rora - CONST_OMEGA_E;
-Omegak = rightAscension + Omegakdot.*Tk - CONST_OMEGA_E * mod(toa, 604800);
+Omegak = raan + Omegakdot.*Tk - CONST_OMEGA_E * mod(toa, 604800);
 
 cosOmegak = cos(Omegak);
 sinOmegak = sin(Omegak);

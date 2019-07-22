@@ -1,4 +1,4 @@
-classdef MathConstants
+classdef UniversalConstants
 % MathConstants     math constants defined in WGS84
     
     properties (Constant)

@@ -122,14 +122,14 @@ classdef Satellite < matlab.mixin.Copyable
     % non-static methods
     methods
         % Get Position in ECEF at specified time
-        position = getPositionECEF(obj, time, frame)
+        position = getPosition(obj, time, frame)
 
     end
 
     % static methods
     methods (Static)
-        s = fromAlmMatrix(alm)
-        s = fromYuma(filename)
+        satellite = fromAlmMatrix(alm)
+        satellite = fromYuma(filename)
     end
 
 end
