@@ -1,11 +1,11 @@
-classdef SatellitePosition < handle
+classdef SatellitePosition < matlab.mixin.Copyable
 % SatellitePosition     a container for the position of a satellite at a
 % given time in both LLH and ECEF coordinates.
 %
-%   p = maast.tools.SatellitePosition(satellite, time, posType, pos)
+%   p = sgt.SatellitePosition(satellite, time, posType, pos)
 %   creates a SatellitePosition from a satellite (satellite) at a given
 %   time (time). The position type is specified by posType (either 'llh' or
-%   'ecef') with the position given by pos.  The constructor will
+%   'ecef') with the position given by pos. The constructor will
 %   automatically compute the other position type so that the resulting
 %   SatellitePosition contains both types of positions.  For a single
 %   satellite, time and pos, the result is a single SatellitePosition.  If
@@ -16,10 +16,8 @@ classdef SatellitePosition < handle
 %   array.  For S satellites and T times, the pos input must be an Sx3xT
 %   matrix and the output will be an SxT matrix.
 %
-% Examples:
-%   TODO: add some examples
 %
-% See Also: maast.tools.Satellite
+% See Also: sgt.Satellite
     
     
     % the elements that define a position
@@ -81,7 +79,7 @@ classdef SatellitePosition < handle
                     % matrix
                     posLLHperm = permute(posLLH, [1 3 2]);
                     posLLHall = reshape(posLLHperm, S*T, 3);
-                    posECEFall = maast.tools.llh2ecef(posLLHall);
+                    posECEFall = sgt.tools.llh2ecef(posLLHall);
                     posECEFperm = reshape(posECEFall, S, T, 3);
                     posECEF = permute(posECEFperm, [1 3 2]);
 
@@ -94,7 +92,7 @@ classdef SatellitePosition < handle
                     % matrix
                     posECEFperm = permute(posECEF, [1 3 2]);
                     posECEFall = reshape(posECEFperm, S*T, 3);
-                    posLLHall = maast.tools.ecef2llh(posECEFall);
+                    posLLHall = sgt.tools.ecef2llh(posECEFall);
                     posLLHperm = reshape(posLLHall, S, T, 3);
                     posLLH = permute(posLLHperm, [1 3 2]);
                     
@@ -103,7 +101,7 @@ classdef SatellitePosition < handle
             end
             
             % create the output as an SxT matrix
-            obj(S,T) = maast.tools.SatellitePosition();
+            obj(S,T) = sgt.SatellitePosition();
             for s = 1:S
                 for t = 1:T
                     obj(s,t).Satellite = satellite(s);

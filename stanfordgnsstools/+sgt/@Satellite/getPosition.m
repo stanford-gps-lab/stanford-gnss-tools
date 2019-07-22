@@ -1,32 +1,34 @@
 function satellitePosition = getPosition(obj, time, frame)
 % getPosition   get the SatellitePosition of the satellite for a given time
-%   compute the SatellitePosition of the satellite from the alamanac data 
-%   that defines the orbit of the satellite for a given time or a set of 
+%   compute the SatellitePosition of the satellite from the alamanac data
+%   that defines the orbit of the satellite for a given time or a set of
 %   times provided. The reference frame is by default ECEF, but can be
 %   specified as an input.
 %
-%   satellitePosition = getPosition(satellite, time, frame) computes the 
-%   SatellitePosition of a satellite (or an array of satellites) at the 
-%   time(s) provided. For an array of S satellites and T times, the 
-%   resulting position matrix will be an SxT cell matrix of satellite 
-%   positions defined as SatellitePosition. Each cell will contain a 3x1 
-%   array which will be [X; Y; Z] for 'ECEF' and 'ECI', and 
-%   [Latitude; Longitude; Altitude] for 'LLA'.
-%   Current frames supported are: 'ECEF', 'ECI', 'LLA'
+%   satellitePosition = getPosition(satellite, time, frame) computes the
+%   SatellitePosition of a satellite (or an array of satellites) at the
+%   time(s) provided. For an array of S satellites and T times, the
+%   resulting position matrix will be an Sx3xT cell matrix of satellite
+%   positions defined as SatellitePosition. Each satellite at each time
+%   contains an array which will be [X; Y; Z] for 'ECEF' and
+%   [Latitude; Longitude; Altitude] for 'LLH'.
+%   Current frames supported are: 'ECEF', 'LLH'
 
 
 % Copyright 2019 Stanford University GPS Laboratory
-%   This file is part of the Stanford GNSS Tools which is released under 
+%   This file is part of the Stanford GNSS Tools which is released under
 %   the MIT License. See `LICENSE.txt` for full license details.
 %   Questions and comments should be directed to the project at:
 %   https://github.com/stanford-gps-lab/stanford-gnss-tools
 
+% Set frame if frame not specified
+if nargin < 3
+    frame = 'ECEF';
+end
 
-
-% get constants needed
+% Get constants needed
 CONST_MU_E = sgt.constants.EarthConstants.mu;
 CONST_OMEGA_E = sgt.constants.EarthConstants.omega;
-
 
 %
 % Setup
@@ -73,65 +75,73 @@ E0 = Mk + 100;  % dim: SxT
 Ek = Mk;
 i = 1;
 while (abs(Ek-E0) > 1e-12 && i < 250)
-  E0 = Ek;
-  Ek = Mk + eccentricity.*sin(E0);
-  i = i + 1;
+    E0 = Ek;
+    Ek = Mk + eccentricity.*sin(E0);
+    i = i + 1;
 end
 
-cosEk = cos(Ek); % dim: SxT
+cosEk = cos(Ek);
 sinEk = sin(Ek);
 
 
 % c1 = 1 - eccen .* cos_Ek;
 % Ek_dot = n0./c1;
 
-c2 = sqrt(1 - eccentricity.*eccentricity);
-vk = atan2(c2.*sinEk, cosEk-eccentricity);
+% Compute true anomaly
+c2 = sqrt(1 - eccentricity.^2);
+vk = atan2(c2.*sinEk, cosEk-eccentricity);  % dim: SxT
 % vk_dot = Ek_dot.*c2./c1;
 
+% Compute argument of latitude
 phik = vk + argumentOfPerigee;  % dim: SxT
 
-uk = phik;
+% Compute corrected argument of latitude
+uk = phik;  % dim: SxT
 % uk_dot = vk_dot;
 
-rk = axis .* (1 - eccentricity.*cosEk);  % dim: SxT
+% Compute corrected radius
+rk = axis.*(1 - eccentricity.*cosEk);  % dim: SxT
 % rk_dot = axis.*eccen.*Ek_dot.*sin_Ek;
 
+% Compute corrected inclination
 ik = inclination;  % dim: SxT
 
-cos_uk = cos(uk);
-sin_uk = sin(uk);
+cosuk = cos(uk);
+sinuk = sin(uk);
 
-xxk = rk.*cos_uk;  % dim: SxT
+% Compute position in orbital plane
+xkOrbital = rk.*cosuk;  % dim: SxT
 % xxk_dot = rk_dot.*cos_uk - uk_dot.*rk.*sin_uk;
 
-yyk = rk.*sin_uk;  % dim: SxT
+ykOrbital = rk.*sinuk;  % dim: SxT
 % yyk_dot = rk_dot.*sin_uk + uk_dot.*rk.*cos_uk;
 
-Omegak_dot = rora - CONST_OMEGA_E;
+% Compute corrected longitude of ascending node
+Omegakdot = rora - CONST_OMEGA_E;
+Omegak = rightAscension + Omegakdot.*Tk - CONST_OMEGA_E * mod(toa, 604800);
 
-Omega_k = rightAscension + Omegak_dot.*Tk - CONST_OMEGA_E * mod(toa, 604800);
-
-cosO = cos(Omega_k);
-sinO = sin(Omega_k);
-cosi = cos(ik);
-sini = sin(ik);
+cosOmegak = cos(Omegak);
+sinOmegak = sin(Omegak);
+cosik = cos(ik);
+sinik = sin(ik);
 
 % build the position matrix to output the data
-% need to do this step, since now going to populate things by depth
-posecef = zeros(S, 3, T);
+pos = zeros(S, 3, T);
 
 % populate the X, Y, Z information to create the Sx3xT matrix needed for
 % the SatellitePosition constructor
-posecef(:,1,:) = xxk.*cosO - yyk.*cosi.*sinO;
-posecef(:,2,:) = xxk.*sinO + yyk.*cosi.*cosO;
-posecef(:,3,:) = yyk.*sini;
+pos(:,1,:) = xkOrbital.*cosOmegak - ykOrbital.*cosik.*sinOmegak;
+pos(:,2,:) = xkOrbital.*sinOmegak + ykOrbital.*cosik.*cosOmegak;
+pos(:,3,:) = ykOrbital.*sinik;
 
 % create the satellite position matrix
 % NOTE: need to squeeze the posecef matrix to remove any singleton
 % dimensions since that's how the constructor for SatellitePosition is
 % built
-satellitePosition = pppanal.SatellitePosition(obj, time(1,:), 'ecef', squeeze(posecef));
+satellitePosition = sgt.SatellitePosition(obj, time(1,:), lower(frame), squeeze(pos));
+
+
+
 
 
 % original code for creating the position vector:
