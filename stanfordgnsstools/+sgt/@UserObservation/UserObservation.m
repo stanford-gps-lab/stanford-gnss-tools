@@ -10,9 +10,7 @@ classdef UserObservation < handle
 %   array will be a 1xT array of UserObservation objects for each time
 %   step.
 %
-%   TODO: define all the properties here
-%
-% See Also: maasr.tools.User, maast.tools.SatellitePosition
+% See Also: sgt.User, sgt.SatellitePosition
 
     % immutable properties
     properties (SetAccess = immutable)
