@@ -1,7 +1,7 @@
 function usrs = createUserGrid(polyfile, latstep, lonstep)
 % createUserGrid    create a regular grid of users within a given polygon
 %
-%   usrs = maast.tools.User.createUserGrid(polyfile, latstep, lonstep)
+%   usrs = sgt.User.createUserGrid(polyfile, latstep, lonstep)
 %   creates a list of users that lie within a box that bounds the polygon
 %   specified in the polyfile.  The grid latitude and longitude step sizes
 %   as specified as latstep and lonstep, respectively.
@@ -25,4 +25,4 @@ posllh = [latmesh(:), lonmesh(:), zeros(length(latmesh(:)), 1)];
 
 % create the users (the IDs will just be sequential) and flag whether or
 % not they are within the polygon
-usrs = maast.tools.User(posllh, 'Polygon', poly);
+usrs = sgt.User(posllh, 'Polygon', poly);

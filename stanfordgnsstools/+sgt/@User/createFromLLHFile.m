@@ -4,7 +4,7 @@ function usrs = createFromLLHFile(llhfile, polyfile)
 %
 %   TODO: describe file format
 %
-%   usrs = maast.tools.Users.createFromLLHFile(filename) create a set of
+%   usrs = sgt.Users.createFromLLHFile(filename) create a set of
 %   users from the LLH information in the file.
 %
 
@@ -25,7 +25,7 @@ llh = data(:,2:4);
 
 % create an array of users at the given LLH coordinates with the provided
 % IDs and polygon information
-usrs = maast.tools.User(llh, 'ID', uid, 'Polygon', poly);
+usrs = sgt.User(llh, 'ID', uid, 'Polygon', poly);
 
 % NOTE: MAAST needs some metadata on whether or not they are in mexico
 

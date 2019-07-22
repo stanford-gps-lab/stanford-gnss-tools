@@ -6,23 +6,23 @@ function m = reshape3Dto2D(m3d, direction)
 %   the 3D matrix to effectively concatenate the 2D matrices in either the
 %   vertical direction or horizontal direction.
 %
-%   m = maast.tools.reshape3Dto2D(m3d) vertically concatenates the 2D
+%   m = sgt.tools.reshape3Dto2D(m3d) vertically concatenates the 2D
 %   matrices such that the result m = [m3d(:,:,1); ...; m3d(:,:,n)].
 %
-%   m = maast.tools.reshape3Dto2D(m3d, direction) specifies the direction
+%   m = sgt.tools.reshape3Dto2D(m3d, direction) specifies the direction
 %   for the reshaping:
 %       - 'vertical': vertically concatenates the 2D matrices and creates
 %       m = [m3d(:,:,1); ...; m3d(:,:,n)]
 %       - 'horizontal': horizontally concatenates the 2D matrices and
 %       creates [m3d(:,:,1) ... m3d(:,:,n)]
 %
-% See Also: maast.tools.reshape2Dto3D
+% See Also: sgt.tools.reshape2Dto3D
 
 % Copyright 2019 Stanford University GPS Laboratory
-%   This file is part of MAAST which is released under the MIT License.
-%   See `LICENSE.txt` for full license details.
+%   This file is part of the Stanford GNSS Tools which is released under 
+%   the MIT License. See `LICENSE.txt` for full license details.
 %   Questions and comments should be directed to the project at:
-%   https://github.com/stanford-gps-lab/maast
+%   https://github.com/stanford-gps-lab/stanford-gnss-tools
 
 % default to returning a vertical 2D matrix
 if nargin < 2

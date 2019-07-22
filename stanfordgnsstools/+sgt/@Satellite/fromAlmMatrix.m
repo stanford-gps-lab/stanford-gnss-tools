@@ -13,10 +13,10 @@ function sats = fromAlmMatrix(alm)
 %   See Also: sgt.Satellite.fromYuma, sgt.Satellite
 
 % Copyright 2019 Stanford University GPS Laboratory
-%   This file is part of stanford-gnss-tools which is released under the 
-%   MIT License. See `LICENSE.txt` for full license details.
+%   This file is part of the Stanford GNSS Tools which is released under 
+%   the MIT License. See `LICENSE.txt` for full license details.
 %   Questions and comments should be directed to the project at:
-%   https://github.com/stanford-gps-lab/maast
+%   https://github.com/stanford-gps-lab/stanford-gnss-tools
 
 % call the satellite constructor with each of the columns separated out
 sats = sgt.Satellite(alm(:,1), alm(:,2), alm(:,3), alm(:,4), ...

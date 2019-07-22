@@ -1,10 +1,10 @@
-classdef UserObservation < handle
+classdef UserObservation < matlab.mixin.Copyable
 % UserObservation   an container for an observation for a user.
 %   An observation ties a User and Satellites together at a specific time
 %   and provides data on the relationship between those two group.
 %   Allows for later querying of satellites in view, etc.
 %
-%   obs = maast.tools.UserObservation(user, satPos) creates an observation
+%   obs = sgt.UserObservation(user, satPos) creates an observation
 %   for a given user and an array of satellite positions (satPos).  satPos
 %   must be a SxT matrix of SatellitePosition objects.  The resulting obs
 %   array will be a 1xT array of UserObservation objects for each time

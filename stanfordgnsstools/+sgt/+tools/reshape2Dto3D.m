@@ -7,16 +7,16 @@ function m3d = reshape2Dto3D(m2d, r, c)
 %   converts that 2D matrix to a 3D representation of the data with each
 %   sub-matrix as a depth entry (e.g. m3d(:,:,1) = m1, m(3d(:,:,n) = mn).
 %
-%   m3d = maast.tools.reshape2Dto3D(m2d, r, c)  reshapes the 3D matrix,
+%   m3d = sgt.tools.reshape2Dto3D(m2d, r, c)  reshapes the 3D matrix,
 %   m3d, into a RxCxN 3D matrix.
 %
-% See Also: maast.tools.reshape3Dto2D
+% See Also: sgt.tools.reshape3Dto2D
 
 % Copyright 2019 Stanford University GPS Laboratory
-%   This file is part of MAAST which is released under the MIT License.
-%   See `LICENSE.txt` for full license details.
+%   This file is part of the Stanford GNSS Tools which is released under 
+%   the MIT License. See `LICENSE.txt` for full license details.
 %   Questions and comments should be directed to the project at:
-%   https://github.com/stanford-gps-lab/maast
+%   https://github.com/stanford-gps-lab/stanford-gnss-tools
 
 [mr, mc] = size(m2d);
 

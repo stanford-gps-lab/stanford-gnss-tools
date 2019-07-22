@@ -13,8 +13,8 @@ uLat = obj.User.PositionLLH(1) * pi/180;
 uLon = obj.User.PositionLLH(2) * pi/180;
 
 % calculate the earth angle
-Rearth = maast.constants.EarthConstants.R;
-Riono = maast.constants.EarthConstants.Riono;
+Rearth = sgt.constants.EarthConstants.R;
+Riono = sgt.constants.EarthConstants.Riono;
 psiPP = 0.5 * pi - el - asin(Rearth * cos(el) / Riono);
 
 % helper for readibility

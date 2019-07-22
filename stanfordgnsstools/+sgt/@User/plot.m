@@ -4,12 +4,12 @@ function plot(obj)
 %   plot(user) plot the user locations as points.
 %
 %   user.plot() is also a valid command where user is of type
-%   maast.tools.User
+%   sgt.User
 %
 %   Example:
 %
 %       % create a list of users
-%       users = maast.tools.User.createUserGrid(100);
+%       users = sgt.User.createUserGrid(100);
 %
 %       % plot with first syntax
 %       figure(1); plot(users);

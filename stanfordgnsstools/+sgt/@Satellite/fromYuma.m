@@ -13,7 +13,7 @@ function sats = fromYuma(filename)
 %   This file is part of Stanford GNSS Tools which is released under the MIT License.
 %   See `LICENSE.txt` for full license details.
 %   Questions and comments should be directed to the project at:
-%   https://github.com/stanford-gps-lab/maast
+%   https://github.com/stanford-gps-lab/stanford-gnss-tools
 
 % error checking on inputs
 if nargin < 1
@@ -31,7 +31,7 @@ if iscell(filename)
         [prn, e, toa, inc, rora, sqrta, raan, w, m0, af0, af1] = parseFile(filename{fi});
 
         % create the satellite list and add to the output array
-        sats{fi} = maast.tools.Satellite(prn, e, toa, inc, rora, ...
+        sats{fi} = sgt.Satellite(prn, e, toa, inc, rora, ...
             sqrta, raan, w, m0, af0, af1);
     end
     

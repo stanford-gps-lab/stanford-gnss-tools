@@ -2,26 +2,26 @@ function [varargout] = llh2ecef(lat, lon, h)
 % llh2ecef    convert from a lat/lon/height in [deg]/[deg]/[m] to an ECEF
 % position in [m].
 %
-%	ecef = maast.tools.llh2ecef(llh) calculates the ECEF position from the
+%	ecef = sgt.tools.llh2ecef(llh) calculates the ECEF position from the
 %	llh matrix containing the latitude, longitude, and height information
 %	in [deg, deg, m].  The llh matrix must be an Nx3 matrix with each row
 %	containing a [lat, lon, h] point to convert.  The resulting ecef matrix
 %	will also be an Nx3 matrix with each row containing the [x, y, z]
 %	position.
 %
-%	[x, y, z] = maast.tools.llh2ecef(lat, lon, h) calculates the ECEF
+%	[x, y, z] = sgt.tools.llh2ecef(lat, lon, h) calculates the ECEF
 %	position given the latitude ([deg]), longitude ([deg]), and height
 %	([m]) as three separate vector.  Each vector must have the same size.
 %	The ECEF position is returned as three separate vectors x, y, and z
 %	containing the corresponding ECEF position component.
 %
-% 	See Also: maast.tools.llh2ecef
+% 	See Also: sgt.tools.llh2ecef
 
 % Copyright 2001-2019 Stanford University GPS Laboratory
-%   This file is part of MAAST which is released under the MIT License.
-%   See `LICENSE.txt` for full license details.
+%   This file is part of the Stanford GNSS Tools which is released under 
+%   the MIT License. See `LICENSE.txt` for full license details.
 %   Questions and comments should be directed to the project at:
-%   https://github.com/stanford-gps-lab/maast
+%   https://github.com/stanford-gps-lab/stanford-gnss-tools
 
 
 % want to allow either a matrix input or 3 separate arrays, so check to see
@@ -52,9 +52,9 @@ slat = sin(latr);
 clat = cos(latr);
 
 % setup additional values
-f = maast.constants.EarthConstants.f;
+f = sgt.constants.EarthConstants.f;
 e2 = (2 - f) * f;
-r_N  = maast.constants.EarthConstants.R ./ sqrt(1 - e2*slat.*slat);
+r_N  = sgt.constants.EarthConstants.R ./ sqrt(1 - e2*slat.*slat);
 
 % do the conversion
 x = (r_N + h).*clat.*cos(lonr);

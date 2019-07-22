@@ -2,25 +2,25 @@ function [varargout] = ecef2llh(x, y, z)
 % ecef2llh    convert from an ECEF position in [m] to a lat/lon/height
 % position in [deg]/[deg]/[m]
 %
-%	llh = maast.tools.ecef2llh(ecef) calculates the LLH position from the
+%	llh = sgt.tools.ecef2llh(ecef) calculates the LLH position from the
 %	ecef matrix containing the x, y, z information in [m].  The ecef matrix
 %	must be an Nx3 matrix with each row containing an [x, y, z] point to
 %	convert.  The resulting llh matrix will also be an Nx3 matrix with each
 %	row containing the [lat, lon, height] position.
 %
-%	[lat, lon, h] = maast.tools.ecef2llh(x, y, z) calculates the LLH
+%	[lat, lon, h] = sgt.tools.ecef2llh(x, y, z) calculates the LLH
 %	position given the ECEF x ([m]), y ([m]), and z ([m]) as three separate
 %	vector.  Each vector must have the same size. The LLH position is
 %	returned as three separate vectors lat, lon, and h containing the
 %	corresponding LLH position component.
 %
-% 	See Also: maast.tools.llh2ecef
+% 	See Also: sgt.tools.llh2ecef
 
 % Copyright 2001-2019 Stanford University GPS Laboratory
-%   This file is part of MAAST which is released under the MIT License.
-%   See `LICENSE.txt` for full license details.
+%   This file is part of the Stanford GNSS Tools which is released under 
+%   the MIT License. See `LICENSE.txt` for full license details.
 %   Questions and comments should be directed to the project at:
-%   https://github.com/stanford-gps-lab/maast
+%   https://github.com/stanford-gps-lab/stanford-gnss-tools
 
 % want to allow either a matrix input or 3 separate arrays, so check to see
 % if the user entered a matrix

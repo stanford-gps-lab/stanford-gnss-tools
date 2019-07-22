@@ -11,7 +11,7 @@ function [varargout] = getDOPS(obj)
 % Example:
 %   TODO: add example
 %
-% See Also: maast.tools.UserObservation
+% See Also: sgt.UserObservation
 
 
 % TODO: right now this only works on a single observation, need to get it
