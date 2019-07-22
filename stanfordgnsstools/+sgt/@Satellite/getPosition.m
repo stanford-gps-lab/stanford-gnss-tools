@@ -1,14 +1,16 @@
 function satellitePosition = getPosition(obj, time, frame)
 % getPosition   get the SatellitePosition of the satellite for a given time
-%   compute the SatellitePosition (combined ECEF and LLH position) of the
-%   satellite from the alamanac data that defines the orbit of the
-%   satellite for a given time or a set of times provided.
+%   compute the SatellitePosition of the satellite from the alamanac data 
+%   that defines the orbit of the satellite for a given time or a set of 
+%   times provided. The reference frame is by default ECEF, but can be
+%   specified as an input.
 %
 %   satellitePosition = getPosition(satellite, time, frame) computes the 
 %   SatellitePosition of a satellite (or an array of satellites) at the 
 %   time(s) provided. For an array of S satellites and T times, the 
 %   resulting position matrix will be an SxT matrix of satellite positions 
-%   defined as SatellitePosition.
+%   defined as SatellitePosition. Current frames supported are: 'ECEF',
+%   'ECI', 'LLA'
 
 
 % Copyright 2019 Stanford University GPS Laboratory
@@ -20,8 +22,8 @@ function satellitePosition = getPosition(obj, time, frame)
 
 
 % get constants needed
-CONST_MU_E = maast.constants.EarthConstants.mu;
-CONST_OMEGA_E = maast.constants.EarthConstants.omega;
+CONST_MU_E = sgt.constants.EarthConstants.mu;
+CONST_OMEGA_E = sgt.constants.EarthConstants.omega;
 
 
 %
