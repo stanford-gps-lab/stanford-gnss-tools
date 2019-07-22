@@ -8,9 +8,11 @@ function satellitePosition = getPosition(obj, time, frame)
 %   satellitePosition = getPosition(satellite, time, frame) computes the 
 %   SatellitePosition of a satellite (or an array of satellites) at the 
 %   time(s) provided. For an array of S satellites and T times, the 
-%   resulting position matrix will be an SxT matrix of satellite positions 
-%   defined as SatellitePosition. Current frames supported are: 'ECEF',
-%   'ECI', 'LLA'
+%   resulting position matrix will be an SxT cell matrix of satellite 
+%   positions defined as SatellitePosition. Each cell will contain a 3x1 
+%   array which will be [X; Y; Z] for 'ECEF' and 'ECI', and 
+%   [Latitude; Longitude; Altitude] for 'LLA'.
+%   Current frames supported are: 'ECEF', 'ECI', 'LLA'
 
 
 % Copyright 2019 Stanford University GPS Laboratory
@@ -40,60 +42,59 @@ S = length(obj);
 T = length(time);
 
 % extract and expand satellite properties that will be needed
-
-% TODO: this ends up being time intensive.... I wonder if there is a better
-% way to do this.  Though at the end of the day this is only needed to be
-% done once before the parallelizing
 sqrt_a = [obj(:).SqrtA]';
 axis = repmat(sqrt_a.^2, 1, T);
 toa = repmat([obj(:).TOA]', 1, T);
-eccen = repmat([obj(:).Eccentricity]', 1, T);
-mean_anomaly = repmat([obj(:).MeanAnomaly]', 1, T);
-arg_of_perigree = repmat([obj(:).ArgumentOfPerigee]', 1, T);
+eccentricity = repmat([obj(:).Eccentricity]', 1, T);
+meanAnomaly = repmat([obj(:).MeanAnomaly]', 1, T);
+argumentOfPerigee = repmat([obj(:).ArgumentOfPerigee]', 1, T);
 inclination = repmat([obj(:).Inclination]', 1, T);
 rora = repmat([obj(:).RateOfRightAscension]', 1, T);
-right_ascension = repmat([obj(:).RightAscension]', 1, T);
+rightAscension = repmat([obj(:).RightAscension]', 1, T);
 
 % expand the time vector
 time = repmat(time, S, 1);
-
 
 %
 % Computation
 %
 
+% Compute mean motion
 n0 = sqrt(CONST_MU_E ./ axis.^3);  % dim: SxT
 
 % Modification (for ICD-100)
 Tk = time - toa;  % dim: SxT
 
-Mk = mean_anomaly + n0.*Tk;  % dim: SxT
-E0 = Mk + 100;
+% Compute mean anomaly
+Mk = meanAnomaly + n0.*Tk;  % dim: SxT
+
+% Compute eccentric anomaly
+E0 = Mk + 100;  % dim: SxT
 Ek = Mk;
 i = 1;
 while (abs(Ek-E0) > 1e-12 && i < 250)
   E0 = Ek;
-  Ek = Mk + eccen.*sin(E0);
+  Ek = Mk + eccentricity.*sin(E0);
   i = i + 1;
 end
 
-cos_Ek = cos(Ek);
-sin_Ek = sin(Ek);
+cosEk = cos(Ek); % dim: SxT
+sinEk = sin(Ek);
 
 
 % c1 = 1 - eccen .* cos_Ek;
 % Ek_dot = n0./c1;
 
-c2 = sqrt(1 - eccen.*eccen);
-vk = atan2(c2.*sin_Ek, cos_Ek-eccen);
+c2 = sqrt(1 - eccentricity.*eccentricity);
+vk = atan2(c2.*sinEk, cosEk-eccentricity);
 % vk_dot = Ek_dot.*c2./c1;
 
-phik   = vk + arg_of_perigree;  % dim: SxT
+phik = vk + argumentOfPerigee;  % dim: SxT
 
 uk = phik;
 % uk_dot = vk_dot;
 
-rk = axis .* (1 - eccen.*cos_Ek);  % dim: SxT
+rk = axis .* (1 - eccentricity.*cosEk);  % dim: SxT
 % rk_dot = axis.*eccen.*Ek_dot.*sin_Ek;
 
 ik = inclination;  % dim: SxT
@@ -109,7 +110,7 @@ yyk = rk.*sin_uk;  % dim: SxT
 
 Omegak_dot = rora - CONST_OMEGA_E;
 
-Omega_k = right_ascension + Omegak_dot.*Tk - CONST_OMEGA_E * mod(toa, 604800);
+Omega_k = rightAscension + Omegak_dot.*Tk - CONST_OMEGA_E * mod(toa, 604800);
 
 cosO = cos(Omega_k);
 sinO = sin(Omega_k);
