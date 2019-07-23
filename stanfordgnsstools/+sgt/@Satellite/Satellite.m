@@ -57,6 +57,14 @@ classdef Satellite < matlab.mixin.Copyable
         
         % AF1 - clock drift [sec/sec]
         AF1
+        
+        %
+        % Varargin properties
+        %
+        
+        % Constellation - Specifies which constellation the satellite
+        % belongs to.
+        Constellation = 'GPS';
     end
 
     % Constructor
@@ -81,6 +89,19 @@ classdef Satellite < matlab.mixin.Copyable
 
             % create a list of satellites given the number of satellites
             obj(Nsats) = sgt.Satellite();
+            
+            % Parse and expand varargin arguments
+            if nargin > 11
+               res = parseSatellite(varargin{:}); 
+               
+               % Expand
+               resFields = fieldnames(res);
+               for i = 1:length(resFields)
+                   if length(res.(resFields{i})) == 1
+                       res.(resFields{i}) = repmat(res.(resFields{i}), [Nsats, 1]);
+                   end
+               end
+            end
 
             % convert each row of information to satellite data
             for i = 1:Nsats
@@ -95,6 +116,7 @@ classdef Satellite < matlab.mixin.Copyable
                 obj(i).MeanAnomaly = meanAnomaly(i);
                 obj(i).AF0 = af0(i);
                 obj(i).AF1 = af1(i);
+                obj(i).Constellation = res.Constellation{i};
             end
         end
 
@@ -103,7 +125,7 @@ classdef Satellite < matlab.mixin.Copyable
 
     % non-static methods
     methods
-        % Get Position in ECEF at specified time
+        % Get Position in specified frame at specified time
         position = getPosition(obj, time, frame)
 
     end
@@ -115,3 +137,36 @@ classdef Satellite < matlab.mixin.Copyable
     end
 
 end
+
+% Parse varargin
+function res = parseSatellite(varargin)
+% Initialize parser
+parser = inputParser;
+
+% Constellation
+validConstellationFn = @(x) (ischar(x) || iscellstr(x)); %#ok<ISCLSTR>
+parser.addParameter('Constellation', 'GPS', validConstellationFn)
+
+% Run parser and set results
+parser.parse(varargin{:})
+res = parser.Results;
+
+end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
