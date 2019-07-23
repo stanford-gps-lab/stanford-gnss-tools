@@ -101,6 +101,10 @@ classdef Satellite < matlab.mixin.Copyable
                        res.(resFields{i}) = repmat(res.(resFields{i}), [Nsats, 1]);
                    end
                end
+               
+               for i = 1:Nsats
+                  obj(i).Constellation = res.Constellation(i); 
+               end
             end
 
             % convert each row of information to satellite data
@@ -116,7 +120,6 @@ classdef Satellite < matlab.mixin.Copyable
                 obj(i).MeanAnomaly = meanAnomaly(i);
                 obj(i).AF0 = af0(i);
                 obj(i).AF1 = af1(i);
-                obj(i).Constellation = res.Constellation{i};
             end
         end
 
