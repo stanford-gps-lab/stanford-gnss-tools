@@ -45,7 +45,7 @@ else
         sqrta, raan, w, m0, af0, af1);
 end
 
-
+end
 
 function [prn, e, toa, inc, rora, sqrta, raan, w, m0, af0, af1] = parseFile(filename)
 % parseFile     helper function to parse all the almanac data in a file
@@ -100,7 +100,7 @@ af1 = af1(1:ind-1);
 % close the file
 fclose(fid);
 
-
+end
 
 function val = readLineParameter(str)
 % readLineParameter     read the value of the parameter from this line
@@ -109,3 +109,5 @@ function val = readLineParameter(str)
 
 % an almanac file has the parameter starting at index 28 on each line
 val = str2num(str(28:end));
+
+end

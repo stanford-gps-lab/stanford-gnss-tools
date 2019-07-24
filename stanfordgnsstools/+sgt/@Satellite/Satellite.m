@@ -97,13 +97,13 @@ classdef Satellite < matlab.mixin.Copyable
                % Expand
                resFields = fieldnames(res);
                for i = 1:length(resFields)
-                   if length(res.(resFields{i})) == 1
+                   if numel(res.(resFields{i})) == 1
                        res.(resFields{i}) = repmat(res.(resFields{i}), [Nsats, 1]);
                    end
                end
                
                for i = 1:Nsats
-                  obj(i).Constellation = res.Constellation(i); 
+                  obj(i).Constellation = res(i).Constellation; 
                end
             end
 
@@ -135,7 +135,7 @@ classdef Satellite < matlab.mixin.Copyable
 
     % static methods
     methods (Static)
-        satellite = fromAlmMatrix(alm)
+        satellite = fromAlmMatrix(alm, varargin)
         satellite = fromYuma(filename)
     end
 
