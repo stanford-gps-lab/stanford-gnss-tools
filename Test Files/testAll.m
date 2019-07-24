@@ -10,6 +10,7 @@ cd(testdir)
 
 %% Test sgt
 testSatellite();
+testFromYuma();
 
 %% back to home directory
 cd(homedir)
