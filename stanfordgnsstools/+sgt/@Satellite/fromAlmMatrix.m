@@ -26,5 +26,5 @@ if nargin < 2
 else
     sats = sgt.Satellite(alm(:,1), alm(:,2), alm(:,3), alm(:,4), ...
         alm(:,5), alm(:,6), alm(:,7), alm(:,8), ...
-        alm(:,9), alm(:,10), alm(:,11), varargin);
+        alm(:,9), alm(:,10), alm(:,11), varargin{:});
 end

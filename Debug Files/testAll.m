@@ -5,12 +5,13 @@ clear; close all; clc;
 homedir = pwd;
 
 %% Go into test directory
-testdir = [pwd, '\testScripts'];
+testdir = [pwd, '\debugScripts'];
 cd(testdir)
 
 %% Test sgt
 testSatellite();
 testFromYuma();
+testFromAlmMatrix();
 
 %% back to home directory
 cd(homedir)

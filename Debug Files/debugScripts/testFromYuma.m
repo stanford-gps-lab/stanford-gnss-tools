@@ -8,16 +8,15 @@ try
     test1 = sgt.Satellite.fromYuma('current.alm');
     
     disp('test1 passed')
-    
 catch
-    disp('test1 failed')
+    disp('*****test1 failed*****')
 end
 
 %% Test 2 - Incomplete Almanac
 try
     test2 = sgt.Satellite.fromYuma('badCurrent.alm');
     
-    disp('test2 failed')
+    disp('*****test2 failed*****')
 catch
     disp('test2 passed')
 end
