@@ -96,14 +96,16 @@ classdef Satellite < matlab.mixin.Copyable
                
                % Expand
                resFields = fieldnames(res);
+               checkInputs(res, resFields, Nsats);     % input sanity check
                for i = 1:length(resFields)
-                   if numel(res.(resFields{i})) == 1
+                   if ~iscell(res.(resFields{i}))
+                       res.(resFields{i}) = {res.(resFields{i})};
                        res.(resFields{i}) = repmat(res.(resFields{i}), [Nsats, 1]);
                    end
                end
                
                for i = 1:Nsats
-                  obj(i).Constellation = res(i).Constellation; 
+                  obj(i).Constellation = res.Constellation(i); 
                end
             end
 
@@ -156,6 +158,16 @@ res = parser.Results;
 
 end
 
+% Check for input errors
+function []  = checkInputs(res, resFields, Nsats)
+% Check that there are no res fields that contain more values than the
+% number of satellites
+if (max(numel(res.(resFields{:}))) > Nsats) && iscell(res.(resFields{:}))
+   error('Number of varargin inputs larger than the number of satellites specified.') 
+end
+
+
+end
 
 
 
