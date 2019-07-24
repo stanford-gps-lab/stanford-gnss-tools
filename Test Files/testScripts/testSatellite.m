@@ -1,6 +1,6 @@
 function testSatellite()
 disp('-----------------')
-disp('Testing Satellite')
+disp('Testing Satellite.m')
 disp('-----------------')
 
 %% Define test parameters
@@ -84,6 +84,19 @@ try
     end
 catch
     disp('test5 failed')
+end
+
+%% Test 6 - test multiple satellites with wrong number of varargin Constellation
+try
+    test6 = sgt.Satellite(prn*ones(2,1), eccentricity*ones(2,1), toa*ones(2,1),...
+        inclination*ones(2,1), rora*ones(2,1), sqrta*ones(2,1), raan*ones(2,1),...
+        argumentOfPerigee*ones(2,1), meanAnomaly*ones(2,1), af0*ones(2,1), af1*ones(2,1),...
+        'Constellation', {'Galileo', 'BDS', 'GLONASS'});
+    
+    disp('test6 failed')
+    
+catch
+    disp('test6 passed')
 end
 
 
