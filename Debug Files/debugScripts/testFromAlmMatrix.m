@@ -103,7 +103,7 @@ try
     test8 = sgt.Satellite.fromAlmMatrix(alm3, 'Constellation', {'BDS', 'Galileo'});
     
     disp('*****test8 failed*****')
-catch
+catch    
     disp('test8 passed')
 end
 

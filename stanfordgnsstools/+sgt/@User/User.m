@@ -3,12 +3,17 @@ classdef User < matlab.mixin.Copyable
 %   A user is a container for a fixed location from which observations or
 %   frame transformations can take place.
 %
-%   user = sgt.User(posllh) creates user(s) at the (lat, lon, alt)
+%   user = sgt.User(posLLH, varargin) creates user(s) at the (lat, lon, alt)
 %   positions specified in posllh.  posllh should be an Nx3 matrix for the
 %   creation of N users with each row containing the (lat, lon, alt) of the
 %   user in [deg, deg, m].
 %
-%
+%   varargin: 
+%   ID - the ID of the user
+%   Polygon - 
+%   ElevationMask - Elevation mask of users. Default 5 degrees.
+%             
+
 
 % Copyright 2019 Stanford University GPS Laboratory
 %   This file is part of the Stanford GNSS Tools which is released under 
@@ -54,12 +59,8 @@ classdef User < matlab.mixin.Copyable
                 return;
             end
 
-            parser = inputParser;
-            parser.addParameter('ID', []);
-            parser.addParameter('Polygon', []);
-            parser.addParameter('ElevationMask', 5*pi/180);
-            parser.parse(varargin{:});
-            res = parser.Results;
+            % Parse varargin
+            res = parseInput(varargin);
             
             % NOTES: posllh right now has to be a matrix with N rows (for N
             % sites) where each row contains [lat lon alt] in [deg, deg, m]
@@ -137,3 +138,29 @@ classdef User < matlab.mixin.Copyable
 
 
 end
+
+% Parse varargin
+function res = parseInput(varargin)
+% Initialize parser
+parser = inputParser;
+
+% ID
+parser.addParameter('ID', []);
+
+% Polygon
+parser.addParameter('Polygon', []);
+
+% ElevationMask
+parser.addParameter('ElevationMask', 5*pi/180);
+
+% Constellation
+validConstellationFn = @(x) (ischar(x) || iscellstr(x)); %#ok<ISCLSTR>
+parser.addParameter('Constellation', 'GPS', validConstellationFn)
+
+% Run parser and set results
+parser.parse(varargin{:})
+res = parser.Results;
+
+end
+
+

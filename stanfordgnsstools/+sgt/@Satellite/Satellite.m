@@ -92,7 +92,7 @@ classdef Satellite < matlab.mixin.Copyable
             
             % Parse and expand varargin arguments
             if nargin > 11
-               res = parseSatellite(varargin{:}); 
+               res = parseInput(varargin{:}); 
                
                % Expand
                resFields = fieldnames(res);
@@ -144,7 +144,7 @@ classdef Satellite < matlab.mixin.Copyable
 end
 
 % Parse varargin
-function res = parseSatellite(varargin)
+function res = parseInput(varargin)
 % Initialize parser
 parser = inputParser;
 
@@ -165,7 +165,6 @@ function []  = checkInputs(res, resFields, Nsats)
 if (max(numel(res.(resFields{:}))) > Nsats) && iscell(res.(resFields{:}))
    error('Number of varargin inputs larger than the number of satellites specified.') 
 end
-
 
 end
 
