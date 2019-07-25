@@ -12,6 +12,7 @@ cd(testdir)
 testSatellite();
 testFromYuma();
 testFromAlmMatrix();
+testUser();
 
 %% back to home directory
 cd(homedir)

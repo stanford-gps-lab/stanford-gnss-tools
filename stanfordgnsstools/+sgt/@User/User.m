@@ -23,12 +23,14 @@ classdef User < matlab.mixin.Copyable
         % ID - the ID of the user
         ID
 
-        % PositionLLH - LLH position of the user on the world
-        %   latitude and longitude are defined in degrees
+        % PositionLLH - LLH position of the user on the world latitude and 
+        % longitude are defined in [deg deg m]. N users are defined
+        % by an Nx3 matrix.
         PositionLLH
         
-        % Position - ECEF position of the user on the world in [m]
-		Position
+        % PositionECEF - ECEF position of the user on the world in [m]. N
+        % users are defined by an Nx3 matrix.
+		PositionECEF
 
         % ECEF2ENU - the rotation matrix from ECEF to ENU for this user
 		ECEF2ENU
@@ -37,14 +39,15 @@ classdef User < matlab.mixin.Copyable
         % in view in [rad]
         ElevationMask = 5 * pi/180
         
-        % InBound - true if the user is within a specified polygon
-        %   if the user was created with a polygon bound, this will be
-        %   flagged true if the user is within the bound and false
-        %   otherwise.  If no polygon bound was provided InBound will
-        %   default to false
+        % InBound - true if the user is within a specified polygon if the 
+        % user was created with a polygon bound, this will be flagged true 
+        % if the user is within the bound and false otherwise.  If no 
+        % polygon bound was provided InBound will default to false
         InBound = false
-	end
+        
+    end
 
+    % Constructor
 	methods
 
 		function obj = User(posllh, varargin)
@@ -52,59 +55,69 @@ classdef User < matlab.mixin.Copyable
             % if no arguments, default to all zero
             if nargin == 0
                 obj.PositionLLH = zeros(3,1);
-                obj.Position = zeros(3,1);
+                obj.PositionECEF = zeros(3,1);
                 obj.ECEF2ENU = zeros(3,3);
                 return;
             end
-
-            % Parse varargin
-            res = parseInput(varargin);
+            
+            if nargin > 1
+                % Parse varargin
+                res = parseInput(varargin{:});
+                
+            end
             
             % NOTES: posllh right now has to be a matrix with N rows (for N
             % sites) where each row contains [lat lon alt] in [deg, deg, m]
             % for each of the sites.
 
-            % get the number of sites
-            [Nsites, ~] = size(posllh);
-            obj(Nsites) = sgt.User();
+            % get the number of users
+            [Nusers, ~] = size(posllh);
+            obj(Nusers) = sgt.User();
 
+            % Record lat and lon of input positions in radians
             latRad = posllh(:,1)*pi/180;
             lonRad = posllh(:,2)*pi/180;
 
-            % bulk convert the LLH positions to ECEF positions
-%             posECEF = sgt.constants.EarthConstants.R*[
-% 			    cos(latRad).*cos(lonRad), ...
-% 			    cos(latRad).*sin(lonRad), ...
-% 			    sin(latRad)];
+            % Convert the LLH positions to ECEF positions
             posECEF = sgt.tools.llh2ecef(posllh);
-
-            % default to a sequential id set if no ID information passed
-            ids = res.ID;
-            if isempty(ids)
-                ids = 1:Nsites;
+            
+            % set user IDs
+            ids = 1:Nusers;
+            if (exist('res', 'var') == 1) && (isfield(res, 'ID') == 1) && ~isempty('res.ID')
+                ids = res.ID;
+                
+                % Check for varargin errors
+                checkInputs(res, Nusers)
             end
             
             % check which points are within the polygon
-            inBnds = false(Nsites,1);
-            if ~isempty(res.Polygon)
+            inBnds = false(Nusers,1);
+            if (exist('res.Polygon', 'var') == 1)
                 poly = res.Polygon;
                 polycheck = inpolygon(posllh(:,2), posllh(:,1), poly(:,2), poly(:,1));
                 inBnds = (polycheck > 0);  % inpolygon returns 0.5 in some versions of MATLAB
             end
             
             % expand the elevation mask if only a single value
-            elMask = res.ElevationMask;
-            if length(elMask) == 1
-                elMask = elMask * ones(Nsites, 1);
+            if (exist('res.ElevationMask', 'var') == 1)
+                if length(res.ElevationMask) == 1
+                    elMask = res.ElevationMask * ones(Nusers,1);
+                elseif length(res.ElevationMask) == Nusers
+                    elMask = res.ElevationMask;
+                else
+                    error('Number of elevation masks specified does not match the number of users')
+                end
+            else
+                elMask = obj(1).ElevationMask * ones(Nusers, 1);
             end
             
             % create the user object for each site
-            for i = 1:Nsites
+            for i = 1:Nusers
                 % directly just save the LLH and the ECEF positions to the
                 % user object
                 obj(i).ID = ids(i);
                 obj(i).PositionLLH = posllh(i,:)';
-                obj(i).Position = posECEF(i,:)';
+                obj(i).PositionECEF = posECEF(i,:)';
                 obj(i).InBound = inBnds(i);
                 obj(i).ElevationMask = elMask(i);
 
@@ -143,7 +156,8 @@ function res = parseInput(varargin)
 parser = inputParser;
 
 % ID
-parser.addParameter('ID', []);
+validIDFn = @(x) (isnumeric(x));
+parser.addParameter('ID', [], validIDFn);
 
 % Polygon
 parser.addParameter('Polygon', []);
@@ -151,13 +165,24 @@ parser.addParameter('Polygon', []);
 % ElevationMask
 parser.addParameter('ElevationMask', 5*pi/180);
 
-% Constellation
-validConstellationFn = @(x) (ischar(x) || iscellstr(x)); %#ok<ISCLSTR>
-parser.addParameter('Constellation', 'GPS', validConstellationFn)
-
 % Run parser and set results
 parser.parse(varargin{:})
 res = parser.Results;
+
+end
+
+% Check inputs
+function checkInputs(res, Nusers)
+% Check that the number of IDs is the same as the number of users.
+if (numel(res.ID) ~= Nusers) && (numel(res.ID) > 1)
+   error('Number of varargin inputs larger than the number of satellites specified.') 
+end
+
+
+
+
+
+
 
 end
 
