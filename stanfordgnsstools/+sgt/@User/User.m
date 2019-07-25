@@ -11,9 +11,7 @@ classdef User < matlab.mixin.Copyable
 %   varargin: 
 %   ID - the ID of the user
 %   Polygon - 
-%   ElevationMask - Elevation mask of users. Default 5 degrees.
-%             
-
+%   ElevationMask - Elevation mask of users. Default 5 degrees.         
 
 % Copyright 2019 Stanford University GPS Laboratory
 %   This file is part of the Stanford GNSS Tools which is released under 
