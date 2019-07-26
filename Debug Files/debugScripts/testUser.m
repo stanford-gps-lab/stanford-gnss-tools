@@ -66,6 +66,48 @@ catch
     disp('test6 passed')
 end
 
+%% Test 7 - test multiple users with same number of IDs
+try
+    test7 = sgt.User(userPosition2, 'ID', [1 2]);
+    
+    disp('test7 passed')
+catch
+    disp('*****test7 failed*****')
+end
+
+%% Test 8 - test multiple users with wrong number of IDs
+try
+    test8 = sgt.User(userPosition2, 'ID', [1 2 3]);
+    
+    disp('*****test8 failed*****')
+catch
+    disp('test8 passed')
+end
+
+%% Test 9 - test multiple users with single ID
+try
+    test9 = sgt.User(userPosition2, 'ID', 1);
+    
+    disp('*****test9 failed*****')
+catch
+    disp('test9 passed')
+end
+
+%% Test 10 - test single user with polygon
+
+%% Test 11 - test multiple users with polygon
+
+%% Test 12 - test single user with bad polygon
+
+%% Test 13 - test single user with single elevation
+
+%% Test 14 - test multiple users with single elevation
+
+%% Test 15 - test single user with multiple elevations
+
+%% Test 16 - test multiple users with same number of elevations
+
+%% Test 17 - test multiple users with wrong number of elevations
 
 
 
