@@ -5,6 +5,7 @@ clear; close all; clc;
 homedir = pwd;
 
 %% Go into test directory
+
 testdir = [pwd, '\debugScripts'];
 % Record command prompt
 delete testResults.test
@@ -13,8 +14,6 @@ diary testResults.test
 cd(testdir)
 
 %% Test sgt
-
-
 testSatellite();
 testFromYuma();
 testFromAlmMatrix();

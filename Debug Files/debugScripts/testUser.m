@@ -1,5 +1,5 @@
 function testUser()
-% clear; close all; clc;
+clear; close all; clc;
 disp('-----------------')
 disp('Testing User.m')
 disp('-----------------')
@@ -93,7 +93,19 @@ catch
     disp('test9 passed')
 end
 
-%% Test 10 - test single user with polygon
+% Test 10 - test single user with polygon
+try
+    myPolygon = sgt.tools.generatePolygon('usrconus.dat');
+    test10 = sgt.User(userPosition, 'Polygon', myPolygon);
+    
+    if test10.InBound
+        disp('test10 passed')
+    else
+        disp('*****test10 failed*****')
+    end
+catch
+    disp('*****test10 failed*****')
+end
 
 %% Test 11 - test multiple users with polygon
 

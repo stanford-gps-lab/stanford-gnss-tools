@@ -83,7 +83,7 @@ classdef User < matlab.mixin.Copyable
             
             % set user IDs
             ids = 1:Nusers;
-            if (exist('res', 'var') == 1) && (isfield(res, 'ID') == 1) && ~isempty('res.ID')
+            if (exist('res', 'var') == 1) && (isfield(res, 'ID') == 1) && ~isempty(res.ID)
                 ids = res.ID;
                 
                 % Check for varargin errors
@@ -92,9 +92,9 @@ classdef User < matlab.mixin.Copyable
             
             % check which points are within the polygon
             inBnds = false(Nusers,1);
-            if (exist('res.Polygon', 'var') == 1)
-                poly = res.Polygon;
-                polycheck = inpolygon(posllh(:,2), posllh(:,1), poly(:,2), poly(:,1));
+            if (exist('res', 'var') == 1) && (isfield(res, 'Polygon') == 1) && ~isempty(res.Polygon)
+                polygon = res.Polygon;
+                polycheck = inpolygon(posllh(:,2), posllh(:,1), polygon.Vertices(:,1), polygon.Vertices(:,2));
                 inBnds = (polycheck > 0);  % inpolygon returns 0.5 in some versions of MATLAB
             end
             
@@ -160,7 +160,8 @@ validIDFn = @(x) (isnumeric(x));
 parser.addParameter('ID', [], validIDFn);
 
 % Polygon
-parser.addParameter('Polygon', []);
+validPolygonFn = @(x) (isa(x, 'polyshape'));
+parser.addParameter('Polygon', [], validPolygonFn);
 
 % ElevationMask
 parser.addParameter('ElevationMask', 5*pi/180);
@@ -178,12 +179,13 @@ if (numel(res.ID) ~= Nusers) && (numel(res.ID) > 1)
    error('Number of varargin inputs larger than the number of satellites specified.') 
 end
 
-
-
-
-
-
-
 end
+
+
+
+
+
+
+
 
 
