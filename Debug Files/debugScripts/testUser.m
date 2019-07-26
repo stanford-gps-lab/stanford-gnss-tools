@@ -1,5 +1,5 @@
 function testUser()
-clear; close all; clc;
+% clear; close all; clc;
 disp('-----------------')
 disp('Testing User.m')
 disp('-----------------')
