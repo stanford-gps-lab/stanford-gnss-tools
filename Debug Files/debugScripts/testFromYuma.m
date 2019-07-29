@@ -1,27 +1,34 @@
 function testFromYuma()
-disp('-----------------')
-disp('Testing fromYuma.m')
-disp('-----------------')
 
+testResults = [];
 %% Test 1 - basic
 try
     test1 = sgt.Satellite.fromYuma('current.alm');
     
-    disp('test1 passed')
 catch
-    disp('*****test1 failed*****')
+    testResults(1) = 1;
 end
 
 %% Test 2 - Incomplete Almanac
 try
     test2 = sgt.Satellite.fromYuma('badCurrent.alm');
     
-    disp('*****test2 failed*****')
+    testResults(2) = 1;
 catch
-    disp('test2 passed')
+    
 end
 
-
+%% Display test results
+if any(testResults)
+    disp('-----------------')
+    disp('Testing fromYuma.m')
+    disp('-----------------')
+    
+    testResults = find(testResults);
+    for i = 1:length(testResults)
+        fprintf(['test', num2str(testResults(i)), ' failed\n'])
+    end
+end
 
 
 

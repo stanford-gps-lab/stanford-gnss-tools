@@ -15,7 +15,8 @@ function usrs = createUserGrid(polyfile, latstep, lonstep)
 %   https://github.com/stanford-gps-lab/stanford-gnss-tools
 
 % load in the polygon file
-poly = sgt.tools.generatePolygon(polyfile);
+poly = load(polyfile);
+polyShape = sgt.tools.generatePolygon(polyfile);
 
 % define the bounds for the grid
 latmin = max(floor(min(poly(:,1))/latstep)*latstep, -90);
@@ -31,4 +32,4 @@ posllh = [latmesh(:), lonmesh(:), zeros(length(latmesh(:)), 1)];
 
 % create the users (the IDs will just be sequential) and flag whether or
 % not they are within the polygon
-usrs = sgt.User(posllh, 'Polygon', poly);
+usrs = sgt.User(posllh, 'Polygon', polyShape);

@@ -1,9 +1,6 @@
 function testGeneratePolygon
-% clear; close all; clc;
-disp('-----------------')
-disp('Testing generatePolygon.m')
-disp('-----------------')
 
+testResults = [];
 %% Define test parameters
 testMatrix = [...
     4.9054152e+01  -1.2317659e+02;...
@@ -114,12 +111,12 @@ try
     test1 = sgt.tools.generatePolygon('usrconus.dat');
     
     if (isa(test1, 'polyshape'))
-        disp('test1 passed')
+
     else
-        disp('*****test1 failed*****')
+        testResults(1) = 1;
     end
 catch
-    disp('*****test1 failed*****')
+    testResults(1) = 1;
 end
 
 %% Test 2 - basic - generate polyshape from matrix
@@ -127,12 +124,12 @@ try
     test2 = sgt.tools.generatePolygon(testMatrix);
     
     if (isa(test2, 'polyshape'))
-        disp('test2 passed')
+
     else
-        disp('*****test2 failed*****')
+        testResults(2) = 1;
     end
 catch
-    disp('*****test2 failed*****')
+    testResults(2) = 1;
 end
 
 
@@ -143,24 +140,34 @@ try
     warning('on', 'MATLAB:polyshape:repairedBySimplify')
     
     if (isa(test3, 'polyshape'))
-        disp('test3 passed')
+
     else
-        disp('*****test3 failed*****')
+        testResults(3) = 1;
     end
 catch
-    disp('*****test3 failed*****')
+    testResults(3) = 1;
 end
 
 %% Test 4 -  test broken matrix
 try
     test4 = sgt.tools.generatePolygon('badusrconus.dat');
     
-    disp('*****test4 failed*****')
+    testResults(4) = 1;
 catch
-    disp('test4 passed')
+
 end
 
-
+%% Display test results
+if any(testResults)
+    disp('-----------------')
+    disp('Testing generatePolygon.m')
+    disp('-----------------')
+    
+    testResults = find(testResults);
+    for i = 1:length(testResults)
+        fprintf(['test', num2str(testResults(i)), ' failed\n'])
+    end
+end
 
 
 

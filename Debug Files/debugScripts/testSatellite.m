@@ -1,8 +1,6 @@
 function testSatellite()
-disp('-----------------')
-disp('Testing Satellite.m')
-disp('-----------------')
 
+testResults = [];
 %% Define test parameters
 prn = 1;
 eccentricity = 0.0091;
@@ -21,9 +19,8 @@ try
     test1 = sgt.Satellite(prn, eccentricity, toa, inclination, rora, sqrta, raan, argumentOfPerigee,...
         meanAnomaly, af0, af1);
     
-    disp('test1 passed')
 catch
-    disp('*****test1 failed*****')
+    testResults(1) = 1;
 end
 
 %% Test 2 - test varargin Constellation
@@ -32,12 +29,12 @@ try
         meanAnomaly, af0, af1, 'Constellation', 'Galileo');
     
     if strcmp(test2.Constellation, 'Galileo')
-        disp('test2 passed')
+        
     else
-        disp('*****test2 failed*****')
+        testResults(2) = 1;
     end
 catch
-    disp('*****test2 failed*****')
+    testResults(2) = 1;
 end
 
 %% Test 3 - test bad varargin Constellation
@@ -45,9 +42,9 @@ try
     test3 = sgt.Satellite(prn, eccentricity, toa, inclination, rora, sqrta, raan, argumentOfPerigee,...
         meanAnomaly, af0, af1, 'Constellation', {'GPS', 'Galileo'});
     
-    disp('*****test3 failed*****')
+    testResults(3) = 1;
 catch
-    disp('test3 passed')
+    
 end
 
 %% Test 4 - test multiple satellites with one varargin Constellation
@@ -59,12 +56,12 @@ try
     
     if (numel(test4) == 2) && (strcmp(test4(1).Constellation, 'Galileo')) &&...
             (strcmp(test4(2).Constellation, 'Galileo'))
-        disp('test4 passed')
+        
     else
-        disp('*****test4 failed*****')
+        testResults(4) = 1;
     end
 catch
-    disp('*****test4 failed*****')
+    
 end
 
 %% Test 5 - test multiple satellites with same number of varargin Constellation
@@ -76,12 +73,12 @@ try
     
     if (numel(test5) == 2) && (strcmp(test5(1).Constellation, 'Galileo')) &&...
             (strcmp(test5(2).Constellation, 'BDS'))
-        disp('test5 passed')
+        
     else
-        disp('*****test5 failed*****')
+        testResults(5) = 1;
     end
 catch
-    disp('*****test5 failed*****')
+
 end
 
 %% Test 6 - test multiple satellites with wrong number of varargin Constellation
@@ -91,9 +88,21 @@ try
         argumentOfPerigee*ones(2,1), meanAnomaly*ones(2,1), af0*ones(2,1), af1*ones(2,1),...
         'Constellation', {'Galileo', 'BDS', 'GLONASS'});
     
-    disp('*****test6 failed*****')
+    testResults(6) = 1;
 catch
-    disp('test6 passed')
+
+end
+
+%% Display test results
+if any(testResults)
+    disp('-----------------')
+    disp('Testing Satellite.m')
+    disp('-----------------')
+    
+    testResults = find(testResults);
+    for i = 1:length(testResults)
+        fprintf(['test', num2str(testResults(i)), ' failed\n'])
+    end
 end
 
 

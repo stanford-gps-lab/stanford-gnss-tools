@@ -20,6 +20,10 @@ testFromAlmMatrix();
 testUser();
 testGeneratePolygon();
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%% If test passes, then the command prompt will be clear %%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 %% back to home directory
 cd(homedir)
 diary off
