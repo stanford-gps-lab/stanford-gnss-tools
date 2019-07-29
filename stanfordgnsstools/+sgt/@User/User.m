@@ -92,14 +92,14 @@ classdef User < matlab.mixin.Copyable
             
             % check which points are within the polygon
             inBnds = false(Nusers,1);
-            if (exist('res', 'var') == 1) && (isfield(res, 'Polygon') == 1) && ~isempty(res.Polygon)
+            if (exist('res', 'var') == 1) && isfield(res, 'Polygon') && ~isempty(res.Polygon)
                 polygon = res.Polygon;
                 polycheck = inpolygon(posllh(:,2), posllh(:,1), polygon.Vertices(:,1), polygon.Vertices(:,2));
                 inBnds = (polycheck > 0);  % inpolygon returns 0.5 in some versions of MATLAB
             end
             
             % expand the elevation mask if only a single value
-            if (exist('res.ElevationMask', 'var') == 1)
+            if (exist('res', 'var') == 1) && isfield(res, 'ElevationMask') && ~isempty(res.ElevationMask)
                 if length(res.ElevationMask) == 1
                     elMask = res.ElevationMask * ones(Nusers,1);
                 elseif length(res.ElevationMask) == Nusers

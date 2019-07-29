@@ -1,5 +1,5 @@
 function testUser()
-clear; close all; clc;
+% clear; close all; clc;
 disp('-----------------')
 disp('Testing User.m')
 disp('-----------------')
@@ -7,6 +7,13 @@ disp('-----------------')
 %% Define test parameters
 userPosition = [37.427127, -122.173243, 17];
 userPosition2 = repmat(userPosition, [2, 1]);
+userPosition3 = [37.427127, -122.173243, 17;...
+    37.427127, 122.173243, 17];
+userPosition4 = [userPosition; userPosition3];
+
+myPolygon = sgt.tools.generatePolygon('usrconus.dat');
+myElevationMask = 15*pi/180;
+myElevationMask2 = [15; 20].*pi/180;
 
 %% Test 1 - basic
 try
@@ -93,9 +100,8 @@ catch
     disp('test9 passed')
 end
 
-% Test 10 - test single user with polygon
+%% Test 10 - test single user with polygon
 try
-    myPolygon = sgt.tools.generatePolygon('usrconus.dat');
     test10 = sgt.User(userPosition, 'Polygon', myPolygon);
     
     if test10.InBound
@@ -108,18 +114,74 @@ catch
 end
 
 %% Test 11 - test multiple users with polygon
+try
+    test11 = sgt.User(userPosition3, 'Polygon', myPolygon);
+    
+    if test11(1).InBound && ~test11(2).InBound
+        disp('test11 passed')
+    else
+        disp('*****test11 failed*****')
+    end
+catch
+    disp('*****test11 failed*****')
+end
 
-%% Test 12 - test single user with bad polygon
+%% Test 12 - test single user with single elevation
+try
+    test12 = sgt.User(userPosition, 'ElevationMask', myElevationMask);
+    
+    if test12.ElevationMask == myElevationMask
+        disp('test12 passed')
+    else
+        disp('*****test12 failed*****')
+    end
+catch
+    disp('*****test12 failed******')
+end
 
-%% Test 13 - test single user with single elevation
+%% Test 13 - test multiple users with single elevation
+try
+    test13 = sgt.User(userPosition2, 'ElevationMask', myElevationMask);
+    
+    if (test13(1).ElevationMask == myElevationMask) && (test13(2).ElevationMask == myElevationMask)
+        disp('test13 passed')
+    else
+        disp('*****test13 failed*****')
+    end
+catch
+    disp('*****test13 failed*****')
+end
 
-%% Test 14 - test multiple users with single elevation
+%% Test 14 - test single user with multiple elevations
+try
+    test14 = sgt.User(userPosition, 'ElevationMask', myElevationMask2);
+    
+    disp('*****test14 failed*****')
+catch
+    disp('test14 passed')
+end
 
-%% Test 15 - test single user with multiple elevations
+%% Test 15 - test multiple users with same number of elevations
+try
+    test15 = sgt.User(userPosition2, 'ElevationMask', myElevationMask2);
+    
+    if (test15(1).ElevationMask == myElevationMask2(1)) && (test15(2).ElevationMask == myElevationMask2(2))
+        disp('test15 passed')
+    else
+        disp('*****test15 failed*****')
+    end
+catch
+    disp('*****test15 failed*****')
+end
 
-%% Test 16 - test multiple users with same number of elevations
-
-%% Test 17 - test multiple users with wrong number of elevations
+%% Test 16 - test multiple users with wrong number of elevations
+try
+    test16 = sgt.User(userPosition4, 'ElevationMask', myElevationMask2);
+    
+    disp('*****test16 failed*****')
+catch
+    disp('test16 passed')
+end
 
 
 
