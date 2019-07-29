@@ -15,7 +15,7 @@ function usrs = createUserGrid(polyfile, latstep, lonstep)
 %   https://github.com/stanford-gps-lab/stanford-gnss-tools
 
 % load in the polygon file
-poly = load(polyfile);
+poly = sgt.tools.generatePolygon(polyfile);
 
 % define the bounds for the grid
 latmin = max(floor(min(poly(:,1))/latstep)*latstep, -90);
