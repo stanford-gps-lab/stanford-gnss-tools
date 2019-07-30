@@ -19,6 +19,7 @@ testFromYuma();
 testFromAlmMatrix();
 testUser();
 testGeneratePolygon();
+testCreateUserGrid();
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%% If test passes, then the command prompt will be clear %%%%%%%%%%

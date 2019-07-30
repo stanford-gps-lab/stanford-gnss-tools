@@ -11,6 +11,8 @@ classdef Satellite < matlab.mixin.Copyable
 %   same length.
 %
 %   varargin arguments:
+%   'Constellation' - Constellation name as a string that the satellite is
+%   in.
 %
 %   See Also: sgt.Satellite.fromAlmMatrix,
 %   sgt.Satellite.fromYuma
