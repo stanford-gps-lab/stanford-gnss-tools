@@ -1,20 +1,6 @@
 function users = createUserGrid(varargin)
 % createUserGrid    create a regular grid of users within a given polygon
 %
-%   usrs = sgt.User.createUserGrid(polyfile, latstep, lonstep)
-%   creates a list of users that lie within a box that bounds the polygon
-%   specified in the polyfile.  The grid latitude and longitude step sizes
-%   as specified as latstep and lonstep, respectively.
-%
-%   user = sgt.User.createUserGrid(numUsers)
-%   creates a list of users that are evenly distributed throughout the
-%   globe. NOTICE: The number of users that are generated are not exactly
-%   equal to the value numUsers. This is done in order to evenly distribute
-%   users. If it is preferred to generate a grid of users that are
-%   constrained within lat and lon boundaries, create a polyfile in the
-%   form of a rectangle and use the 3-argument implementation of this
-%   function shown above.
-%
 %   user = sgt.User.createUserGrid(varargin)
 %   creates a user grid based on a number of possible input arguments
 %
@@ -109,22 +95,8 @@ if (sum(inputLogic == [1 0 0 0]) == 4)  % NumUsers
     gridLon = lonMin:lonStep:lonMax;
     [latMesh, lonMesh] = meshgrid(gridLat, gridLon);
     posLLH = [latMesh(:), lonMesh(:), zeros(length(latMesh(:)), 1)];
-    % Don't double count the poles
-    latMinInd = find(posLLH(:,1) ~= -90);
-    if latMinInd(1) ~= 1
-       posLLH = [-90, 0, 0;...
-           posLLH(latMinInd(1):end, :)]; 
-    end
-    latMaxInd = find(posLLH(:,1) == 90);
-    if ~isempty(latMaxInd)
-       posLLH = [posLLH(1:latMaxInd(1)-1, :);...
-           90, 0, 0]; 
-    end
-    % Don't double count the prime meridian
-    if any(posLLH(:,2) == 0) && any(posLLH(:,2) == 360)
-        lonMaxInd = (posLLH(:,2) == 360);
-        posLLH(lonMaxInd, :) = [];
-    end
+    % Check for redundant users
+    posLLH = checkRedundantUsers(posLLH);
     
     % create the users (the IDs will just be sequential)
     users = sgt.User(posLLH);
@@ -147,22 +119,8 @@ elseif (sum(inputLogic == [1 0 0 1]) == 4)  % NumUsers + GridBoundary
     gridLon = lonMin:lonStep:lonMax;
     [latMesh, lonMesh] = meshgrid(gridLat, gridLon);
     posLLH = [latMesh(:), lonMesh(:), zeros(length(latMesh(:)), 1)];
-    % Don't double count the poles
-    latMinInd = find(posLLH(:,1) ~= -90);
-    if latMinInd(1) ~= 1
-       posLLH = [-90, 0, 0;...
-           posLLH(latMinInd(1):end, :)]; 
-    end
-    latMaxInd = find(posLLH(:,1) == 90);
-    if ~isempty(latMaxInd)
-       posLLH = [posLLH(1:latMaxInd(1)-1, :);...
-           90, 0, 0]; 
-    end
-    % Don't double count the prime meridian
-    if any(posLLH(:,2) == 0) && any(posLLH(:,2) == 360)
-        lonMaxInd = (posLLH(:,2) == 360);
-        posLLH(lonMaxInd, :) = [];
-    end
+    % Check for redundant users
+    posLLH = checkRedundantUsers(posLLH);
     
     % create the users (the IDs will just be sequential)
     users = sgt.User(posLLH);
@@ -207,8 +165,6 @@ elseif (sum(inputLogic == [0 0 1 1]) == 4)  % GridStep + GridBoundary
 else
     error('Invalid inputs. Check input arguments.')
 end
-
-
 end
 
 % Parse varargin
@@ -237,3 +193,30 @@ parser.parse(varargin{:})
 res = parser.Results;
 
 end
+
+% Function to get rid of redundant users
+function posLLH = checkRedundantUsers(posLLH)
+% Don't double count the poles
+latMinInd = find(posLLH(:,1) ~= -90);
+if latMinInd(1) ~= 1
+    posLLH = [-90, 0, 0;...
+        posLLH(latMinInd(1):end, :)];
+end
+latMaxInd = find(posLLH(:,1) == 90);
+if ~isempty(latMaxInd)
+    posLLH = [posLLH(1:latMaxInd(1)-1, :);...
+        90, 0, 0];
+end
+% Don't double count the prime meridian
+if any(posLLH(:,2) == 0) && any(posLLH(:,2) == 360)
+    lonMaxInd = (posLLH(:,2) == 360);
+    posLLH(lonMaxInd, :) = [];
+end
+end
+
+
+
+
+
+
+
