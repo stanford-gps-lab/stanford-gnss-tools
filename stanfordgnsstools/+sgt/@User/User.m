@@ -144,7 +144,7 @@ classdef User < matlab.mixin.Copyable
         % TODO: want constructors to make different grid types
 %         objs = createUserGrid(numSites)
         usrs = createFromLLHFile(llhfile, polyfile)
-        usrs = createUserGrid(polyfile, latstep, lonstep)
+        usrs = createUserGrid(varargin)
 	end
 
 
