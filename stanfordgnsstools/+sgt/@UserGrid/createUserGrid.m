@@ -79,7 +79,7 @@ inputLogic = [(~isempty(res.NumUsers)), (~isempty(res.PolygonFile)),...
 
 % Conditional cases for different uses of the method
 if (sum(inputLogic == [1 0 0 0]) == 4)  % NumUsers
-    sqrtNumUsers = sqrt(res.NumUsers);    % Value specified in this case is the number of users
+    sqrtNumUsers = sqrt(res.NumUsers);
     % define the bounds for the grid
     latMin = -90;
     latMax = 90;
@@ -103,7 +103,7 @@ if (sum(inputLogic == [1 0 0 0]) == 4)  % NumUsers
     return;
     
 elseif (sum(inputLogic == [1 0 0 1]) == 4)  % NumUsers + GridBoundary
-    sqrtNumUsers = sqrt(res.NumUsers);    % Value specified in this case is the number of users
+    sqrtNumUsers = sqrt(res.NumUsers);
     % define the bounds for the grid
     latMin = res.GridBoundary(1);
     latMax = res.GridBoundary(2);
@@ -127,6 +127,32 @@ elseif (sum(inputLogic == [1 0 0 1]) == 4)  % NumUsers + GridBoundary
     return;
     
 elseif (sum(inputLogic == [1 1 0 0]) == 4)  % NumUsers + PolygonFile
+    sqrtNumUsers = sqrt(res.NumUsers);
+    
+    % load in the polygon file
+    poly = load(res.PolygonFile);
+    
+    % define the bounds for the grid
+    latMin = max(floor(min(poly(:,1))), -90);
+    latMax = min(ceil(max(poly(:,1))), 90);
+    lonMin = floor(min(poly(:,2)));
+    lonMax = ceil(max(poly(:,2)));
+    
+    % Define latStep and lonStep
+    latStep = ceil((latMax - latMin)/sqrtNumUsers);
+    lonStep = ceil((lonMax - lonMin)/sqrtNumUsers);
+    
+    % create the lat/lon points that define the grid
+    gridLat = latMin:latStep:latMax;
+    gridLon = lonMin:lonStep:lonMax;
+    [latMesh, lonMesh] = meshgrid(gridLat, gridLon);
+    posLLH = [latMesh(:), lonMesh(:), zeros(length(latMesh(:)), 1)];
+    % Check for redundant users
+    posLLH = checkRedundantUsers(posLLH);
+    
+    % create the users (the IDs will just be sequential)
+    userGrid = sgt.UserGrid(posLLH, 'PolygonFile', res.PolygonFile);
+    return;
     
 elseif (sum(inputLogic == [0 1 1 0]) == 4)  % PolygonFile + GridStep
     % load in the polygon file
@@ -151,6 +177,8 @@ elseif (sum(inputLogic == [0 1 1 0]) == 4)  % PolygonFile + GridStep
     gridLon = lonMin:lonStep:lonMax;
     [latMesh, lonMesh] = meshgrid(gridLat, gridLon);
     posLLH = [latMesh(:), lonMesh(:), zeros(length(latMesh(:)), 1)];
+    % Check for redundant users
+    posLLH = checkRedundantUsers(posLLH);
     
     % create the users (the IDs will just be sequential) and flag whether or
     % not they are within the polygon
@@ -159,7 +187,58 @@ elseif (sum(inputLogic == [0 1 1 0]) == 4)  % PolygonFile + GridStep
     
 elseif (sum(inputLogic == [0 0 1 0]) == 4)  % GridStep
     
+    % Define latStep and lonStep
+    latStep = res.GridStep(1);
+    if (length(res.GridStep) == 1)
+        lonStep = latStep;
+    else
+        lonStep = res.GridStep(2);
+    end
+    
+    % define the bounds for the grid
+    latMin = -90;
+    latMax = 90;
+    lonMin = 0;
+    lonMax = 360;
+    
+    % create the lat/lon points that define the grid
+    gridLat = latMin:latStep:latMax;
+    gridLon = lonMin:lonStep:lonMax;
+    [latMesh, lonMesh] = meshgrid(gridLat, gridLon);
+    posLLH = [latMesh(:), lonMesh(:), zeros(length(latMesh(:)), 1)];
+    % Check for redundant users
+    posLLH = checkRedundantUsers(posLLH);
+    
+    % create the users (the IDs will just be sequential)
+    userGrid = sgt.UserGrid(posLLH);
+    return;
+    
 elseif (sum(inputLogic == [0 0 1 1]) == 4)  % GridStep + GridBoundary
+    % Define latStep and lonStep
+    latStep = res.GridStep(1);
+    if (length(res.GridStep) == 1)
+        lonStep = latStep;
+    else
+        lonStep = res.GridStep(2);
+    end
+    
+    % define the bounds for the grid
+    latMin = res.GridBoundary(1);
+    latMax = res.GridBoundary(2);
+    lonMin = res.GridBoundary(3);
+    lonMax = res.GridBoundary(4);
+    
+    % create the lat/lon points that define the grid
+    gridLat = latMin:latStep:latMax;
+    gridLon = lonMin:lonStep:lonMax;
+    [latMesh, lonMesh] = meshgrid(gridLat, gridLon);
+    posLLH = [latMesh(:), lonMesh(:), zeros(length(latMesh(:)), 1)];
+    % Check for redundant users
+    posLLH = checkRedundantUsers(posLLH);
+    
+    % create the users (the IDs will just be sequential)
+    userGrid = sgt.UserGrid(posLLH);
+    return;
     
 else
     error('Invalid inputs. Check input arguments.')

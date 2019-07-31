@@ -3,11 +3,14 @@ function testCreateUserGrid()
 testResults = [];
 %% Define parameters here
 polygonFile = 'usrconus.dat';
+gridBoundary = [-90, 90, 0, 360];
+gridBoundary2 = [-45, 45, 90, 270];
+gridStep = 10;
 latStep = 10;
 lonStep = 10;
 numUsers = 100;
 
-%% Test 1 - Create user grid with polygon and gridstep
+%% Test 1 - Create user grid with polygonfile and gridstep
 try
     test1 = sgt.UserGrid.createUserGrid('PolygonFile', polygonFile, 'GridStep', [latStep, lonStep]);
     
@@ -28,17 +31,35 @@ end
 
 %% Test 3 - Create user grid with NumUsers and GridBoundary
 try
-    test3 = sgt.UserGrid.createUserGrid('NumUsers', numUsers, 'GridBoundary', [-90, 90, 0, 360]);
+    test3 = sgt.UserGrid.createUserGrid('NumUsers', numUsers, 'GridBoundary', gridBoundary);
     
 catch
     testResults(3) = 1;
 end
 
-%% Test 4 - Create user grid with NumUsers and Polygon
+%% Test 4 - Create user grid with NumUsers and PolygonFile
+try
+    test4 = sgt.UserGrid.createUserGrid('NumUsers', numUsers, 'PolygonFile', polygonFile);
+    
+catch
+    testResults(4) = 1;
+end
 
 %% Test 5 - Create user grid with GridStep
+try
+    test5 = sgt.UserGrid.createUserGrid('GridStep', gridStep);
+    
+catch
+    testResults(5) = 1;
+end
 
 %% Test 6 - Create user grid with GridStep and GridBoundary
+try
+    test6 = sgt.UserGrid.createUserGrid('GridStep', gridStep, 'GridBoundary', gridBoundary2);
+    
+catch
+    testResults(6) = 1;
+end
 
 %% Display test results
 if any(testResults)
