@@ -27,6 +27,7 @@ function userGrid = createUserGrid(varargin)
 %   boundary. This boundary is used to determine whether created users are
 %   within the geographic boundary, and in some cases defines the
 %   'GridBoundary' as shown in an example below.
+%   
 %
 %   Examples: The following are a number of common use cases for this
 %   method.

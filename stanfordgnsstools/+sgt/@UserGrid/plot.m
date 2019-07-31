@@ -20,12 +20,12 @@ if (nargin > 1)
     end
 end
 
-% % Plot map
-sgt.plotearth.plotearth;
+% Plot map
+sgt.plotearth.earth_sphere('m');
 
 % Plot user locations on map
 hold on
-plot3(obj.GridPositionECEF(:,1), obj.GridPositionECEF(:,2), obj.GridPositionECEF(:,3), '*')
+plot3(obj.GridPositionECEF(:,1), obj.GridPositionECEF(:,2), obj.GridPositionECEF(:,3), 'r.')
 
 
 
