@@ -39,7 +39,7 @@ properties
     % Defined as [x, y, z] in [m, m, m]. Will be an Nx3 matrix for N users.
     GridPositionECEF
     
-    % Polygon - a polyshape object that defines a geographic boundary in 
+    % Polygon - a polyshape object that defines a geographic boundary in
     % terms of a series of [lat, lon] positions.
     Polygon = [];
     
@@ -67,7 +67,7 @@ methods
         obj.GridPositionECEF = sgt.tools.llh2ecef(posLLH);
         
         % Create users from posLLH
-        obj.Users = sgt.User(posLLH, varargin{:});        
+        obj.Users = sgt.User(posLLH, varargin{:});
         
         % Parse and handle varargin
         if nargin > 1
@@ -75,17 +75,24 @@ methods
             res = parseInput(varargin{:});
             
             % Store polygon
-            obj.Polygon = sgt.tools.generatePolygon(res.PolygonFile);
+            if ~isempty(res.PolygonFile)
+                obj.Polygon = sgt.tools.generatePolygon(res.PolygonFile);
+            end
+            
+            % Store GridName
+            if ~isempty(res.GridName)
+                obj.GridName = res.GridName;
+            end
         end
     end
     
 end
 
 methods
-   % Method to plot users on Mercator projection
-   
-   % Method to plot users on a globe (perhaps just make a 'plot' function
-   % with a varargin for Mercator?)
+    % Method to plot users on Mercator projection
+    
+    % Method to plot users on a globe (perhaps just make a 'plot' function
+    % with a varargin for Mercator?)
 end
 
 % Static Methods
@@ -104,6 +111,10 @@ parser = inputParser;
 % Polygon
 validPolygonFileFn = @(x) (ischar(x));
 parser.addParameter('PolygonFile', [], validPolygonFileFn)
+
+% GridName
+validGridNameFn = @(x) (ischar(x));
+parser.addParameter('GridName', [], validGridNameFn)
 
 % Run parser and set results
 parser.parse(varargin{:})
