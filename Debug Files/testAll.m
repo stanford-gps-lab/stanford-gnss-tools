@@ -1,33 +1,25 @@
 % Test all
 clear; close all; clc;
 
-%% Record home directory
-homedir = pwd;
+%% Get test file names to be run
 
-%% Go into test directory
+testDir = [pwd, '\debugScripts'];
+testList = dir(fullfile(testDir, '*.m'));
 
-testdir = [pwd, '\debugScripts'];
 % Record command prompt
 delete testResults.test
 diary on
 diary testResults.test
-cd(testdir)
 
 %% Test sgt
-testSatellite();
-testFromYuma();
-testFromAlmMatrix();
-testUser();
-testGeneratePolygon();
-testCreateUserGrid();
-testUserGrid();
+for i = 1:length(testList)
+   run(fullfile(testDir, testList(i).name)); 
+end
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%% If test passes, then the command prompt will be clear %%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-%% back to home directory
-cd(homedir)
 diary off
 
 
