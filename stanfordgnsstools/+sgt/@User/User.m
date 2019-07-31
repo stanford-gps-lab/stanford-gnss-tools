@@ -74,6 +74,9 @@ classdef User < matlab.mixin.Copyable
             % get the number of users
             [Nusers, ~] = size(posllh);
             obj(Nusers) = sgt.User();
+            
+            % Shift longitude
+            posllh(:,2) = sgt.tools.lonShift(posllh(:,2));
 
             % Record lat and lon of input positions in radians
             latRad = posllh(:,1)*pi/180;
