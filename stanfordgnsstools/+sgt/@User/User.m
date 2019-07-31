@@ -4,13 +4,18 @@ classdef User < matlab.mixin.Copyable
 %   frame transformations can take place.
 %
 %   user = sgt.User(posLLH, varargin) creates user(s) at the (lat, lon, alt)
-%   positions specified in posllh.  posllh should be an Nx3 matrix for the
+%   positions specified in posLLH.  posLLH should be an Nx3 matrix for the
 %   creation of N users with each row containing the (lat, lon, alt) of the
-%   user in [deg, deg, m].
+%   user in [deg, deg, m]. For meta data concerning all users, see
+%   sgt.UserGrid.
+%
+%   See Also: sgt.UserGrid, sgt.UserGrid.createUserGrid,
+%   sgt.UserGrid.createFromLLHFile
 %
 %   varargin: 
 %   ID - the ID of the user
-%   Polygon - 
+%   Polygon - specifies the name of a polyfile that bounds a geographic
+%   region.
 %   ElevationMask - Elevation mask of users. Default 5 degrees.         
 
 % Copyright 2019 Stanford University GPS Laboratory
@@ -141,10 +146,7 @@ classdef User < matlab.mixin.Copyable
     end
 
 	methods (Static)
-        % TODO: want constructors to make different grid types
-%         objs = createUserGrid(numSites)
-        usrs = createFromLLHFile(llhfile, polyfile)
-        usrs = createUserGrid(varargin)
+        
 	end
 
 
