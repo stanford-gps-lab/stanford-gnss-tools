@@ -14,9 +14,9 @@ classdef User < matlab.mixin.Copyable
 %
 %   varargin: 
 %   ID - the ID of the user
-%   Polygon - specifies the name of a polyfile that bounds a geographic
+%   PolygonFile - specifies the name of a polyfile that bounds a geographic
 %   region.
-%   ElevationMask - Elevation mask of users. Default 5 degrees.         
+%   ElevationMask - Elevation mask of users [rad]. Default 5 degrees.         
 
 % Copyright 2019 Stanford University GPS Laboratory
 %   This file is part of the Stanford GNSS Tools which is released under 
@@ -70,10 +70,6 @@ classdef User < matlab.mixin.Copyable
                 res = parseInput(varargin{:});
                 
             end
-            
-            % NOTES: posllh right now has to be a matrix with N rows (for N
-            % sites) where each row contains [lat lon alt] in [deg, deg, m]
-            % for each of the sites.
 
             % get the number of users
             [Nusers, ~] = size(posllh);
@@ -97,8 +93,8 @@ classdef User < matlab.mixin.Copyable
             
             % check which points are within the polygon
             inBnds = false(Nusers,1);
-            if (exist('res', 'var') == 1) && isfield(res, 'Polygon') && ~isempty(res.Polygon)
-                polygon = res.Polygon;
+            if (exist('res', 'var') == 1) && isfield(res, 'PolygonFile') && ~isempty(res.PolygonFile)
+                polygon = sgt.tools.generatePolygon(res.PolygonFile);
                 polycheck = inpolygon(posllh(:,2), posllh(:,1), polygon.Vertices(:,1), polygon.Vertices(:,2));
                 inBnds = (polycheck > 0);  % inpolygon returns 0.5 in some versions of MATLAB
             end
@@ -162,11 +158,15 @@ validIDFn = @(x) (isnumeric(x));
 parser.addParameter('ID', [], validIDFn);
 
 % Polygon
-validPolygonFn = @(x) (isa(x, 'polyshape'));
-parser.addParameter('Polygon', [], validPolygonFn);
+validPolygonFileFn = @(x) (ischar(x));
+parser.addParameter('PolygonFile', [], validPolygonFileFn);
 
 % ElevationMask
-parser.addParameter('ElevationMask', 5*pi/180);
+validElevationMaskFn = @(x) (isnumeric(x)) & all((abs(x) < 90*pi/180));
+parser.addParameter('ElevationMask', 5*pi/180, validElevationMaskFn);
+
+% Varargins that may be passed through UserGrid
+parser.addParameter('GridName', []);
 
 % Run parser and set results
 parser.parse(varargin{:})

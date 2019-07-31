@@ -8,7 +8,7 @@ userPosition3 = [37.427127, -122.173243, 17;...
     37.427127, 122.173243, 17];
 userPosition4 = [userPosition; userPosition3];
 
-myPolygon = sgt.tools.generatePolygon('usrconus.dat');
+polygonFile = 'usrconus.dat';
 myElevationMask = 15*pi/180;
 myElevationMask2 = [15; 20].*pi/180;
 
@@ -96,7 +96,7 @@ end
 
 %% Test 10 - test single user with polygon
 try
-    test10 = sgt.User(userPosition, 'Polygon', myPolygon);
+    test10 = sgt.User(userPosition, 'PolygonFile', polygonFile);
     
     if test10.InBound
 
@@ -109,7 +109,7 @@ end
 
 %% Test 11 - test multiple users with polygon
 try
-    test11 = sgt.User(userPosition3, 'Polygon', myPolygon);
+    test11 = sgt.User(userPosition3, 'PolygonFile', polygonFile);
     
     if test11(1).InBound && ~test11(2).InBound
 

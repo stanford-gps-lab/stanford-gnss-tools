@@ -89,9 +89,9 @@ methods
 end
 
 % Static Methods
-methods
-    usrs = createFromLLHFile(llhfile, polyfile)
-    usrs = createUserGrid(varargin)
+methods (Static)
+    userGrid = createFromLLHFile(llhfile, polyfile)
+    userGrid = createUserGrid(varargin)
     
 end
 end
@@ -104,7 +104,6 @@ parser = inputParser;
 % Polygon
 validPolygonFileFn = @(x) (ischar(x));
 parser.addParameter('PolygonFile', [], validPolygonFileFn)
-
 
 % Run parser and set results
 parser.parse(varargin{:})

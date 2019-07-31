@@ -1,7 +1,7 @@
-function users = createUserGrid(varargin)
-% createUserGrid    create a regular grid of users within a given polygon
+function userGrid = createUserGrid(varargin)
+% createUserGrid    create a grid of users with specified inputs
 %
-%   user = sgt.User.createUserGrid(varargin)
+%   user = sgt.UserGrid.createUserGrid(varargin)
 %   creates a user grid based on a number of possible input arguments
 %
 %   varargin:
@@ -23,40 +23,40 @@ function users = createUserGrid(varargin)
 %   is calculated from other arguments and is assumed to be the same for
 %   lattitude and longitude.
 %   -----
-%   'Polygon' - a polygon file that is used to specify a geographic
+%   'PolygonFile' - a polygon file that is used to specify a geographic
 %   boundary. This boundary is used to determine whether created users are
 %   within the geographic boundary, and in some cases defines the
 %   'GridBoundary' as shown in an example below.
 %
 %   Examples: The following are a number of common use cases for this
 %   method.
-%   ----- sgt.User.createUserGrid('NumUsers', numUsers)
+%   ----- sgt.UserGrid.createUserGrid('NumUsers', numUsers)
 %   This implementation creates a grid of users over the entire surface of
 %   the globe and evenly distributes them.
-%   ----- sgt.User.createUserGrid('NumUsers', numUsers, 'GridBoundary',
+%   ----- sgt.UserGrid.createUserGrid('NumUsers', numUsers, 'GridBoundary',
 %   [latMin, latMax, lonMin, lonMax])
 %   This implementation creates a grid of users over the surface of the
 %   globe specified by the 'GridBoundary'.
-%   ----- sgt.User.createUserGrid('NumUsers', numUsers, 'Polygon',
+%   ----- sgt.UserGrid.createUserGrid('NumUsers', numUsers, 'PolygonFile',
 %   polyfile)
-%   This implementation creates a 'GridBoundary' from the input 'Polygon'
+%   This implementation creates a 'GridBoundary' from the input 'PolygonFile'
 %   file and evenly distributes the number of specified users throughout
 %   the geographic boundary. The users created in this scenario will also
 %   have the property 'InBound' determined from the same polyfile.
-%   ----- sgt.User.createUserGrid('Polygon', polyfile, 'GridStep',
+%   ----- sgt.UserGrid.createUserGrid('PolygonFile', polyfile, 'GridStep',
 %   [latStep, lonStep])
 %   This implementation creates a 'GridBoundary' using the specified
 %   polyfile and distributes the users throughout the geographic region
 %   using the specified 'GridStep'.
-%   ----- sgt.User.createUserGrid('GridStep', [latStep, lonStep])
+%   ----- sgt.UserGrid.createUserGrid('GridStep', [latStep, lonStep])
 %   This implementation distributes users throughout the globe with spacing
 %   specified by [latStep, lonStep].
-%   ----- sgt.User.createUserGrid('GridStep', [latStep, lonStep],
+%   ----- sgt.UserGrid.createUserGrid('GridStep', [latStep, lonStep],
 %   'GridBoundary', [latMin, latMax, lonMin, lonMax])
 %   This implementation distributes throughout the geographic region
 %   specified by 'GridBoundary' using the specified 'GridStep'.
 %
-%   See also: sgt.User, sgt.User.createFromLLHFile
+%   See also: sgt.UserGrid, sgt.UserGrid.createFromLLHFile
 
 % Copyright 2019 Stanford University GPS Laboratory
 %   This file is part of the Stanford GNSS Tools which is released under
@@ -73,9 +73,9 @@ end
 res = parseInput(varargin{:});
 
 % Generates an array where 1 represents a field that is populated
-inputLogic = [(~isempty(res.NumUsers)), (~isempty(res.Polygon)),...
+inputLogic = [(~isempty(res.NumUsers)), (~isempty(res.PolygonFile)),...
     (~isempty(res.GridStep)), (~isempty(res.GridBoundary))];
-% [(1)NumUsers, (2)Polygon, (3)GridStep, (4)GridBoundary]
+% [(1)NumUsers, (2)PolygonFile, (3)GridStep, (4)GridBoundary]
 
 % Conditional cases for different uses of the method
 if (sum(inputLogic == [1 0 0 0]) == 4)  % NumUsers
@@ -99,7 +99,7 @@ if (sum(inputLogic == [1 0 0 0]) == 4)  % NumUsers
     posLLH = checkRedundantUsers(posLLH);
     
     % create the users (the IDs will just be sequential)
-    users = sgt.User(posLLH);
+    userGrid = sgt.UserGrid(posLLH);
     return;
     
 elseif (sum(inputLogic == [1 0 0 1]) == 4)  % NumUsers + GridBoundary
@@ -123,15 +123,14 @@ elseif (sum(inputLogic == [1 0 0 1]) == 4)  % NumUsers + GridBoundary
     posLLH = checkRedundantUsers(posLLH);
     
     % create the users (the IDs will just be sequential)
-    users = sgt.User(posLLH);
+    userGrid = sgt.UserGrid(posLLH);
     return;
     
-elseif (sum(inputLogic == [1 1 0 0]) == 4)  % NumUsers + Polygon
+elseif (sum(inputLogic == [1 1 0 0]) == 4)  % NumUsers + PolygonFile
     
-elseif (sum(inputLogic == [0 1 1 0]) == 4)  % Polygon + GridStep
+elseif (sum(inputLogic == [0 1 1 0]) == 4)  % PolygonFile + GridStep
     % load in the polygon file
-    poly = load(res.Polygon);
-    polygon = sgt.tools.generatePolygon(res.Polygon);
+    poly = load(res.PolygonFile);
     
     % Define latStep and lonStep
     latStep = res.GridStep(1);
@@ -155,7 +154,7 @@ elseif (sum(inputLogic == [0 1 1 0]) == 4)  % Polygon + GridStep
     
     % create the users (the IDs will just be sequential) and flag whether or
     % not they are within the polygon
-    users = sgt.User(posLLH, 'Polygon', polygon);
+    userGrid = sgt.UserGrid(posLLH, 'PolygonFile', res.PolygonFile);
     return;
     
 elseif (sum(inputLogic == [0 0 1 0]) == 4)  % GridStep
@@ -176,9 +175,9 @@ parser = inputParser;
 validNumUsersFn = @(x) (isnumeric(x));
 parser.addParameter('NumUsers', [], validNumUsersFn)
 
-% Polygon
-validPolygonFn = @(x) (ischar(x));
-parser.addParameter('Polygon', [], validPolygonFn)
+% PolygonFile
+validPolygonFileFn = @(x) (ischar(x));
+parser.addParameter('PolygonFile', [], validPolygonFileFn)
 
 % GridStep
 validGridStepFn = @(x) (isnumeric(x));
