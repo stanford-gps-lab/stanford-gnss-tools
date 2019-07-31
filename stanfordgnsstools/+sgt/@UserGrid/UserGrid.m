@@ -89,10 +89,7 @@ methods
 end
 
 methods
-    % Method to plot users on Mercator projection
-    
-    % Method to plot users on a globe (perhaps just make a 'plot' function
-    % with a varargin for Mercator?)
+    plot(varargin)
 end
 
 % Static Methods

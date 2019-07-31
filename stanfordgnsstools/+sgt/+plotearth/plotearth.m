@@ -263,11 +263,11 @@ try % sometime memory problem occurs
     switch projection
         case 'cube',
             display('compute cubed-sphere\n');
-            [Vertices Faces FaceID] = pppanal.plotearth.cubedsphere(n(1), ...
+            [Vertices Faces FaceID] = sgt.plotearth.cubedsphere(n(1), ...
                                                'equidistance', shape);
         case 'mercator',
             display('compute mercator-sphere\n');
-            [Vertices Faces FaceID] = pppanal.plotearth.mercator(n, shape);            
+            [Vertices Faces FaceID] = sgt.plotearth.mercator(n, shape);            
     end
     
     %% Preparation
