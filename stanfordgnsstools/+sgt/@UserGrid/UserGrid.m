@@ -60,6 +60,9 @@ methods
             return;
         end
         
+        % Shift longitude
+        posLLH(:,2) = sgt.tools.lonShift(posLLH(:,2));
+        
         % Store user locations in GridPositionLLH
         obj.GridPositionLLH = posLLH;
         

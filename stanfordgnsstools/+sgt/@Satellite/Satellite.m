@@ -60,10 +60,6 @@ classdef Satellite < matlab.mixin.Copyable
         % AF1 - clock drift [sec/sec]
         AF1
         
-        %
-        % Varargin properties
-        %
-        
         % Constellation - Specifies which constellation the satellite
         % belongs to.
         Constellation = 'GPS';

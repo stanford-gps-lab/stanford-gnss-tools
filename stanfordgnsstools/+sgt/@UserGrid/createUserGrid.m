@@ -111,6 +111,8 @@ if (sum(inputLogic == [1 0 0 0 0]) == numFields)  % NumUsers
     posLLH = [latMesh(:), lonMesh(:), zeros(length(latMesh(:)), 1)];
     % Check for redundant users
     posLLH = checkRedundantUsers(posLLH);
+    % Shift longitude
+    posLLH(:,2) = sgt.tools.lonShift(posLLH(:,2));
     
     % create the users (the IDs will just be sequential)
     userGrid = sgt.UserGrid(posLLH);
@@ -135,6 +137,8 @@ elseif (sum(inputLogic == [1 0 0 1 0]) == numFields)  % NumUsers + GridBoundary
     posLLH = [latMesh(:), lonMesh(:), zeros(length(latMesh(:)), 1)];
     % Check for redundant users
     posLLH = checkRedundantUsers(posLLH);
+    % Shift longitude
+    posLLH(:,2) = sgt.tools.lonShift(posLLH(:,2));
     
     % create the users (the IDs will just be sequential)
     userGrid = sgt.UserGrid(posLLH);
@@ -163,6 +167,8 @@ elseif (sum(inputLogic == [1 1 0 0 0]) == numFields)  % NumUsers + PolygonFile
     posLLH = [latMesh(:), lonMesh(:), zeros(length(latMesh(:)), 1)];
     % Check for redundant users
     posLLH = checkRedundantUsers(posLLH);
+    % Shift longitude
+    posLLH(:,2) = sgt.tools.lonShift(posLLH(:,2));
     
     % create the users (the IDs will just be sequential)
     userGrid = sgt.UserGrid(posLLH, 'PolygonFile', res.PolygonFile);
@@ -193,6 +199,8 @@ elseif (sum(inputLogic == [0 1 1 0 0]) == numFields)  % PolygonFile + GridStep
     posLLH = [latMesh(:), lonMesh(:), zeros(length(latMesh(:)), 1)];
     % Check for redundant users
     posLLH = checkRedundantUsers(posLLH);
+    % Shift longitude
+    posLLH(:,2) = sgt.tools.lonShift(posLLH(:,2));
     
     % create the users (the IDs will just be sequential) and flag whether or
     % not they are within the polygon
@@ -222,6 +230,8 @@ elseif (sum(inputLogic == [0 0 1 0 0]) == numFields)  % GridStep
     posLLH = [latMesh(:), lonMesh(:), zeros(length(latMesh(:)), 1)];
     % Check for redundant users
     posLLH = checkRedundantUsers(posLLH);
+    % Shift longitude
+    posLLH(:,2) = sgt.tools.lonShift(posLLH(:,2));
     
     % create the users (the IDs will just be sequential)
     userGrid = sgt.UserGrid(posLLH);
@@ -249,6 +259,8 @@ elseif (sum(inputLogic == [0 0 1 1 0]) == numFields)  % GridStep + GridBoundary
     posLLH = [latMesh(:), lonMesh(:), zeros(length(latMesh(:)), 1)];
     % Check for redundant users
     posLLH = checkRedundantUsers(posLLH);
+    % Shift longitude
+    posLLH(:,2) = sgt.tools.lonShift(posLLH(:,2));
     
     % create the users (the IDs will just be sequential)
     userGrid = sgt.UserGrid(posLLH);
@@ -257,6 +269,8 @@ elseif (sum(inputLogic == [0 0 1 1 0]) == numFields)  % GridStep + GridBoundary
 elseif (sum(inputLogic == [0 0 0 0 1]) == numFields)    % LLHFile
     % Load LLHFile
     posLLH = load(res.LLHFile);
+    % Shift longitude
+    posLLH(:,2) = sgt.tools.lonShift(posLLH(:,2));
     
     % Create the users (the IDs will just be sequential)
     userGrid = sgt.UserGrid(posLLH);
@@ -265,6 +279,8 @@ elseif (sum(inputLogic == [0 0 0 0 1]) == numFields)    % LLHFile
 elseif (sum(inputLogic == [0 1 0 0 1]) == numFields)    % PolygonFile + LLHFile
     % Load LLHFile
     posLLH = load(res.LLHFile);
+    % Shift longitude
+    posLLH(:,2) = sgt.tools.lonShift(posLLH(:,2));
     
     % create the users (the IDs will just be sequential) and flag whether or
     % not they are within the polygon
