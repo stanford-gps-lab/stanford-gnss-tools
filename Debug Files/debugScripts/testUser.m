@@ -16,7 +16,7 @@ myElevationMask2 = [15; 20].*pi/180;
 try
     test1 = sgt.User(userPosition);
     
-    if sum(abs(test1.PositionECEF - lla2ecef(userPosition)') < 10) == 3
+    if sum(abs(test1.PositionECEF - sgt.tools.llh2ecef(userPosition)') < 10) == 3
 
     else
         testResults(1) = 1;

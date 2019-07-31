@@ -16,6 +16,8 @@ for i = 1:length(testList)
    run(fullfile(testDir, testList(i).name)); 
 end
 
+license('inuse') %  This helps in development to ensure that on MATLAB is being used.
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%% If test passes, then the command prompt will be clear %%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
