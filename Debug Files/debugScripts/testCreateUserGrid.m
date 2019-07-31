@@ -9,6 +9,7 @@ gridStep = 10;
 latStep = 10;
 lonStep = 10;
 numUsers = 100;
+llhFile = 'myLLHFile.userLocation';
 
 %% Test 1 - Create user grid with polygonfile and gridstep
 try
@@ -59,6 +60,22 @@ try
     
 catch
     testResults(6) = 1;
+end
+
+%% Test 7 - Create user grid from LLHFile
+try
+    test7 = sgt.UserGrid.createUserGrid('LLHFile', llhFile);
+    
+catch
+    testResults(7) = 1;
+end
+
+%% Test 8 - Create user grid from LLHFile and include a PolygonFile
+try
+    test8 = sgt.UserGrid.createUserGrid('LLHFile', llhFile, 'PolygonFile', polygonFile);
+    
+catch
+   testResults(8) = 1; 
 end
 
 %% Display test results

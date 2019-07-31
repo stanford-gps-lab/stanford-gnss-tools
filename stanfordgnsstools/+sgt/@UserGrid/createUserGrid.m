@@ -27,7 +27,11 @@ function userGrid = createUserGrid(varargin)
 %   boundary. This boundary is used to determine whether created users are
 %   within the geographic boundary, and in some cases defines the
 %   'GridBoundary' as shown in an example below.
-%   
+%   -----
+%   'LLHFile' - a file containing LLH positions of all users. These are
+%   then directly used to create a user grid. If the LLH positions of a
+%   previous UserGrid is being used, these files are typically denoted as
+%   *.userLocation.
 %
 %   Examples: The following are a number of common use cases for this
 %   method.
@@ -56,8 +60,15 @@ function userGrid = createUserGrid(varargin)
 %   'GridBoundary', [latMin, latMax, lonMin, lonMax])
 %   This implementation distributes throughout the geographic region
 %   specified by 'GridBoundary' using the specified 'GridStep'.
+%   ----- sgt.UserGrid.createUserGrid('LLHFile', LLHFilename)
+%   This implementation generates a user grid based on the LLH provided in
+%   LLHFilename.
+%   ----- sgt.UserGrid.createUserGrid('LLHFile', LLHFilename,
+%   'PolygonFile', polyfile)
+%   This implementation generates a user grid based on the LLH provided in
+%   LLHFilename. It also incorporates the polygon saved in polyfile.
 %
-%   See also: sgt.UserGrid, sgt.UserGrid.createFromLLHFile
+%   See also: sgt.UserGrid, sgt.User
 
 % Copyright 2019 Stanford University GPS Laboratory
 %   This file is part of the Stanford GNSS Tools which is released under
@@ -72,14 +83,16 @@ end
 
 % Parse inputs
 res = parseInput(varargin{:});
+numFields = numel(fieldnames(res));
 
 % Generates an array where 1 represents a field that is populated
 inputLogic = [(~isempty(res.NumUsers)), (~isempty(res.PolygonFile)),...
-    (~isempty(res.GridStep)), (~isempty(res.GridBoundary))];
-% [(1)NumUsers, (2)PolygonFile, (3)GridStep, (4)GridBoundary]
+    (~isempty(res.GridStep)), (~isempty(res.GridBoundary)),...
+    (~isempty(res.LLHFile))];
+% [(1)NumUsers, (2)PolygonFile, (3)GridStep, (4)GridBoundary, (5)LLHFile]
 
 % Conditional cases for different uses of the method
-if (sum(inputLogic == [1 0 0 0]) == 4)  % NumUsers
+if (sum(inputLogic == [1 0 0 0 0]) == numFields)  % NumUsers
     sqrtNumUsers = sqrt(res.NumUsers);
     % define the bounds for the grid
     latMin = -90;
@@ -103,7 +116,7 @@ if (sum(inputLogic == [1 0 0 0]) == 4)  % NumUsers
     userGrid = sgt.UserGrid(posLLH);
     return;
     
-elseif (sum(inputLogic == [1 0 0 1]) == 4)  % NumUsers + GridBoundary
+elseif (sum(inputLogic == [1 0 0 1 0]) == numFields)  % NumUsers + GridBoundary
     sqrtNumUsers = sqrt(res.NumUsers);
     % define the bounds for the grid
     latMin = res.GridBoundary(1);
@@ -127,7 +140,7 @@ elseif (sum(inputLogic == [1 0 0 1]) == 4)  % NumUsers + GridBoundary
     userGrid = sgt.UserGrid(posLLH);
     return;
     
-elseif (sum(inputLogic == [1 1 0 0]) == 4)  % NumUsers + PolygonFile
+elseif (sum(inputLogic == [1 1 0 0 0]) == numFields)  % NumUsers + PolygonFile
     sqrtNumUsers = sqrt(res.NumUsers);
     
     % load in the polygon file
@@ -155,7 +168,7 @@ elseif (sum(inputLogic == [1 1 0 0]) == 4)  % NumUsers + PolygonFile
     userGrid = sgt.UserGrid(posLLH, 'PolygonFile', res.PolygonFile);
     return;
     
-elseif (sum(inputLogic == [0 1 1 0]) == 4)  % PolygonFile + GridStep
+elseif (sum(inputLogic == [0 1 1 0 0]) == numFields)  % PolygonFile + GridStep
     % load in the polygon file
     poly = load(res.PolygonFile);
     
@@ -186,7 +199,7 @@ elseif (sum(inputLogic == [0 1 1 0]) == 4)  % PolygonFile + GridStep
     userGrid = sgt.UserGrid(posLLH, 'PolygonFile', res.PolygonFile);
     return;
     
-elseif (sum(inputLogic == [0 0 1 0]) == 4)  % GridStep
+elseif (sum(inputLogic == [0 0 1 0 0]) == numFields)  % GridStep
     
     % Define latStep and lonStep
     latStep = res.GridStep(1);
@@ -214,7 +227,7 @@ elseif (sum(inputLogic == [0 0 1 0]) == 4)  % GridStep
     userGrid = sgt.UserGrid(posLLH);
     return;
     
-elseif (sum(inputLogic == [0 0 1 1]) == 4)  % GridStep + GridBoundary
+elseif (sum(inputLogic == [0 0 1 1 0]) == numFields)  % GridStep + GridBoundary
     % Define latStep and lonStep
     latStep = res.GridStep(1);
     if (length(res.GridStep) == 1)
@@ -241,6 +254,23 @@ elseif (sum(inputLogic == [0 0 1 1]) == 4)  % GridStep + GridBoundary
     userGrid = sgt.UserGrid(posLLH);
     return;
     
+elseif (sum(inputLogic == [0 0 0 0 1]) == numFields)    % LLHFile
+    % Load LLHFile
+    posLLH = load(res.LLHFile);
+    
+    % Create the users (the IDs will just be sequential)
+    userGrid = sgt.UserGrid(posLLH);
+    return;
+    
+elseif (sum(inputLogic == [0 1 0 0 1]) == numFields)    % PolygonFile + LLHFile
+    % Load LLHFile
+    posLLH = load(res.LLHFile);
+    
+    % create the users (the IDs will just be sequential) and flag whether or
+    % not they are within the polygon
+    userGrid = sgt.UserGrid(posLLH, 'PolygonFile', res.PolygonFile);
+    return;
+    
 else
     error('Invalid inputs. Check input arguments.')
 end
@@ -264,8 +294,12 @@ validGridStepFn = @(x) (isnumeric(x));
 parser.addParameter('GridStep', [], validGridStepFn)
 
 % GridBoundary
-validGridBoundary = @(x) (isnumeric(x)) && (x(2) > x(1)) && (x(4) > x(3));
-parser.addParameter('GridBoundary', [], validGridBoundary)
+validGridBoundaryFn = @(x) (isnumeric(x)) && (x(2) > x(1)) && (x(4) > x(3));
+parser.addParameter('GridBoundary', [], validGridBoundaryFn)
+
+% GridBoundary
+validLLHFileFn = @(x) (ischar(x));
+parser.addParameter('LLHFile', [], validLLHFileFn)
 
 % Run parser and set results
 parser.parse(varargin{:})
