@@ -106,10 +106,10 @@ if nargout == 0
 
     % Create the sphere with Earth topography and adjust colormap
     surface(x,y,z,props,'parent',cax)
-    colormap(topomap1)
+    colormap gray
 
-% Replace the calls to surface and colormap with these lines if you do 
-% not want the Earth's topography displayed.
+% % Replace the calls to surface and colormap with these lines if you do 
+% % not want the Earth's topography displayed.
 %     surf(x,y,z,'parent',cax)
 %     shading flat
 %     colormap gray

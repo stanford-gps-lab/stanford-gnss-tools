@@ -92,7 +92,11 @@ methods
 end
 
 methods
-    plot(varargin)
+    % Plot information related to the user grid
+    plot(obj, varargin)
+    
+    % Save UserGrid locations to a file
+    saveUserGrid(obj, fileName, varargin)
 end
 
 % Static Methods
