@@ -1,5 +1,5 @@
 function saveUserGrid(obj, fileName, varargin)
-% saveUserGrid(fileName, varargin) saves the UserGrid locations in LLH 
+% saveUserGrid(fileName, varargin) saves the UserGrid locations in LLH
 % format to a file by the name of [filename].userGrid.
 %
 % varargin:
@@ -7,36 +7,43 @@ function saveUserGrid(obj, fileName, varargin)
 % 'Path' - sets the file path for where the userGrid is saved
 
 % Copyright 2019 Stanford University GPS Laboratory
-%   This file is part of the Stanford GNSS Tools which is released under 
+%   This file is part of the Stanford GNSS Tools which is released under
 %   the MIT License. See `LICENSE.txt` for full license details.
 %   Questions and comments should be directed to the project at:
 %   https://github.com/stanford-gps-lab/stanford-gnss-tools
 
 % Handle empty call
 if nargin < 2
-   return; 
+    return;
 end
 
-% Open file
+% Edit file name
 newFileName = [fileName, '.userGrid'];
-fildID = fopen(newFileName);
 
 % Create formatSpec
-formatSpec = '%f %f %f';
+formatSpec = '%13.8f\t %13.8f\t %13.8f\r';
 
 % Parse varargin
 if nargin > 2
     res = parseInput(varargin{:});
     
+    % add path to file name
+    if (~isempty(res.Path))
+        newFileName = [res.Path, '\', newFileName];
+        if (exist(res.Path, 'dir') ~= 7)
+           mkdir(res.Path); 
+        end
+    end
     
-    
-else
-    % Print data to file
-    fprintf(fileID, formatSpec, GridPositionLLH)
 end
 
+% Open file
+fileID = fopen(newFileName, 'w+');
+% Print data to file
+fprintf(fileID, formatSpec, obj.GridPositionLLH');
 
-
+% Close file
+fclose(fileID);
 
 end
 
@@ -48,7 +55,6 @@ parser = inputParser;
 % Path
 validPathFn = @(x) (ischar(x));
 parser.addParameter('Path', [], validPathFn)
-
 
 % Run parser and set results
 parser.parse(varargin{:})

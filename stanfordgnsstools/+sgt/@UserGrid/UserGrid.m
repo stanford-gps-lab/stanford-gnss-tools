@@ -101,7 +101,6 @@ end
 
 % Static Methods
 methods (Static)
-    userGrid = createFromLLHFile(llhfile, polyfile)
     userGrid = createUserGrid(varargin)
     
 end

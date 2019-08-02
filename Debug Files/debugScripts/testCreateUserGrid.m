@@ -9,7 +9,7 @@ gridStep = 10;
 latStep = 10;
 lonStep = 10;
 numUsers = 100;
-llhFile = 'myLLHFile.userGrid';
+llhFile = 'myFile.userGrid';
 
 %% Test 1 - Create user grid with polygonfile and gridstep
 try
