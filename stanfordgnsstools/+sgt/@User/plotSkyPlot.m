@@ -1,8 +1,8 @@
 function plotSkyPlot(obj, satellites, time)
-% plotSkyPlot  Plot the skyplot for a UserObservation (obj) using specified
+% plotSkyPlot  Plot the skyplot for a User (obj) using specified
 %   satellites (satellites) at one or multiple times (time).
 %
-%   sgt.UserObservation.plotSkyPlot(obj, satellites, time) plots the 
+%   sgt.User.plotSkyPlot(obj, satellites, time) plots the 
 %   skyplot for a user using the specified satellites. If a single time is 
 %   specified, it shows an instantaneous skyplot. If more than one time is 
 %   shown, the skyplot will show a trace of the satellite motion through 
@@ -17,13 +17,15 @@ function plotSkyPlot(obj, satellites, time)
 %   Questions and comments should be directed to the project at:
 %   https://github.com/stanford-gps-lab/stanford-gnss-tools
 
-% Have a UserObservation object
-
 % Get satellitePositions at the times specified in time.
+satellitePositions = satellites.getPosition(time, 'ECEF');
 
-% Find the azimuth and elevation values of the satellites in view
+% Get user observations from this information
+userObservation = sgt.UserObservation(obj, satellitePositions);
 
 % Plot the satellite positions on a polar plot
-
+figure;
+polarplot(userObservation.AzimuthAngles.*180/pi, 90 - userObservation.ElevationAngles.*180/pi, 'o');
+rlim([0 90])
 
 end

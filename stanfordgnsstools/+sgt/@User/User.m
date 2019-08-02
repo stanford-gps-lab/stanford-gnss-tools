@@ -135,20 +135,18 @@ classdef User < matlab.mixin.Copyable
             end
            
         end
-
-    end
-
-    methods
-        % TODO: make a helepr function for getting the user observations
-%         obs = getUserObservations(obj)
-        plot(obj)
-    end
-
-	methods (Static)
         
-	end
-
-
+    end
+    
+    methods
+        plotSkyPlot(obj, satellites, time)
+    end
+    
+    methods (Static)
+        
+    end
+    
+    
 end
 
 % Parse varargin

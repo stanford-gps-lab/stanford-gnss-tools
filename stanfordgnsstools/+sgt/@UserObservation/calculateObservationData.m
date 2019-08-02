@@ -25,7 +25,7 @@ satPos = [obj.SatellitePositions.ECEF];
 %
 
 % compute the range to the sallites
-losecef = satPos - repmat(obj.User.Position, 1, S);
+losecef = satPos - repmat(obj.User.PositionECEF, 1, S);
 
 % normalize by magnitude
 r = vecnorm(losecef);
