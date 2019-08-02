@@ -12,7 +12,7 @@ function satellitePosition = getPosition(obj, time, frame)
 %   positions defined as SatellitePosition. Each satellite at each time
 %   contains an array which will be [X; Y; Z] for 'ECEF' and
 %   [Latitude; Longitude; Altitude] for 'LLH'.
-%   Current frames supported are: 'ECEF', 'LLH'
+%   Current frames supported are: 'ECEF', 'LLH'   
 %
 % See also: sgt.SatellitePosition
 
