@@ -7,19 +7,21 @@ testDir = [pwd, '\debugScripts'];
 testList = dir(fullfile(testDir, '*.m'));
 
 % Record command prompt
-delete testResults.test
+if (exist('testResults.test', 'file') == 2)
+    delete testResults.test
+end
 diary on
 diary testResults.test
 
 %% Test sgt
 for i = 1:length(testList)
-   run(fullfile(testDir, testList(i).name)); 
+    run(fullfile(testDir, testList(i).name));
 end
 
 license('inuse') %  This helps in development to ensure that on MATLAB is being used.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%% If test passes, then the command prompt will be clear %%%%%%%%%%
+%%%%% If test passes, then the command prompt will only read 'matlab' %%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 diary off
