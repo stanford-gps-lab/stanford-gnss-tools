@@ -1,4 +1,5 @@
-function testPlotSkyPlot()
+% function testPlotSkyPlot()
+clear; close all; clc;
 
 testResults = [];
 %% Define test parameters
@@ -7,12 +8,20 @@ equatorialUser = userGrid.Users(42);
 polarUser = userGrid.Users(end);
 satellites = sgt.Satellite.fromYuma('current.alm');
 time = 0;
+time2 = 0:100:100000;
 
 %% Test 1 - Basic test of plotting a skyplot
 try
    equatorialUser.plotSkyPlot(satellites, time);
 catch
     testResults(1) = 1;
+end
+
+%% Test 2 - Test over multiple points in time
+try
+   polarUser.plotSkyPlot(satellites, time2);
+catch
+    testResults(2) = 1;
 end
 
 %% Display test results
@@ -27,4 +36,4 @@ if any(testResults)
     end
 end
 
-close all;
+% close all;
