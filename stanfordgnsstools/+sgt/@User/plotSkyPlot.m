@@ -28,6 +28,12 @@ figure; %pax = polaraxes; pax.ThetaDir = 'clockwise'; pax.ThetaZeroLocation = 't
 polarplot(userObservation.AzimuthAngles, 90 - userObservation.ElevationAngles.*180/pi, 'o');
 pax = gca; pax.ThetaDir = 'clockwise'; pax.ThetaZeroLocation = 'top';
 
+% Text to be added next to each point
+prnInView = find(userObservation.SatellitesInViewMask ~= 0);
+c = cellstr(strcat('PRN ', num2str(prnInView)));
+dx = 0*pi/180; dy = 15;
+text(userObservation.AzimuthAngles+dx, 90 - userObservation.ElevationAngles.*180/pi+dy, c)
+
 rlim([0 90])
 
 end

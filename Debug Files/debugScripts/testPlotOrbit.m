@@ -1,5 +1,4 @@
-% function testPlotOrbit()
-clear; close all; clc;
+function testPlotOrbit()
 
 testResults = [];
 %% Define test parameters
@@ -41,4 +40,4 @@ if any(testResults)
     end
 end
 
-% close all;
+close all;
