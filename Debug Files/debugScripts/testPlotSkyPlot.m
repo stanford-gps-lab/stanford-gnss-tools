@@ -1,4 +1,5 @@
-function testPlotSkyPlot()
+% function testPlotSkyPlot()
+clear; close all; clc
 
 testResults = [];
 %% Define test parameters
@@ -8,7 +9,7 @@ polarUser = userGrid.Users(end);
 satellites = sgt.Satellite.fromYuma('current.alm');
 time = 0;
 
-tempSats = satellites([2, 4, 5]);
+tempSats = satellites;
 
 
 %% Test 1 - Basic test of plotting a skyplot

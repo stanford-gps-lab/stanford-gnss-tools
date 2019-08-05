@@ -25,7 +25,7 @@ userObservation = sgt.UserObservation(obj, satellitePositions);
 
 % Plot the satellite positions on a polar plot
 figure; %pax = polaraxes; pax.ThetaDir = 'clockwise'; pax.ThetaZeroLocation = 'top';
-polarplot(userObservation.AzimuthAngles, pi/2 - userObservation.ElevationAngles, 'o');
+polarplot(userObservation.AzimuthAngles, 90 - userObservation.ElevationAngles.*180/pi, 'o');
 pax = gca; pax.ThetaDir = 'clockwise'; pax.ThetaZeroLocation = 'top';
 
 rlim([0 90])
