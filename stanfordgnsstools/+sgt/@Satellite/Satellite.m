@@ -130,6 +130,9 @@ classdef Satellite < matlab.mixin.Copyable
     methods
         % Get Position in specified frame at specified time
         position = getPosition(obj, time, frame)
+        
+        % Plot the orbit(s) of the satellite(s)
+        plotOrbit(obj, varargin)
 
     end
 

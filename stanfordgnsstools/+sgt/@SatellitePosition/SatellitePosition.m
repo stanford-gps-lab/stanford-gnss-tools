@@ -116,12 +116,6 @@ classdef SatellitePosition < matlab.mixin.Copyable
                     obj(s,t).ECEF = posECEF(s,:,t)';
                 end
             end
-            
         end
-        
-        
     end
-    
-    
-    
 end

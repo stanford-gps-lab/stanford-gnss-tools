@@ -1,25 +1,23 @@
-function testPlotSkyPlot()
+function testPlotOrbits()
 
 testResults = [];
 %% Define test parameters
-userGrid = sgt.UserGrid.createUserGrid('NumUsers', 100);
-equatorialUser = userGrid.Users(42);
-polarUser = userGrid.Users(end);
 satellites = sgt.Satellite.fromYuma('current.alm');
-time = 0;
+
+%% Test 1 - Test a basic orbit plot
+% try
+    satellites.plotOrbit
+% catch
+%     
+% end
 
 
-%% Test 1 - Basic test of plotting a skyplot
-try
-    equatorialUser.plotSkyPlot(satellites, time);
-catch
-    testResults(1) = 1;
-end
+%% Test 2 - Test an orbit plot with a UserGrid varargin
 
 %% Display test results
 if any(testResults)
     disp('-----------------')
-    disp('Testing sgt.User.plotSkyPlot.m')
+    disp('Testing sgt.Satellite.plotOrbits.m')
     disp('-----------------')
     
     testResults = find(testResults);
