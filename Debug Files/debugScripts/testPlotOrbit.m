@@ -1,15 +1,15 @@
-function testPlotOrbits()
+function testPlotOrbit()
 
 testResults = [];
 %% Define test parameters
 satellites = sgt.Satellite.fromYuma('current.alm');
 
 %% Test 1 - Test a basic orbit plot
-% try
+try
     satellites.plotOrbit
-% catch
-%     
-% end
+catch
+    testResults(1) = 1;
+end
 
 
 %% Test 2 - Test an orbit plot with a UserGrid varargin
@@ -25,3 +25,5 @@ if any(testResults)
         fprintf(['test', num2str(testResults(i)), ' failed\n'])
     end
 end
+
+close all;

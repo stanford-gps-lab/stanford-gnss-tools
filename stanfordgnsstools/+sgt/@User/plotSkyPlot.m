@@ -24,8 +24,10 @@ satellitePositions = satellites.getPosition(time, 'ECEF');
 userObservation = sgt.UserObservation(obj, satellitePositions);
 
 % Plot the satellite positions on a polar plot
-figure;
-polarplot(userObservation.AzimuthAngles.*180/pi, 90 - userObservation.ElevationAngles.*180/pi, 'o');
+figure; %pax = polaraxes; pax.ThetaDir = 'clockwise'; pax.ThetaZeroLocation = 'top';
+polarplot(userObservation.AzimuthAngles, pi/2 - userObservation.ElevationAngles, 'o');
+pax = gca; pax.ThetaDir = 'clockwise'; pax.ThetaZeroLocation = 'top';
+
 rlim([0 90])
 
 end

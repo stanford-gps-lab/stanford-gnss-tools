@@ -93,7 +93,8 @@ classdef SatellitePosition < matlab.mixin.Copyable
                     posECEF = permute(posECEFperm, [1 3 2]);
                     
                     % posECI TODO
-                    posECI = [];
+                    [r, c, d] = size(pos3D);
+                    posECI = NaN(r,c,d);
 
                 case 'ecef'
                     posECEF = pos3D;
@@ -109,7 +110,8 @@ classdef SatellitePosition < matlab.mixin.Copyable
                     posLLH = permute(posLLHperm, [1 3 2]);
                     
                     % posECI TODO
-                    posECI = [];
+                    [r, c, d] = size(pos3D);
+                    posECI = NaN(r,c,d);
                     
                 case 'eci'
                     [r, c, d] = size(pos3D);

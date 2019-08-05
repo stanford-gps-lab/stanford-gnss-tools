@@ -8,13 +8,21 @@ polarUser = userGrid.Users(end);
 satellites = sgt.Satellite.fromYuma('current.alm');
 time = 0;
 
+tempSats = satellites([2, 4, 5]);
+
 
 %% Test 1 - Basic test of plotting a skyplot
-try
-    equatorialUser.plotSkyPlot(satellites, time);
-catch
-    testResults(1) = 1;
-end
+% try
+    tempSats.plotOrbit(time)
+    
+   equatorialUser.plotSkyPlot(tempSats, time);
+   
+   derp = tempSats.getPosition(time, 'ecef');
+   herp = [derp(1:end).LLH];
+   herp = herp(1:2,:)
+% catch
+%     testResults(1) = 1;
+% end
 
 %% Display test results
 if any(testResults)

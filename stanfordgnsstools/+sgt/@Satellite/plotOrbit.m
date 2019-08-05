@@ -13,6 +13,14 @@ function plotOrbit(obj, time, varargin)
 %   'PolygonFile' - A polygon file that contains the information necessary
 %   to create a geographic boundary
 
+% Handle nargin arguments
+if nargin < 1
+    return;
+end
+if nargin < 2
+    time = 0;
+end
+
 % Useful variables
 numSats = length(obj);
 
@@ -25,9 +33,20 @@ satOrbit = propagateOrbit(obj);
 % Plot satellite orbits with satellite at position at time 'time'
 figure; hold on;
 for i = 1:numSats
-    plot3(satOrbit(:,1,i), satOrbit(:,2,i), satOrbit(:,3,i))
+    % Plot orbits
+    h = plot3(satOrbit(:,1,i), satOrbit(:,2,i), satOrbit(:,3,i));
+    
+    % Consistent colors between orbits and satellite positions
+    colorNum = get(h, 'color');
+    
+    % Get satellite positions
+%     satPosition = obj(i).getPosition(time, 'eci');
+satPosition = obj(i).getPosition(time, 'ecef');
+%     plot3(satPosition.ECI(1), satPosition.ECI(2), satPosition.ECI(3), '.', 'MarkerSize', 15,  'color', colorNum)
+plot3(satPosition.ECEF(1), satPosition.ECEF(2), satPosition.ECEF(3), '.', 'MarkerSize', 15,  'color', colorNum)
 end
 sgt.plotearth.earth_sphere('m')
+
 
 % Plot varargin variables
 
@@ -77,17 +96,19 @@ satPositions = sgt.SatellitePosition();
 orbitalPeriod = 2*sgtPi*(obj(1).SqrtA^3)/sqrt(sgtMu);
 
 % Time for satellites positions
-time = [0:1000:ceil(orbitalPeriod)]';
+time = [0:1000:ceil(orbitalPeriod)+1000]';
 
 % Preallocate satOrbit
 satOrbit = NaN(length(time), 3, numSats);
 
 % Get positions of satelite i for all times
 satPositions = obj.getPosition(time, 'ECI')';
+% satPositions = obj.getPosition(time, 'ECEF')';
 
 % Convert necessary information to a nice matrix to work with
 for i = 1:numSats
-    satOrbit(:,:,i) = [satPositions(:,i).ECI]';
+        satOrbit(:,:,i) = [satPositions(:,i).ECI]';
+%     satOrbit(:,:,i) = [satPositions(:,i).ECEF]';
 end
 % end
 
