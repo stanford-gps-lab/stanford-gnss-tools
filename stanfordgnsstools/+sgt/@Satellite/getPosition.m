@@ -12,7 +12,7 @@ function satellitePosition = getPosition(obj, time, frame)
 %   positions defined as SatellitePosition. Each satellite at each time
 %   contains an array which will be [X; Y; Z] for 'ECEF' and
 %   [Latitude; Longitude; Altitude] for 'LLH'.
-%   Current frames supported are: 'ECEF', 'LLH'   
+%   Current frames supported are: 'ECEF', 'LLH'
 %
 % See also: sgt.SatellitePosition
 
@@ -84,7 +84,6 @@ end
 cosEk = cos(Ek);
 sinEk = sin(Ek);
 
-
 % c1 = 1 - eccen .* cos_Ek;
 % Ek_dot = n0./c1;
 
@@ -119,7 +118,11 @@ ykOrbital = rk.*sinuk;  % dim: SxT
 
 % Compute corrected longitude of ascending node
 Omegakdot = rora - CONST_OMEGA_E;
-Omegak = raan + Omegakdot.*Tk - CONST_OMEGA_E * mod(toa, 604800);
+if (strcmpi('eci', frame))
+    Omegak = raan - CONST_OMEGA_E * mod(toa, 604800);
+else
+    Omegak = raan + Omegakdot.*Tk - CONST_OMEGA_E * mod(toa, 604800);
+end
 
 cosOmegak = cos(Omegak);
 sinOmegak = sin(Omegak);

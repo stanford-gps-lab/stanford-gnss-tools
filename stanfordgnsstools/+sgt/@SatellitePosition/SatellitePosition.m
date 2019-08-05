@@ -44,6 +44,9 @@ classdef SatellitePosition < matlab.mixin.Copyable
         
         % ECEF - the ECEF position of the sat at the given time
         ECEF
+        
+        % ECI - the ECI position of the sat at the given time
+        ECI
     end
     
     methods
@@ -88,6 +91,9 @@ classdef SatellitePosition < matlab.mixin.Copyable
                     posECEFall = sgt.tools.llh2ecef(posLLHall);
                     posECEFperm = reshape(posECEFall, S, T, 3);
                     posECEF = permute(posECEFperm, [1 3 2]);
+                    
+                    % posECI TODO
+                    posECI = [];
 
                 case 'ecef'
                     posECEF = pos3D;
@@ -102,6 +108,14 @@ classdef SatellitePosition < matlab.mixin.Copyable
                     posLLHperm = reshape(posLLHall, S, T, 3);
                     posLLH = permute(posLLHperm, [1 3 2]);
                     
+                    % posECI TODO
+                    posECI = [];
+                    
+                case 'eci'
+                    [r, c, d] = size(pos3D);
+                    posECEF = NaN(r,c,d);
+                    posLLH = NaN(r,c,d);
+                    posECI = pos3D;
                 otherwise
                     error('invalid position type');
             end
@@ -114,6 +128,7 @@ classdef SatellitePosition < matlab.mixin.Copyable
                     obj(s,t).t = time(t);
                     obj(s,t).LLH = posLLH(s,:,t)';
                     obj(s,t).ECEF = posECEF(s,:,t)';
+                    obj(s,t).ECI = posECI(s,:,t)';
                 end
             end
         end

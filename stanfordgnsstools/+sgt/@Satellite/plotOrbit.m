@@ -27,6 +27,7 @@ figure; hold on;
 for i = 1:numSats
     plot3(satOrbit(:,1,i), satOrbit(:,2,i), satOrbit(:,3,i))
 end
+sgt.plotearth.earth_sphere('m')
 
 % Plot varargin variables
 
@@ -78,12 +79,15 @@ orbitalPeriod = 2*sgtPi*(obj(1).SqrtA^3)/sqrt(sgtMu);
 % Time for satellites positions
 time = [0:1000:ceil(orbitalPeriod)]';
 
+% Preallocate satOrbit
+satOrbit = NaN(length(time), 3, numSats);
+
 % Get positions of satelite i for all times
-satPositions = obj.getPosition(time, 'ECEF')';
+satPositions = obj.getPosition(time, 'ECI')';
 
 % Convert necessary information to a nice matrix to work with
 for i = 1:numSats
-    satOrbit(:,:,i) = [satPositions(:,i).ECEF]';
+    satOrbit(:,:,i) = [satPositions(:,i).ECI]';
 end
 % end
 
