@@ -40,15 +40,27 @@ for i = 1:numSats
     colorNum = get(h, 'color');
     
     % Get satellite positions
-    %     satPosition = obj(i).getPosition(time, 'eci');
     satPosition = obj(i).getPosition(time, 'ecef');
-    %     plot3(satPosition.ECI(1), satPosition.ECI(2), satPosition.ECI(3), '.', 'MarkerSize', 15,  'color', colorNum)
     plot3(satPosition.ECEF(1), satPosition.ECEF(2), satPosition.ECEF(3), '.', 'MarkerSize', 15,  'color', colorNum)
 end
 sgt.plotearth.earth_sphere('m')
 
-
 % Plot varargin variables
+if (~isempty(res.UserGrid))
+    % Plot user locations on map
+    plot3(res.UserGrid.GridPositionECEF(:,1), res.UserGrid.GridPositionECEF(:,2), res.UserGrid.GridPositionECEF(:,3), 'r.', 'MarkerSize', 10)
+end
+if (~isempty(res.PolygonFile))
+    polygonLLH = load(res.PolygonFile);
+    polygonECEF = sgt.tools.llh2ecef([polygonLLH(:,1),...
+        polygonLLH(:,2), 2e5*ones(length(polygonLLH),1)]);
+    fill3(polygonECEF(:,1), polygonECEF(:,2), polygonECEF(:,3), 'c', 'FaceAlpha', 0.5)
+    
+    inBound = [res.UserGrid.Users(:).InBound];
+    if (sum(inBound) > 0)
+        plot3(res.UserGrid.GridPositionECEF(inBound,1), res.UserGrid.GridPositionECEF(inBound,2), res.UserGrid.GridPositionECEF(inBound,3), 'b.', 'MarkerSize', 10)
+    end
+end
 
 end
 
@@ -62,7 +74,7 @@ validPolygonFileFn = @(x) (ischar(x));
 parser.addParameter('PolygonFile', [], validPolygonFileFn)
 
 % UserGrid
-validUserGridFn = @(x) (isa(x, 'UserGrid'));
+validUserGridFn = @(x) (isa(x, 'sgt.UserGrid'));
 parser.addParameter('UserGrid', [], validUserGridFn)
 
 % Run parser and set results

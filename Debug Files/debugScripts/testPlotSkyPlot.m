@@ -1,5 +1,4 @@
-% function testPlotSkyPlot()
-clear; close all; clc
+function testPlotSkyPlot()
 
 testResults = [];
 %% Define test parameters
