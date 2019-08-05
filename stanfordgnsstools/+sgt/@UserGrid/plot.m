@@ -49,7 +49,7 @@ if (nargin > 1)
         figure;
         % Plot map
         coastData = load('coast'); 
-        plot(coastData.long, coastData.lat, 'k'); axis(axis2D); hold on;
+        plot(coastData.long, coastData.lat, 'k'); axis(axis2D); axis equal; hold on;
         % Plot user locations on map
         plot(obj.GridPositionLLH(:,2), obj.GridPositionLLH(:,1), 'r.')
         % Plot polygon if requested
