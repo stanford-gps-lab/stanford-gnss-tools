@@ -17,15 +17,15 @@ function [] = calculateObservationData(obj)
 %
 
 % get the number of satellites and their positions
-[S, ~] = size(obj.SatellitePositions);
-satPos = [obj.SatellitePositions.ECEF];
+[S, ~] = size(obj.SatellitePosition);
+satellitePosition = [obj.SatellitePosition.ECEF];
 
 %
 % calculate the ECEF LOS
 %
 
 % compute the range to the sallites
-losecef = satPos - repmat(obj.User.PositionECEF, 1, S);
+losecef = satellitePosition - repmat(obj.User.PositionECEF, 1, S);
 
 % normalize by magnitude
 r = vecnorm(losecef);

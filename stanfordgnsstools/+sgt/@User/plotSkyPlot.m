@@ -23,13 +23,13 @@ pax.RTickLabel = {'90'; '70'; '50'; '40'; '20'};
 for i = 1:length(time)
     
     % Get satellitePositions at the times specified in time.
-    satellitePositions = satellites.getPosition(time(i), 'ECEF');
+    satellitePosition = satellites.getPosition(time(i), 'ECEF');
     
     % Get user observations from this information
-    userObservation = sgt.UserObservation(obj, satellitePositions);
+    userObservation = sgt.UserObservation(obj, satellitePosition);
     
     % Plot the satellite positions on a polar plot
-    temp = [userObservation.SatellitePositions.Satellite]; temp2 = [temp.PRN]';
+    temp = [userObservation.SatellitePosition.Satellite]; temp2 = [temp.PRN]';
     prnInView = temp2(userObservation.SatellitesInViewMask);
     polarscatter(userObservation.AzimuthAngles, 90 - userObservation.ElevationAngles.*180/pi, sz, prnInView, 'filled');
     
@@ -38,9 +38,12 @@ for i = 1:length(time)
         textStr = cellstr(strcat('PRN ', num2str(prnInView)));
         dx = 0*pi/180; dy = 10;
         text(userObservation.AzimuthAngles+dx, 90 - userObservation.ElevationAngles.*180/pi+dy, textStr)
-    end
-    
-    rlim([0 90])
+    end   
 end
+rlim([0 90])
+
+% Plot the elevation mask
+polarplot(linspace(0,2*pi,100), 90 - obj.ElevationMask*180/pi.*ones(100,1), 'b--')
+
 
 end

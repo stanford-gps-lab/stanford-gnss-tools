@@ -25,7 +25,7 @@ classdef UserObservation < matlab.mixin.Copyable
         
         % SatellitePositions - array of the satellite positions for this
         % observations
-        SatellitePositions
+        SatellitePosition
     end
     
     % properties computed based on constructor data
@@ -67,7 +67,7 @@ classdef UserObservation < matlab.mixin.Copyable
     
     methods
 
-        function obj = UserObservation(user, satPos)
+        function obj = UserObservation(user, satellitePosition)
 
             % handle the empty constructor for vector creation
             if nargin == 0
@@ -76,14 +76,14 @@ classdef UserObservation < matlab.mixin.Copyable
 
             % NOTE: satPos is a SatellitePosition object which will return 
             % a 1xT array of observations
-            [~, T] = size(satPos);
+            [~, T] = size(satellitePosition);
             
             
             obj(T) = sgt.UserObservation();
             for i = 1:T
                 % set the properties
                 obj(i).User = user;
-                obj(i).SatellitePositions = satPos(:,i);
+                obj(i).SatellitePosition = satellitePosition(:,i);
                 
                 % run the math to populate all of the properties that are a
                 % function of the user and the satellite positions
