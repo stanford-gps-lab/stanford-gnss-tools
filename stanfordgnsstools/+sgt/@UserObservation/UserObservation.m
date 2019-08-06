@@ -67,7 +67,8 @@ classdef UserObservation < matlab.mixin.Copyable & matlab.mixin.SetGet
     
     % Dependent properties computed only when explicitly called for by the 
     % get method associated with each property
-    properties (SetAccess = private, Dependent = true)
+%     properties (SetAccess = private, Dependent = true)
+    properties (Dependent = true, SetAccess = private)
        % GDOP - Geometric Dilution of Precision
        GDOP
        
@@ -135,9 +136,8 @@ classdef UserObservation < matlab.mixin.Copyable & matlab.mixin.SetGet
         end
     end
     
+    % All other methods go here
     methods
-        % TODO: any methods go here
-        [varargout] = getDOP(obj)
         ipp = getIPP(obj)
     end
     
