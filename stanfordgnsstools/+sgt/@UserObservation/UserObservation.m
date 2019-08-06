@@ -95,7 +95,7 @@ classdef UserObservation < matlab.mixin.Copyable
 
     methods
         % TODO: any methods go here
-        [varargout] = getDOPS(obj)
+        [varargout] = getDOP(obj)
         ipp = getIPP(obj)
     end
     

@@ -17,7 +17,7 @@ classdef SatellitePosition < matlab.mixin.Copyable
 %   matrix and the output will be an SxT matrix.
 %
 %
-% See Also: sgt.Satellite
+% See Also: sgt.Satellite, sgt.Satellite.getPosition
 
 % Copyright 2019 Stanford University GPS Laboratory
 %   This file is part of the Stanford GNSS Tools which is released under
