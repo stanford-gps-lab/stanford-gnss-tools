@@ -17,7 +17,9 @@ function plotSkyPlot(obj, satellites, time)
 %   Questions and comments should be directed to the project at:
 %   https://github.com/stanford-gps-lab/stanford-gnss-tools
 
-figure; polarscatter(NaN, NaN); hold on; sz = 75; pax = gca; pax.ThetaDir = 'clockwise'; pax.ThetaZeroLocation = 'top';
+figure; polarscatter(NaN, NaN); hold on; sz = 75; pax = gca; 
+pax.ThetaDir = 'clockwise'; pax.ThetaZeroLocation = 'top'; pax.RTick = [0, 20, 40, 60, 80];
+pax.RTickLabel = {'90'; '70'; '50'; '40'; '20'};
 for i = 1:length(time)
     
     % Get satellitePositions at the times specified in time.
@@ -27,13 +29,14 @@ for i = 1:length(time)
     userObservation = sgt.UserObservation(obj, satellitePositions);
     
     % Plot the satellite positions on a polar plot
-    prnInView = find(userObservation.SatellitesInViewMask ~= 0); % Sets the colors of the satellites
+    temp = [userObservation.SatellitePositions.Satellite]; temp2 = [temp.PRN]';
+    prnInView = temp2(userObservation.SatellitesInViewMask);
     polarscatter(userObservation.AzimuthAngles, 90 - userObservation.ElevationAngles.*180/pi, sz, prnInView, 'filled');
     
     % Text to be added next to each point
     if length(time) == 1
         textStr = cellstr(strcat('PRN ', num2str(prnInView)));
-        dx = 0*pi/180; dy = 15;
+        dx = 0*pi/180; dy = 10;
         text(userObservation.AzimuthAngles+dx, 90 - userObservation.ElevationAngles.*180/pi+dy, textStr)
     end
     
