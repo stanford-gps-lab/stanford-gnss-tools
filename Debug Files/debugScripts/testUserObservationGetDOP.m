@@ -1,5 +1,5 @@
-% function testUserObservationGetDOP()
-clear; close all; clc;
+function testUserObservationGetDOP()
+% clear; close all; clc;
 
 testResults = [];
 %% Define test parameters
@@ -16,30 +16,39 @@ satellitePosition2 = satellite.getPosition(time2, 'ECEF');
 equatorialUserObservation = sgt.UserObservation(equatorialUser, satellitePosition);
 equatorialUserObservation2 = sgt.UserObservation(equatorialUser, satellitePosition2);
 
-%% Test 1 - single output basic
+%% Test 1 - get GDOP
 try
-    test1 = equatorialUserObservation.getDOP;
-    
-    if length(test1) ~= 4
-        testResults(1) = 1;
-    end
+    test1 = equatorialUserObservation.get.GDOP;
 catch
     testResults(1) = 1;
 end
 
-%% Test 2 - 5 output basic
+%% Test 2 - get PDOP
 try
-    [test2a, test2b, test2c, test2d, test2e] = equatorialUserObservation.getDOP;
-    
+    test2 = equatorialUserObservation.get.PDOP;
 catch
     testResults(2) = 1;
 end
 
-%% Test 3 - Multiple user observations
+%% Test 3 - get TDOP
 try
-    test3 = equatorialUserObservation2.getDOP;
+    test3 = equatorialUserObservation.get.TDOP;
 catch
     testResults(3) = 1;
+end
+
+%% Test 4 - get HDOP
+try
+    test4 = equatorialUserObservation.get.HDOP;
+catch
+    testResults(4) = 1;
+end
+
+%% Test 5 - get VDOP
+try
+    test5 = equatorialUserObservation.get.VDOP;
+catch
+    testResults(5) = 1;
 end
 
 %% Display test results

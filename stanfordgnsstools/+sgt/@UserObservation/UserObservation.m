@@ -1,4 +1,4 @@
-classdef UserObservation < matlab.mixin.Copyable
+classdef UserObservation < matlab.mixin.Copyable & matlab.mixin.SetGet
 % UserObservation   an container for an observation for a user.
 %   An observation ties a User and Satellites together at a specific time
 %   and provides data on the relationship between those two group.
@@ -65,6 +65,25 @@ classdef UserObservation < matlab.mixin.Copyable
         Range
     end
     
+    % Dependent properties computed only when explicitly called for by the 
+    % get method associated with each property
+    properties (SetAccess = private, Dependent = true)
+       % GDOP - Geometric Dilution of Precision
+       GDOP
+       
+       % PDOP - Position Dilution of Precision
+       PDOP
+       
+       % TDOP - Time Dilution of Precision
+       TDOP
+       
+       % HDOP - Horizontal Dilution of Precision
+       HDOP
+       
+       % VDOP - Vertical Dilution of Precision
+       VDOP
+    end
+    
     methods
 
         function obj = UserObservation(user, satellitePosition)
@@ -93,6 +112,29 @@ classdef UserObservation < matlab.mixin.Copyable
         
     end
 
+    % Methods for dependent properties
+    methods
+        function gdop = get.GDOP(obj)
+            gdop = getGDOP(obj);
+        end
+        
+        function pdop = get.PDOP(obj)
+           pdop = getPDOP(obj); 
+        end
+        
+        function tdop = get.TDOP(obj)
+           tdop = getTDOP(obj); 
+        end
+        
+        function hdop = get.HDOP(obj)
+           hdop = getHDOP(obj); 
+        end
+        
+        function vdop = get.VDOP(obj)
+           vdop = getVDOP(obj); 
+        end
+    end
+    
     methods
         % TODO: any methods go here
         [varargout] = getDOP(obj)
@@ -103,6 +145,112 @@ classdef UserObservation < matlab.mixin.Copyable
         calculateObservationData(obj)
     end
 
+end
 
+%
+% Dependent property methods
+%
+
+% get.GDOP
+function gdop = getGDOP(obj)
+% This function retrieves the GDOP of the observation
+
+% build the G matrix in the ENU frame
+inview = obj.SatellitesInViewMask;  % need an in view mask
+Genu = [obj.LOSenu(inview,:) ones(obj.NumSatellitesInView, 1)];
+
+% compute H = inv(Genu'Genu)
+H = inv(Genu' * Genu);
+
+% extract the diag of H for all the dop calculations
+DOPs = diag(H);
+
+% Compute GDOP
+gdop = sqrt(sum(DOPs));
 
 end
+
+% get.PDOP
+function pdop = getPDOP(obj)
+% This function retrieves the GDOP of the observation
+
+% build the G matrix in the ENU frame
+inview = obj.SatellitesInViewMask;  % need an in view mask
+Genu = [obj.LOSenu(inview,:) ones(obj.NumSatellitesInView, 1)];
+
+% compute H = inv(Genu'Genu)
+H = inv(Genu' * Genu);
+
+% extract the diag of H for all the dop calculations
+DOPs = diag(H);
+
+% Compute PDOP
+pdop = sqrt(sum(DOPs(1:3)));
+
+end
+
+% get.TDOP
+function tdop = getTDOP(obj)
+% This function retrieves the GDOP of the observation
+
+% build the G matrix in the ENU frame
+inview = obj.SatellitesInViewMask;  % need an in view mask
+Genu = [obj.LOSenu(inview,:) ones(obj.NumSatellitesInView, 1)];
+
+% compute H = inv(Genu'Genu)
+H = inv(Genu' * Genu);
+
+% extract the diag of H for all the dop calculations
+DOPs = diag(H);
+
+% Compute TDOP
+tdop = sqrt(DOPs(4));
+
+end
+
+% get.HDOP
+function hdop = getHDOP(obj)
+% This function retrieves the GDOP of the observation
+
+% build the G matrix in the ENU frame
+inview = obj.SatellitesInViewMask;  % need an in view mask
+Genu = [obj.LOSenu(inview,:) ones(obj.NumSatellitesInView, 1)];
+
+% compute H = inv(Genu'Genu)
+H = inv(Genu' * Genu);
+
+% extract the diag of H for all the dop calculations
+DOPs = diag(H);
+
+% Compute HDOP
+hdop = sqrt(sum(DOPs(1:2)));
+
+end
+
+% get.VDOP
+function vdop = getVDOP(obj)
+% This function retrieves the GDOP of the observation
+
+% build the G matrix in the ENU frame
+inview = obj.SatellitesInViewMask;  % need an in view mask
+Genu = [obj.LOSenu(inview,:) ones(obj.NumSatellitesInView, 1)];
+
+% compute H = inv(Genu'Genu)
+H = inv(Genu' * Genu);
+
+% extract the diag of H for all the dop calculations
+DOPs = diag(H);
+
+% Compute VDOP
+vdop = sqrt(DOPs(3));
+
+end
+
+
+
+
+
+
+
+
+
