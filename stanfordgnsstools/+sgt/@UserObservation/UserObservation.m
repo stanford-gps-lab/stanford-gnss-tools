@@ -67,7 +67,6 @@ classdef UserObservation < matlab.mixin.Copyable & matlab.mixin.SetGet
     
     % Dependent properties computed only when explicitly called for by the 
     % get method associated with each property
-%     properties (SetAccess = private, Dependent = true)
     properties (Dependent = true, SetAccess = private)
        % GDOP - Geometric Dilution of Precision
        GDOP
@@ -85,6 +84,7 @@ classdef UserObservation < matlab.mixin.Copyable & matlab.mixin.SetGet
        VDOP
     end
     
+    % Constructor
     methods
 
         function obj = UserObservation(user, satellitePosition)
@@ -135,14 +135,15 @@ classdef UserObservation < matlab.mixin.Copyable & matlab.mixin.SetGet
            vdop = getVDOP(obj); 
         end
     end
+
+    % Protected methods
+    methods (Access = protected)
+        calculateObservationData(obj)
+    end
     
     % All other methods go here
     methods
         ipp = getIPP(obj)
-    end
-    
-    methods (Access = protected)
-        calculateObservationData(obj)
     end
 
 end
