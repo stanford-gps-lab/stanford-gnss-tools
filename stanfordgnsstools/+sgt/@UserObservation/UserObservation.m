@@ -84,6 +84,7 @@ classdef UserObservation < matlab.mixin.Copyable & matlab.mixin.SetGet
        VDOP
     end
     
+    % Constructor
     methods
 
         function obj = UserObservation(user, satellitePosition)
@@ -134,14 +135,15 @@ classdef UserObservation < matlab.mixin.Copyable & matlab.mixin.SetGet
            vdop = getVDOP(obj); 
         end
     end
+
+    % Protected methods
+    methods (Access = protected)
+        calculateObservationData(obj)
+    end
     
     % All other methods go here
     methods
         ipp = getIPP(obj)
-    end
-    
-    methods (Access = protected)
-        calculateObservationData(obj)
     end
 
 end
