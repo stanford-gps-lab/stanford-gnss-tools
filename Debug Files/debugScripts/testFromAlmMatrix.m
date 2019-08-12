@@ -1,4 +1,5 @@
 function testFromAlmMatrix()
+disp('Testing sgt.Satellite.fromAlmMatrix...')
 
 testResults = [];
 %% set almanac terms and test fromAlmMatrix.m

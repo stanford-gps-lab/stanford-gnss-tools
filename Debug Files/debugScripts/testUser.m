@@ -1,4 +1,5 @@
 function testUser()
+disp('Testing sgt.User...')
 
 testResults = [];
 %% Define test parameters

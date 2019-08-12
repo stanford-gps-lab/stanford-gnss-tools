@@ -21,7 +21,7 @@ end
 license('inuse') %  This helps in development to ensure that on MATLAB is being used.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%% If test passes, then the command prompt will only read 'matlab' %%%%%
+%%%%%%%%%%% Check to see that only the 'matlab' license is used %%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 diary off

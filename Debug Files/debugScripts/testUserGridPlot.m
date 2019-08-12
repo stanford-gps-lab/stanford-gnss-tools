@@ -1,4 +1,5 @@
 function testUserGridPlot()
+disp('Testing sgt.UserGrid.plot...')
 
 testResults = [];
 %% Define parameters here

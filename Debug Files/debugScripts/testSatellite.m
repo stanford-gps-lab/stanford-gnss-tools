@@ -1,4 +1,5 @@
 function testSatellite()
+disp('Testing sgt.Satellite...')
 
 testResults = [];
 %% Define test parameters

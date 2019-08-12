@@ -1,4 +1,5 @@
 function testPlotOrbit()
+disp('Testing sgt.Satellite.plotOrbit...')
 
 testResults = [];
 %% Define test parameters

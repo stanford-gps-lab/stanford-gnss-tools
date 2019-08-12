@@ -1,4 +1,5 @@
 function testCreateUserGrid()
+disp('Testing sgt.UserGrid.createUserGrid...')
 
 testResults = [];
 %% Define parameters here

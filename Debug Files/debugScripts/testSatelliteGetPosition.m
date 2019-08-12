@@ -1,4 +1,5 @@
 function testSatelliteGetPosition()
+disp('Testing sgt.Satellite.getPosition...')
 
 testResults = [];
 %% Define test parameters

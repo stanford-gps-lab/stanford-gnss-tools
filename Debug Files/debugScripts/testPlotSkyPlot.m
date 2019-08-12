@@ -1,5 +1,5 @@
 function testPlotSkyPlot()
-% clear; close all; clc;
+disp('Testing sgt.User.plotSkyPlot...')
 
 testResults = [];
 %% Define test parameters

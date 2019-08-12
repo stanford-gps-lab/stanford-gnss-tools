@@ -1,4 +1,5 @@
 function testGeneratePolygon
+disp('Testing sgt.tools.generatePolygon...')
 
 testResults = [];
 %% Define test parameters

@@ -1,5 +1,5 @@
-% function testUserObservationGetDOP()
-clear; close all; clc;
+function testUserObservationGetDOP()
+disp('Testing sgt.UserObservation.getDOP...')
 
 testResults = [];
 %% Define test parameters

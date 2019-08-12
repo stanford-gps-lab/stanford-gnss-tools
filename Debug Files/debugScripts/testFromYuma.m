@@ -1,4 +1,5 @@
 function testFromYuma()
+disp('Testing sgt.Satellite.fromYuma...')
 
 testResults = [];
 %% Test 1 - basic
