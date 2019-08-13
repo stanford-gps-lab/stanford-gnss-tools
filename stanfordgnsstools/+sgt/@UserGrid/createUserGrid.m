@@ -78,6 +78,7 @@ function userGrid = createUserGrid(varargin)
 
 % handle the null argument
 if nargin < 1
+    userGrid = sgt.UserGrid();
     return;
 end
 
