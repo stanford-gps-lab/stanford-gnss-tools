@@ -10,7 +10,7 @@ testList = dir(fullfile(testDir, '*.m'));
 if (exist('testResults.test', 'file') == 2)
     delete testResults.test
 end
-diary on
+
 diary testResults.test
 
 %% Test sgt
