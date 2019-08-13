@@ -13,9 +13,12 @@ classdef User < matlab.mixin.Copyable
 %   sgt.UserGrid.createFromLLHFile
 %
 %   varargin: 
+%   -----
 %   ID - the ID of the user
+%   -----
 %   PolygonFile - specifies the name of a polyfile that bounds a geographic
-%   region.
+%   region. See sgt.tools.generatePolygon
+%   -----
 %   ElevationMask - Elevation mask of users [rad]. Default 5 degrees.         
 
 % Copyright 2019 Stanford University GPS Laboratory
