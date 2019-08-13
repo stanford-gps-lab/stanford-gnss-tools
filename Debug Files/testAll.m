@@ -18,7 +18,7 @@ for i = 1:length(testList)
     run(fullfile(testDir, testList(i).name));
 end
 
-fprintf('\n\nLicenses in Use:\n')
+fprintf('\nLicenses in Use:\n')
 license('inuse') %  This helps in development to ensure that on MATLAB is being used.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
