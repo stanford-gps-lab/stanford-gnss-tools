@@ -73,7 +73,6 @@ classdef User < matlab.mixin.Copyable
 
             % get the number of users
             [Nusers, ~] = size(posllh);
-            obj(Nusers) = sgt.User();
             
             % Shift longitude
             posllh(:,2) = sgt.tools.lonShift(posllh(:,2));
