@@ -135,12 +135,8 @@ classdef User < matlab.mixin.Copyable
                     -sin(lat)*cos(lon), -sin(lat)*sin(lon), cos(lat);
                      cos(lat)*cos(lon),  cos(lat)*sin(lon), sin(lat)];
             end
-           
         end
-        
     end
-    
-    
 end
 
 % Parse varargin

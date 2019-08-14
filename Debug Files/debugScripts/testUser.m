@@ -13,7 +13,7 @@ polygonFile = 'usrconus.dat';
 myElevationMask = 15*pi/180;
 myElevationMask2 = [15; 20].*pi/180;
 
-%% Test 1 - basic
+%% Test 1 - Constructor -  basic
 try
     test1 = sgt.User(userPosition);
     
@@ -26,7 +26,7 @@ catch
     testResults(1) = 1;
 end
 
-%% Test 2 - flipped userPostion
+%% Test 2 - Constructor - flipped userPostion
 try
     test2 = sgt.User(userPosition');
     
@@ -35,7 +35,7 @@ catch
 
 end
 
-%% Test 3 - separated position
+%% Test 3 - Constructor - separated position
 try
     test3 = sgt.User(userPosition(1), userPosition(2), userPosition(3));
     
@@ -44,7 +44,7 @@ catch
 
 end
 
-%% Test 4 - vector of userPosition
+%% Test 4 - Constructor - vector of userPosition
 try
     test4 = sgt.User(userPosition2);
     
@@ -52,7 +52,7 @@ catch
     testResults(4) = 1;
 end
 
-%% Test 5 - test single user with single ID
+%% Test 5 - Constructor - test single user with single ID
 try
     test5 = sgt.User(userPosition, 'ID', 1);
     
@@ -60,7 +60,7 @@ catch
     testResults(5) = 1;
 end
 
-%% Test 6 - test single user with multiple IDs
+%% Test 6 - Constructor - test single user with multiple IDs
 try
     test6 = sgt.User(userPosition, 'ID', [1, 2]);
     
@@ -69,7 +69,7 @@ catch
 
 end
 
-%% Test 7 - test multiple users with same number of IDs
+%% Test 7 - Constructor - test multiple users with same number of IDs
 try
     test7 = sgt.User(userPosition2, 'ID', [1 2]);
     
@@ -77,7 +77,7 @@ catch
     testResults(7) = 1;
 end
 
-%% Test 8 - test multiple users with wrong number of IDs
+%% Test 8 - Constructor - test multiple users with wrong number of IDs
 try
     test8 = sgt.User(userPosition2, 'ID', [1 2 3]);
     
@@ -86,7 +86,7 @@ catch
 
 end
 
-%% Test 9 - test multiple users with single ID
+%% Test 9 - Constructor - test multiple users with single ID
 try
     test9 = sgt.User(userPosition2, 'ID', 1);
     
@@ -95,7 +95,7 @@ catch
 
 end
 
-%% Test 10 - test single user with polygon
+%% Test 10 - Constructor - test single user with polygon
 try
     test10 = sgt.User(userPosition, 'PolygonFile', polygonFile);
     
@@ -108,7 +108,7 @@ catch
     testResults(10) = 1;
 end
 
-%% Test 11 - test multiple users with polygon
+%% Test 11 - Constructor - test multiple users with polygon
 try
     test11 = sgt.User(userPosition3, 'PolygonFile', polygonFile);
     
@@ -121,7 +121,7 @@ catch
     testResults(11) = 1;
 end
 
-%% Test 12 - test single user with single elevation
+%% Test 12 - Constructor - test single user with single elevation
 try
     test12 = sgt.User(userPosition, 'ElevationMask', myElevationMask);
     
@@ -134,7 +134,7 @@ catch
     testResults(12) = 1;
 end
 
-%% Test 13 - test multiple users with single elevation
+%% Test 13 - Constructor - test multiple users with single elevation
 try
     test13 = sgt.User(userPosition2, 'ElevationMask', myElevationMask);
     
@@ -147,7 +147,7 @@ catch
     testResults(13) = 1;
 end
 
-%% Test 14 - test single user with multiple elevations
+%% Test 14 - Constructor - test single user with multiple elevations
 try
     test14 = sgt.User(userPosition, 'ElevationMask', myElevationMask2);
     
@@ -156,7 +156,7 @@ catch
 
 end
 
-%% Test 15 - test multiple users with same number of elevations
+%% Test 15 - Constructor - test multiple users with same number of elevations
 try
     test15 = sgt.User(userPosition2, 'ElevationMask', myElevationMask2);
     
@@ -169,7 +169,7 @@ catch
     testResults(15) = 1;
 end
 
-%% Test 16 - test multiple users with wrong number of elevations
+%% Test 16 - Constructor - test multiple users with wrong number of elevations
 try
     test16 = sgt.User(userPosition4, 'ElevationMask', myElevationMask2);
     
