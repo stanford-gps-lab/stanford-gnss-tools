@@ -126,17 +126,15 @@ classdef Satellite < matlab.mixin.Copyable
 
     end
 
-    % non-static methods
+    % Public Methods
     methods
         % Get Position in specified frame at specified time
         position = getPosition(obj, time, frame)
-        
-        % Plot the orbit(s) of the satellite(s)
         plotOrbit(obj, varargin)
 
     end
 
-    % static methods
+    % Static Methods
     methods (Static)
         satellite = fromAlmMatrix(alm, varargin)
         satellite = fromYuma(filename)
