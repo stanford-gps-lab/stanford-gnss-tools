@@ -1,4 +1,4 @@
-function testPlotOrbit()
+function testSatellitePlotOrbit()
 fprintf('Testing sgt.Satellite.plotOrbit: ')
 
 testResults = [];

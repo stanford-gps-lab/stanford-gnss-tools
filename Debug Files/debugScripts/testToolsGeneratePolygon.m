@@ -1,4 +1,4 @@
-function testGeneratePolygon
+function testToolsGeneratePolygon
 fprintf('Testing sgt.tools.generatePolygon: ')
 
 testResults = [];

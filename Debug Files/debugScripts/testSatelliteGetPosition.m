@@ -17,7 +17,6 @@ af1 = 3.410605131648481e-13;
 satellite = sgt.Satellite(prn, eccentricity, toa, inclination, rateOfRightAscension, sqrta, raan, argumentOfPerigee, meanAnomaly, af0, af1);
 
 time = 496800;
-refPos =  [-1.925132225718e+007  5.287213508708e+006  1.758197241879e+007];
 %% Test 1 - basic
 try
     test1 = satellite.getPosition(time, 'ECEF');

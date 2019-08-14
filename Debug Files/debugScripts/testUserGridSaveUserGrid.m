@@ -1,4 +1,4 @@
-function testSaveUserGrid()
+function testUserGridSaveUserGrid()
 fprintf('Testing sgt.UserGrid.saveUserGrid.: ')
 
 testResults = [];

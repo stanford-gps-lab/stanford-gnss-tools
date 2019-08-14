@@ -1,4 +1,4 @@
-function testFromYuma()
+function testSatelliteFromYuma()
 fprintf('Testing sgt.Satellite.fromYuma: ')
 
 testResults = [];

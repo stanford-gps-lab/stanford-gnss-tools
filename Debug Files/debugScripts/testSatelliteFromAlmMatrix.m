@@ -1,4 +1,4 @@
-function testFromAlmMatrix()
+function testSatelliteFromAlmMatrix()
 fprintf('Testing sgt.Satellite.fromAlmMatrix: ')
 
 testResults = [];

@@ -1,5 +1,5 @@
-function testPlotSkyPlot()
-fprintf('Testing sgt.User.plotSkyPlot: ')
+function testUserObservationPlotSkyPlot()
+fprintf('Testing sgt.UserObservation.plotSkyPlot: ')
 
 testResults = [];
 %% Define test parameters

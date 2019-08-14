@@ -1,4 +1,4 @@
-function testCreateUserGrid()
+function testUserGridCreateUserGrid()
 fprintf('Testing sgt.UserGrid.createUserGrid: ')
 
 testResults = [];
