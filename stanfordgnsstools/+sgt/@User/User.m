@@ -140,14 +140,6 @@ classdef User < matlab.mixin.Copyable
         
     end
     
-    methods
-        plotSkyPlot(obj, satellites, time)
-    end
-    
-    methods (Static)
-        
-    end
-    
     
 end
 

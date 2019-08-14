@@ -7,20 +7,24 @@ userGrid = sgt.UserGrid.createUserGrid('NumUsers', 100);
 equatorialUser = userGrid.Users(42);
 polarUser = userGrid.Users(end);
 satellites = sgt.Satellite.fromYuma('current.alm');
-% satellites = satellites([1:4]);
 time = 0;
-time2 = 0:100:10000;
+time2 = 0:100:3600*12;
 
+satellitePosition = satellites.getPosition(time);
+satellitePosition2 = satellites.getPosition(time2);
+
+equatorialUserObservation = sgt.UserObservation(equatorialUser, satellitePosition);
+polarUserObservation2 = sgt.UserObservation(polarUser, satellitePosition2);
 %% Test 1 - Basic test of plotting a skyplot
 try
-   equatorialUser.plotSkyPlot(satellites, time);
+   equatorialUserObservation.plotSkyPlot;
 catch
     testResults(1) = 1;
 end
 
 %% Test 2 - Test over multiple points in time
 try
-   polarUser.plotSkyPlot(satellites, time2);
+   polarUserObservation2.plotSkyPlot;
 catch
     testResults(2) = 1;
 end
@@ -37,4 +41,4 @@ if any(testResults)
     end
 end
 
-close all;
+% close all;

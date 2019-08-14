@@ -143,6 +143,7 @@ classdef UserObservation < matlab.mixin.Copyable & matlab.mixin.SetGet
     
     % All other methods go here
     methods
+        plotSkyPlot(obj)
         ipp = getIPP(obj)
     end
 
