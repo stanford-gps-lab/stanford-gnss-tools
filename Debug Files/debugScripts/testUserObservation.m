@@ -6,7 +6,7 @@ testResults = [];
 userGrid = sgt.UserGrid.createUserGrid('NumUsers', 100);
 equatorialUser = userGrid.Users(42);
 time = 0;
-time2 = 0:1000:5000;
+time2 = 0:100:500;
 
 satellite = sgt.Satellite.fromYuma('current.alm');
 satellitePosition = satellite.getPosition(time, 'ECEF');
@@ -97,6 +97,20 @@ try
     test12 = equatorialUserObservation2.getVDOP;
 catch
     testResults(12) = 1;
+end
+
+%% Test 13 - obj.plotSkyPlot -  single observation
+try
+   equatorialUserObservation.plotSkyPlot;
+catch
+    testResults(13) = 1;
+end
+
+%% Test 14 - obj.plotSkyPlot - multiple observations
+try
+   equatorialUserObservation2.plotSkyPlot;
+catch
+    testResults(14) = 1;
 end
 
 %% Display test results
