@@ -1,5 +1,5 @@
 function testCreateUserGrid()
-disp('Testing sgt.UserGrid.createUserGrid...')
+fprintf('Testing sgt.UserGrid.createUserGrid: ')
 
 testResults = [];
 %% Define parameters here
@@ -81,12 +81,11 @@ end
 
 %% Display test results
 if any(testResults)
-    disp('-----------------')
-    disp('Testing createUserGrid.m')
-    disp('-----------------')
-    
+    fprintf('---Failed---\n')    
     testResults = find(testResults);
     for i = 1:length(testResults)
         fprintf(['test', num2str(testResults(i)), ' failed\n'])
     end
+else
+    fprintf('Passed\n')
 end

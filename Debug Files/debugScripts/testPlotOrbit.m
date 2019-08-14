@@ -1,5 +1,5 @@
 function testPlotOrbit()
-disp('Testing sgt.Satellite.plotOrbit...')
+fprintf('Testing sgt.Satellite.plotOrbit: ')
 
 testResults = [];
 %% Define test parameters
@@ -31,14 +31,13 @@ end
 
 %% Display test results
 if any(testResults)
-    disp('-----------------')
-    disp('Testing sgt.Satellite.plotOrbits.m')
-    disp('-----------------')
-    
+    fprintf('---Failed---\n')    
     testResults = find(testResults);
     for i = 1:length(testResults)
         fprintf(['test', num2str(testResults(i)), ' failed\n'])
     end
+else
+    fprintf('Passed\n')
 end
 
 close all;

@@ -1,5 +1,5 @@
 function testFromAlmMatrix()
-disp('Testing sgt.Satellite.fromAlmMatrix...')
+fprintf('Testing sgt.Satellite.fromAlmMatrix: ')
 
 testResults = [];
 %% set almanac terms and test fromAlmMatrix.m
@@ -106,14 +106,13 @@ end
 
 %% Display test results
 if any(testResults)
-    disp('-----------------')
-    disp('Testing fromAlmMatrix.m')
-    disp('-----------------')
-    
+    fprintf('---Failed---\n')    
     testResults = find(testResults);
     for i = 1:length(testResults)
         fprintf(['test', num2str(testResults(i)), ' failed\n'])
     end
+else
+    fprintf('Passed\n')
 end
 
 

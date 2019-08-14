@@ -1,5 +1,5 @@
 function testUserObservationGetDOP()
-disp('Testing sgt.UserObservation.getDOP...')
+fprintf('Testing sgt.UserObservation.getDOP: ')
 
 testResults = [];
 %% Define test parameters
@@ -62,14 +62,13 @@ end
 
 %% Display test results
 if any(testResults)
-    disp('-----------------')
-    disp('Testing UserObservation.getDOP.m')
-    disp('-----------------')
-    
+    fprintf('---Failed---\n')    
     testResults = find(testResults);
     for i = 1:length(testResults)
         fprintf(['test', num2str(testResults(i)), ' failed\n'])
     end
+else
+    fprintf('Passed\n')
 end
 
 

@@ -1,5 +1,5 @@
 function testUserGridPlot()
-disp('Testing sgt.UserGrid.plot...')
+fprintf('Testing sgt.UserGrid.plot: ')
 
 testResults = [];
 %% Define parameters here
@@ -41,14 +41,13 @@ end
 
 %% Display test results
 if any(testResults)
-    disp('-----------------')
-    disp('Testing UserGrid.m')
-    disp('-----------------')
-    
+    fprintf('---Failed---\n')    
     testResults = find(testResults);
     for i = 1:length(testResults)
         fprintf(['test', num2str(testResults(i)), ' failed\n'])
     end
+else
+    fprintf('Passed\n')
 end
 
 close all;

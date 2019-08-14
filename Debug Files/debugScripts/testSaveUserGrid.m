@@ -1,5 +1,5 @@
 function testSaveUserGrid()
-disp('Testing sgt.UserGrid.saveUserGrid...')
+fprintf('Testing sgt.UserGrid.saveUserGrid.: ')
 
 testResults = [];
 %% Define test parameters
@@ -28,12 +28,11 @@ rmdir(filePath, 's')
 
 %% Display test results
 if any(testResults)
-    disp('-----------------')
-    disp('Testing sgt.UserGrid.saveUserGrid.m')
-    disp('-----------------')
-    
+    fprintf('---Failed---\n')    
     testResults = find(testResults);
     for i = 1:length(testResults)
         fprintf(['test', num2str(testResults(i)), ' failed\n'])
     end
+else
+    fprintf('Passed\n')
 end
