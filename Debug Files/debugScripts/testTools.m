@@ -1,8 +1,9 @@
-function testToolsGeneratePolygon
-fprintf('Testing sgt.tools.generatePolygon: ')
+function testTools
+fprintf('Testing sgt.tools: ')
 
 testResults = [];
 %% Define test parameters
+% sgt.tools.generatePolygon
 testMatrix = [...
     4.9054152e+01  -1.2317659e+02;...
     4.9054187e+01  -9.5202089e+01;...
