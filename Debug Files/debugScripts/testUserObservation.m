@@ -124,6 +124,8 @@ else
     fprintf('Passed\n')
 end
 
+close all;
+
 
 
 
