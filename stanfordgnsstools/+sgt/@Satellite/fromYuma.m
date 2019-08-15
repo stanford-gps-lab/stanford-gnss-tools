@@ -10,14 +10,14 @@ function sats = fromYuma(filename)
 % See Also: sgt.Satellite.fromAlmMatrix, sgt.Satellite
 
 % Copyright 2019 Stanford University GPS Laboratory
-%   This file is part of Stanford GNSS Tools which is released under the MIT License.
-%   See `LICENSE.txt` for full license details.
+%   This file is part of the Stanford GNSS Tools which is released
+%   under the MIT License. See `LICENSE.txt` for full license details.
 %   Questions and comments should be directed to the project at:
 %   https://github.com/stanford-gps-lab/stanford-gnss-tools
 
 % error checking on inputs
 if nargin < 1
-	error('you must specify a filename');
+    error('you must specify a filename');
 end
 
 % if it's a cell array, loop through each file and create the output
@@ -29,14 +29,14 @@ if iscell(filename)
     for fi = 1:length(filename)
         % parse the file
         [prn, e, toa, inc, rora, sqrta, raan, w, m0, af0, af1] = parseFile(filename{fi});
-
+        
         % create the satellite list and add to the output array
         sats{fi} = sgt.Satellite(prn, e, toa, inc, rora, ...
             sqrta, raan, w, m0, af0, af1);
     end
     
 else
-
+    
     % parse the file
     [prn, e, toa, inc, rora, sqrta, raan, w, m0, af0, af1] = parseFile(filename);
     
@@ -68,17 +68,17 @@ while fgets(fid) ~= -1  % NOTE: the first list is not needed
     fgets(fid);     % read the health line (not used)
     e(ind) = readLineParameter(fgets(fid));     % eccentricity
     toa(ind) = readLineParameter(fgets(fid));   % time of applicability
-	inc(ind) = readLineParameter(fgets(fid));   % inclination angle
-	rora(ind) = readLineParameter(fgets(fid));  % rate of right ascention
-	sqrta(ind) = readLineParameter(fgets(fid)); % square root of semi-major axis
-	raan(ind) = readLineParameter(fgets(fid));  % right ascention
-	w(ind) = readLineParameter(fgets(fid));     % argument of perigee
-	m0(ind) = readLineParameter(fgets(fid));    % mean anomaly
-	af0(ind) = readLineParameter(fgets(fid));   % Af0
-	af1(ind) = readLineParameter(fgets(fid));   % Af1
+    inc(ind) = readLineParameter(fgets(fid));   % inclination angle
+    rora(ind) = readLineParameter(fgets(fid));  % rate of right ascention
+    sqrta(ind) = readLineParameter(fgets(fid)); % square root of semi-major axis
+    raan(ind) = readLineParameter(fgets(fid));  % right ascention
+    w(ind) = readLineParameter(fgets(fid));     % argument of perigee
+    m0(ind) = readLineParameter(fgets(fid));    % mean anomaly
+    af0(ind) = readLineParameter(fgets(fid));   % Af0
+    af1(ind) = readLineParameter(fgets(fid));   % Af1
     fgets(fid);     % week number (not used currently)
     fgets(fid);     % empty line
-
+    
     % increment the index
     ind = ind + 1;
 end

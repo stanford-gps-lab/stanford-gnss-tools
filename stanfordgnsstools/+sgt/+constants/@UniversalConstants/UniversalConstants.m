@@ -1,5 +1,5 @@
 classdef UniversalConstants
-% MathConstants     math constants defined in WGS84
+% UniversalConstants     Universal constants defined in WGS84
 
 % Copyright 2019 Stanford University GPS Laboratory
 %   This file is part of the Stanford GNSS Tools which is released under 

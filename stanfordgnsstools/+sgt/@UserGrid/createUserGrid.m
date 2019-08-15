@@ -44,10 +44,11 @@ function userGrid = createUserGrid(varargin)
 %   globe specified by the 'GridBoundary'.
 %   ----- sgt.UserGrid.createUserGrid('NumUsers', numUsers, 'PolygonFile',
 %   polyfile)
-%   This implementation creates a 'GridBoundary' from the input 'PolygonFile'
-%   file and evenly distributes the number of specified users throughout
-%   the geographic boundary. The users created in this scenario will also
-%   have the property 'InBound' determined from the same polyfile.
+%   This implementation creates a 'GridBoundary' from the input
+%   'PolygonFile' file and evenly distributes the number of specified users
+%   throughout the geographic boundary. The users created in this scenario
+%   will also have the property 'InBound' determined from the same
+%   polyfile.
 %   ----- sgt.UserGrid.createUserGrid('PolygonFile', polyfile, 'GridStep',
 %   [latStep, lonStep])
 %   This implementation creates a 'GridBoundary' using the specified
@@ -71,8 +72,8 @@ function userGrid = createUserGrid(varargin)
 %   See also: sgt.UserGrid, sgt.User
 
 % Copyright 2019 Stanford University GPS Laboratory
-%   This file is part of the Stanford GNSS Tools which is released under
-%   the MIT License. See `LICENSE.txt` for full license details.
+%   This file is part of the Stanford GNSS Tools which is released
+%   under the MIT License. See `LICENSE.txt` for full license details.
 %   Questions and comments should be directed to the project at:
 %   https://github.com/stanford-gps-lab/stanford-gnss-tools
 

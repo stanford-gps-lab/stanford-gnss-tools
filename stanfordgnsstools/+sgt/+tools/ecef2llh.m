@@ -17,7 +17,7 @@ function [varargout] = ecef2llh(x, y, z)
 % 	See Also: sgt.tools.llh2ecef
 
 % Copyright 2001-2019 Stanford University GPS Laboratory
-%   This file is part of the Stanford GNSS Tools which is released under 
+%   This file is part of the Stanford GNSS Tools which is released under
 %   the MIT License. See `LICENSE.txt` for full license details.
 %   Questions and comments should be directed to the project at:
 %   https://github.com/stanford-gps-lab/stanford-gnss-tools
@@ -25,15 +25,15 @@ function [varargout] = ecef2llh(x, y, z)
 % want to allow either a matrix input or 3 separate arrays, so check to see
 % if the user entered a matrix
 if nargin == 1
-	[r, c] = size(x);
-	if c ~= 3
-		error('invalid matrix input format');
-	end
-
-	% split out the 3 elements
-	y = x(:,2);
-	z = x(:,3);
-	x = x(:,1);
+    [r, c] = size(x);
+    if c ~= 3
+        error('invalid matrix input format');
+    end
+    
+    % split out the 3 elements
+    y = x(:,2);
+    z = x(:,3);
+    x = x(:,1);
 end
 
 % TODO: need to validate the input dimensions, etc for the 3 vector case.
@@ -60,29 +60,29 @@ oldH = -1e-9; 		% the old height value
 num = z./p;			% atan2 numerator (constant for all iterations)
 
 while abs(h - oldH) > 1e-4
-
-		% save the old height
-		oldH = h;
-
-		% compute latitude
-		den =  1 - e2*r_N./(r_N + h);
-		lat = atan2(num, den);
-
-		% compute height
-		r_N = sgt.constants.EarthConstants.R./sqrt(1 - e2*sin(lat).^2);
-		h = p./cos(lat) - r_N;
+    
+    % save the old height
+    oldH = h;
+    
+    % compute latitude
+    den =  1 - e2*r_N./(r_N + h);
+    lat = atan2(num, den);
+    
+    % compute height
+    r_N = sgt.constants.EarthConstants.R./sqrt(1 - e2*sin(lat).^2);
+    h = p./cos(lat) - r_N;
 end
 
 % convert lat and lon to degrees
 lat = lat * 180/pi;
 lon = lon * 180/pi;
 
-% if the input was a matrix, return a matrix output, if the input was 3 
+% if the input was a matrix, return a matrix output, if the input was 3
 % separate vectors, then return 3 separate vectors
 if nargin == 1
-	varargout{1} = [lat lon h];
+    varargout{1} = [lat lon h];
 else
-	varargout{1} = lat;
-	varargout{2} = lon;
-	varargout{3} = h;
+    varargout{1} = lat;
+    varargout{2} = lon;
+    varargout{3} = h;
 end

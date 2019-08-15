@@ -1,29 +1,30 @@
 classdef SatellitePosition < matlab.mixin.Copyable
-% SatellitePosition     a container for the position of a satellite at a
-% given time in both LLH and ECEF coordinates.
-%
-%   p = sgt.SatellitePosition(satellite, time, posType, pos)
-%   creates a SatellitePosition from a satellite (satellite) at a given
-%   time (time). The position type is specified by posType (either 'llh' or
-%   'ecef') with the position given by pos. The constructor will
-%   automatically compute the other position type so that the resulting
-%   SatellitePosition contains both types of positions.  For a single
-%   satellite, time and pos, the result is a single SatellitePosition.  If
-%   satellite is an array of S satellite and time is a scalar, position
-%   must be an Sx3 matrix of the position of each S satellites at the given
-%   time and the output will be a Sx1 array.  For a single satellite and T
-%   times, the pos array must be a 3xT array and the output will be a 1xT
-%   array.  For S satellites and T times, the pos input must be an Sx3xT
-%   matrix and the output will be an SxT matrix.
-%
-%
-% See Also: sgt.Satellite, sgt.Satellite.getPosition
-
-% Copyright 2019 Stanford University GPS Laboratory
-%   This file is part of the Stanford GNSS Tools which is released under
-%   the MIT License. See `LICENSE.txt` for full license details.
-%   Questions and comments should be directed to the project at:
-%   https://github.com/stanford-gps-lab/stanford-gnss-tools
+    % SatellitePosition     a container for the position of a satellite at
+    %   a given time in both LLH and ECEF coordinates.
+    %
+    %   p = sgt.SatellitePosition(satellite, time, posType, pos)
+    %   creates a SatellitePosition from a satellite (satellite) at a given
+    %   time (time). The position type is specified by posType (either
+    %   'llh' or 'ecef') with the position given by pos. The constructor
+    %   will automatically compute the other position type so that the
+    %   resulting SatellitePosition contains both types of positions. For a
+    %   single satellite, time and pos, the result is a single 
+    %   SatellitePosition. If satellite is an array of S satellite and time
+    %   is a scalar, position must be an Sx3 matrix of the position of each
+    %   S satellites at the given time and the output will be a Sx1 array.
+    %   For a single satellite and T times, the pos array must be a 3xT
+    %   array and the output will be a 1xT array.  For S satellites and T
+    %   times, the pos input must be an Sx3xT matrix and the output will be
+    %   an SxT matrix.
+    %
+    %
+    % See Also: sgt.Satellite, sgt.Satellite.getPosition
+    
+    % Copyright 2019 Stanford University GPS Laboratory
+    %   This file is part of the Stanford GNSS Tools which is released
+    %   under the MIT License. See `LICENSE.txt` for full license details.
+    %   Questions and comments should be directed to the project at:
+    %   https://github.com/stanford-gps-lab/stanford-gnss-tools
     
     
     % the elements that define a position
@@ -95,7 +96,7 @@ classdef SatellitePosition < matlab.mixin.Copyable
                     % posECI TODO
                     [r, c, d] = size(pos3D);
                     posECI = NaN(r,c,d);
-
+                    
                 case 'ecef'
                     posECEF = pos3D;
                     

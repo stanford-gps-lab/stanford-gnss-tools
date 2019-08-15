@@ -1,6 +1,12 @@
 function testSatellite()
 fprintf('Testing sgt.Satellite: ')
 
+% Copyright 2019 Stanford University GPS Laboratory
+%   This file is part of the Stanford GNSS Tools which is released
+%   under the MIT License. See `LICENSE.txt` for full license details.
+%   Questions and comments should be directed to the project at:
+%   https://github.com/stanford-gps-lab/stanford-gnss-tools
+
 testResults = [];
 %% Define test parameters
 prn = 1;
@@ -35,7 +41,7 @@ end
 try
     test2 = sgt.Satellite(prn, eccentricity, toa, inclination, rora, sqrta, raan, argumentOfPerigee,...
         meanAnomaly, af0, af1, 'Constellation', 'Galileo');
-
+    
     if strcmp(test2.Constellation, 'Galileo')
         
     else
@@ -49,7 +55,7 @@ end
 try
     test3 = sgt.Satellite(prn, eccentricity, toa, inclination, rora, sqrta, raan, argumentOfPerigee,...
         meanAnomaly, af0, af1, 'Constellation', {'GPS', 'Galileo'});
-
+    
     testResults(3) = 1;
 catch
     
@@ -86,7 +92,7 @@ try
         testResults(5) = 1;
     end
 catch
-
+    
 end
 
 %% Test 6 - Constructor - test multiple satellites with wrong number of varargin Constellation
@@ -98,7 +104,7 @@ try
     
     testResults(6) = 1;
 catch
-
+    
 end
 
 %% Test 7 - obj.fromAlmMatrix - basic
@@ -114,12 +120,12 @@ try
     test8 = sgt.Satellite.fromAlmMatrix(alm, 'Constellation', 'Galileo');
     
     if strcmp(test8.Constellation, 'Galileo')
-
+        
     else
         testResults(8) = 1;
     end
 catch
- testResults(8) = 1;
+    testResults(8) = 1;
 end
 
 %% Test 9 - obj.fromAlmMatrix - test multiple satellites with no varargin
@@ -127,7 +133,7 @@ try
     test9 = sgt.Satellite.fromAlmMatrix(alm2);
     
 catch
-     testResults(9) = 1;
+    testResults(9) = 1;
 end
 
 %% Test 10 - obj.fromAlmMatrix - test multiple satellites with one varargin
@@ -135,9 +141,9 @@ try
     test10 = sgt.Satellite.fromAlmMatrix(alm2, 'Constellation', 'BDS');
     
     if (strcmp(test10(1).Constellation, 'BDS')) && (strcmp(test10(2).Constellation, 'BDS'))
-
+        
     else
-         testResults(10) = 1;
+        testResults(10) = 1;
     end
 catch
     testResults(10) = 1;
@@ -148,7 +154,7 @@ try
     test11 = sgt.Satellite.fromAlmMatrix(alm2, 'Constellation', {'BDS', 'Galileo'});
     
     if (strcmp(test11(1).Constellation, 'BDS')) && (strcmp(test11(2).Constellation, 'Galileo'))
-
+        
     else
         testResults(11) = 1;
     end
@@ -162,7 +168,7 @@ try
     
     testResults(12) = 1;
 catch
-
+    
 end
 
 %% Test 13 - obj.fromAlmMatrix - test multiple satellite with wrong # of varargin
@@ -171,7 +177,7 @@ try
     
     testResults(13) = 1;
 catch
-
+    
 end
 
 %% Test 14 - obj.fromAlmMatrix - variant of test 14
@@ -180,7 +186,7 @@ try
     
     testResults(14) = 1;
 catch
-
+    
 end
 
 %% Test 15 - obj.fromYuma - basic
@@ -202,8 +208,8 @@ end
 %% Test 17 - obj.getPosition - basic
 try
     satellite = sgt.Satellite(prn, eccentricity, toa, inclination, rora, sqrta,...
-    raan, argumentOfPerigee, meanAnomaly, af0, af1);
-
+        raan, argumentOfPerigee, meanAnomaly, af0, af1);
+    
     test17 = satellite.getPosition(time, 'ECEF');
 catch
     testResults(1) = 17;
@@ -235,7 +241,7 @@ end
 
 %% Display test results
 if any(testResults)
-    fprintf('---Failed---\n')    
+    fprintf('---Failed---\n')
     testResults = find(testResults);
     for i = 1:length(testResults)
         fprintf(['test', num2str(testResults(i)), ' failed\n'])

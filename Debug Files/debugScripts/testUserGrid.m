@@ -1,6 +1,12 @@
 function testUserGrid()
 fprintf('Testing sgt.UserGrid: ')
 
+% Copyright 2019 Stanford University GPS Laboratory
+%   This file is part of the Stanford GNSS Tools which is released
+%   under the MIT License. See `LICENSE.txt` for full license details.
+%   Questions and comments should be directed to the project at:
+%   https://github.com/stanford-gps-lab/stanford-gnss-tools
+
 testResults = [];
 %% Define parameters here
 userPosition = [37.427127, -122.173243, 17];
@@ -44,8 +50,8 @@ try
     test3 = sgt.UserGrid(userPosition, 'GridName', 'MyGrid');
     
     if (~strcmp(test3.GridName ,'MyGrid'))
-       testResults(3) = 1; 
-    end    
+        testResults(3) = 1;
+    end
 catch
     testResults(3) = 1;
 end
@@ -128,7 +134,7 @@ try
     test12 = sgt.UserGrid.createUserGrid('LLHFile', llhFile, 'PolygonFile', polygonFile);
     
 catch
-   testResults(12) = 1; 
+    testResults(12) = 1;
 end
 
 %% Test 13 - obj.plot - plot 2D UserGrid
@@ -172,7 +178,7 @@ catch
 end
 
 %% Test 18 - obj.saveUserGrid - save a userGrid file to a specified path
-try 
+try
     userGrid = sgt.UserGrid.createUserGrid('NumUsers', 100);
     userGrid.saveUserGrid(fileName, 'Path', filePath);
 catch
@@ -181,7 +187,7 @@ end
 
 %% Display test results
 if any(testResults)
-    fprintf('---Failed---\n')    
+    fprintf('---Failed---\n')
     testResults = find(testResults);
     for i = 1:length(testResults)
         fprintf(['test', num2str(testResults(i)), ' failed\n'])

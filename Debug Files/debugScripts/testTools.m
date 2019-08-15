@@ -1,6 +1,12 @@
 function testTools
 fprintf('Testing sgt.tools: ')
 
+% Copyright 2019 Stanford University GPS Laboratory
+%   This file is part of the Stanford GNSS Tools which is released
+%   under the MIT License. See `LICENSE.txt` for full license details.
+%   Questions and comments should be directed to the project at:
+%   https://github.com/stanford-gps-lab/stanford-gnss-tools
+
 testResults = [];
 %% Define test parameters
 % sgt.tools.generatePolygon
@@ -113,7 +119,7 @@ try
     test1 = sgt.tools.generatePolygon('usrconus.dat');
     
     if (isa(test1, 'polyshape'))
-
+        
     else
         testResults(1) = 1;
     end
@@ -126,7 +132,7 @@ try
     test2 = sgt.tools.generatePolygon(testMatrix);
     
     if (isa(test2, 'polyshape'))
-
+        
     else
         testResults(2) = 1;
     end
@@ -142,7 +148,7 @@ try
     warning('on', 'MATLAB:polyshape:repairedBySimplify')
     
     if (isa(test3, 'polyshape'))
-
+        
     else
         testResults(3) = 1;
     end
@@ -156,12 +162,12 @@ try
     
     testResults(4) = 1;
 catch
-
+    
 end
 
 %% Display test results
 if any(testResults)
-    fprintf('---Failed---\n')    
+    fprintf('---Failed---\n')
     testResults = find(testResults);
     for i = 1:length(testResults)
         fprintf(['test', num2str(testResults(i)), ' failed\n'])

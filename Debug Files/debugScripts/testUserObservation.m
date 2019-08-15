@@ -1,6 +1,12 @@
 function testUserObservation()
 fprintf('Testing sgt.UserObservation: ')
 
+% Copyright 2019 Stanford University GPS Laboratory
+%   This file is part of the Stanford GNSS Tools which is released
+%   under the MIT License. See `LICENSE.txt` for full license details.
+%   Questions and comments should be directed to the project at:
+%   https://github.com/stanford-gps-lab/stanford-gnss-tools
+
 testResults = [];
 %% Define test parameters
 userGrid = sgt.UserGrid.createUserGrid('NumUsers', 100);
@@ -101,14 +107,14 @@ end
 
 %% Test 13 - obj.plotSkyPlot -  single observation
 try
-   equatorialUserObservation.plotSkyPlot;
+    equatorialUserObservation.plotSkyPlot;
 catch
     testResults(13) = 1;
 end
 
 %% Test 14 - obj.plotSkyPlot - multiple observations
 try
-   equatorialUserObservation2.plotSkyPlot;
+    equatorialUserObservation2.plotSkyPlot;
 catch
     testResults(14) = 1;
 end

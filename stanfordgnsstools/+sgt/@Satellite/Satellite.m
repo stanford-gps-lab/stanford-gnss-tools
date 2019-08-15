@@ -1,28 +1,29 @@
 classdef Satellite < matlab.mixin.Copyable
-% Satellite     an almanac based representation of a satellite in orbit.
-%
-%   satellite = sgt.Satellite(prn, eccentricity, toa, inclination, 
-%   rateOfRightAscension, sqrta, raan, argumentOfPerigee, meanAnomaly, af0, 
-%   af1, varargin) create a satellite, or a list of satellites
-%   from the specified almanac parameters.  Each parameter can
-%   either be a scalar or a column vector of length N for
-%   creating a list of N satellites.  If creating an array of
-%   satellites, all the inputs must be column vectors of the
-%   same length.
-%
-%   varargin arguments:
-%   'Constellation' - Constellation name as a string that the satellite is
-%   in.
-%
-%   See Also: sgt.Satellite.fromAlmMatrix,
-%   sgt.Satellite.fromYuma
-
-% Copyright 2019 Stanford University GPS Laboratory
-%   This file is part of stanford-gnss-tools which is released under the 
-%   MIT License. See `LICENSE.txt` for full license details.
-%   Questions and comments should be directed to the project at:
-%   https://github.com/stanford-gps-lab/stanford-gnss-tools
-
+    % Satellite    an almanac based representation of a satellite in orbit.
+    %
+    %   satellite = sgt.Satellite(prn, eccentricity, toa, inclination,
+    %   rateOfRightAscension, sqrta, raan, argumentOfPerigee, meanAnomaly, 
+    %   af0, af1, varargin) create a satellite, or a list of satellites
+    %   from the specified almanac parameters.  Each parameter can
+    %   either be a scalar or a column vector of length N for
+    %   creating a list of N satellites.  If creating an array of
+    %   satellites, all the inputs must be column vectors of the
+    %   same length.
+    %
+    %   Varargin:
+    %   -----
+    %   'Constellation' - Constellation name as a string that the satellite
+    %   is in.
+    %
+    %   See Also: sgt.Satellite.fromAlmMatrix,
+    %   sgt.Satellite.fromYuma
+    
+    % Copyright 2019 Stanford University GPS Laboratory
+    %   This file is part of the Stanford GNSS Tools which is released
+    %   under the MIT License. See `LICENSE.txt` for full license details.
+    %   Questions and comments should be directed to the project at:
+    %   https://github.com/stanford-gps-lab/stanford-gnss-tools
+    
     % the almanac properties -> can only be set in the constructor
     properties(SetAccess = immutable)
         % PRN - the satellite PRN code
@@ -64,10 +65,10 @@ classdef Satellite < matlab.mixin.Copyable
         % belongs to.
         Constellation = 'GPS';
     end
-
+    
     % Constructor
     methods
-
+        
         function obj = Satellite(prn, eccentricity, toa, inclination,...
                 rateOfRightAscension, sqrta, raan, argumentOfPerigee,...
                 meanAnomaly, af0, af1, varargin)
@@ -82,31 +83,31 @@ classdef Satellite < matlab.mixin.Copyable
             if nargin < 11
                 error('not enough input parameters');
             end
-
+            
             Nsats = length(prn);
-
+            
             % create a list of satellites given the number of satellites
             obj(Nsats) = sgt.Satellite();
             
             % Parse and expand varargin arguments
             if nargin > 11
-               res = parseInput(varargin{:}); 
-               
-               % Expand
-               resFields = fieldnames(res);
-               checkInputs(res, resFields, Nsats);     % input sanity check
-               for i = 1:length(resFields)
-                   if ~iscell(res.(resFields{i}))
-                       res.(resFields{i}) = {res.(resFields{i})};
-                       res.(resFields{i}) = repmat(res.(resFields{i}), [Nsats, 1]);
-                   end
-               end
-               
-               for i = 1:Nsats
-                  obj(i).Constellation = res.Constellation(i); 
-               end
+                res = parseInput(varargin{:});
+                
+                % Expand
+                resFields = fieldnames(res);
+                checkInputs(res, resFields, Nsats);     % input sanity check
+                for i = 1:length(resFields)
+                    if ~iscell(res.(resFields{i}))
+                        res.(resFields{i}) = {res.(resFields{i})};
+                        res.(resFields{i}) = repmat(res.(resFields{i}), [Nsats, 1]);
+                    end
+                end
+                
+                for i = 1:Nsats
+                    obj(i).Constellation = res.Constellation(i);
+                end
             end
-
+            
             % convert each row of information to satellite data
             for i = 1:Nsats
                 obj(i).PRN = prn(i);
@@ -122,24 +123,24 @@ classdef Satellite < matlab.mixin.Copyable
                 obj(i).AF1 = af1(i);
             end
         end
-
-
+        
+        
     end
-
+    
     % Public Methods
     methods
         % Get Position in specified frame at specified time
         position = getPosition(obj, time, frame)
         plotOrbit(obj, varargin)
-
+        
     end
-
+    
     % Static Methods
     methods (Static)
         satellite = fromAlmMatrix(alm, varargin)
         satellite = fromYuma(filename)
     end
-
+    
 end
 
 % Parse varargin
@@ -162,7 +163,7 @@ function []  = checkInputs(res, resFields, Nsats)
 % Check that there are no res fields that contain more values than the
 % number of satellites
 if (max(numel(res.(resFields{:}))) > Nsats) && iscell(res.(resFields{:}))
-   error('Number of varargin inputs larger than the number of satellites specified.') 
+    error('Number of varargin inputs larger than the number of satellites specified.')
 end
 
 end

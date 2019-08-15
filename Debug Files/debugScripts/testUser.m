@@ -1,6 +1,12 @@
 function testUser()
 fprintf('Testing sgt.User: ')
 
+% Copyright 2019 Stanford University GPS Laboratory
+%   This file is part of the Stanford GNSS Tools which is released
+%   under the MIT License. See `LICENSE.txt` for full license details.
+%   Questions and comments should be directed to the project at:
+%   https://github.com/stanford-gps-lab/stanford-gnss-tools
+
 testResults = [];
 %% Define test parameters
 userPosition = [37.427127, -122.173243, 17];
@@ -18,7 +24,7 @@ try
     test1 = sgt.User(userPosition);
     
     if sum(abs(test1.PositionECEF - sgt.tools.llh2ecef(userPosition)') < 10) == 3
-
+        
     else
         testResults(1) = 1;
     end
@@ -32,7 +38,7 @@ try
     
     testResults(2) = 1;
 catch
-
+    
 end
 
 %% Test 3 - Constructor - separated position
@@ -41,7 +47,7 @@ try
     
     testResults(3) = 1;
 catch
-
+    
 end
 
 %% Test 4 - Constructor - vector of userPosition
@@ -66,7 +72,7 @@ try
     
     testResults(6) = 1;
 catch
-
+    
 end
 
 %% Test 7 - Constructor - test multiple users with same number of IDs
@@ -83,7 +89,7 @@ try
     
     testResults(8) = 1;
 catch
-
+    
 end
 
 %% Test 9 - Constructor - test multiple users with single ID
@@ -92,7 +98,7 @@ try
     
     testResults(9) = 1;
 catch
-
+    
 end
 
 %% Test 10 - Constructor - test single user with polygon
@@ -100,7 +106,7 @@ try
     test10 = sgt.User(userPosition, 'PolygonFile', polygonFile);
     
     if test10.InBound
-
+        
     else
         testResults(10) = 1;
     end
@@ -113,7 +119,7 @@ try
     test11 = sgt.User(userPosition3, 'PolygonFile', polygonFile);
     
     if test11(1).InBound && ~test11(2).InBound
-
+        
     else
         testResults(11) = 1;
     end
@@ -126,7 +132,7 @@ try
     test12 = sgt.User(userPosition, 'ElevationMask', myElevationMask);
     
     if test12.ElevationMask == myElevationMask
-
+        
     else
         testResults(12) = 1;
     end
@@ -139,7 +145,7 @@ try
     test13 = sgt.User(userPosition2, 'ElevationMask', myElevationMask);
     
     if (test13(1).ElevationMask == myElevationMask) && (test13(2).ElevationMask == myElevationMask)
-
+        
     else
         testResults(13) = 1;
     end
@@ -153,7 +159,7 @@ try
     
     testResults(14) = 1;
 catch
-
+    
 end
 
 %% Test 15 - Constructor - test multiple users with same number of elevations
@@ -161,7 +167,7 @@ try
     test15 = sgt.User(userPosition2, 'ElevationMask', myElevationMask2);
     
     if (test15(1).ElevationMask == myElevationMask2(1)) && (test15(2).ElevationMask == myElevationMask2(2))
-
+        
     else
         testResults(15) = 1;
     end
@@ -175,12 +181,12 @@ try
     
     testResults(16) = 1;
 catch
-
+    
 end
 
 %% Display test results
 if any(testResults)
-    fprintf('---Failed---\n')    
+    fprintf('---Failed---\n')
     testResults = find(testResults);
     for i = 1:length(testResults)
         fprintf(['test', num2str(testResults(i)), ' failed\n'])
