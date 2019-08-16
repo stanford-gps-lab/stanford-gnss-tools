@@ -32,156 +32,93 @@ catch
     testResults(1) = 1;
 end
 
-%% Test 2 - Constructor - flipped userPostion
+%% Test 2 - Constructor - vector of userPosition
 try
-    test2 = sgt.User(userPosition');
+    test2 = sgt.User(userPosition2);
     
+catch
     testResults(2) = 1;
-catch
-    
 end
 
-%% Test 3 - Constructor - separated position
+%% Test 3 - Constructor - test single user with single ID
 try
-    test3 = sgt.User(userPosition(1), userPosition(2), userPosition(3));
+    test3 = sgt.User(userPosition, 'ID', 1);
     
+catch
     testResults(3) = 1;
-catch
-    
 end
 
-%% Test 4 - Constructor - vector of userPosition
+%% Test 4 - Constructor - test multiple users with same number of IDs
 try
-    test4 = sgt.User(userPosition2);
+    test4 = sgt.User(userPosition2, 'ID', [1 2]);
     
 catch
     testResults(4) = 1;
 end
 
-%% Test 5 - Constructor - test single user with single ID
+%% Test 5 - Constructor - test single user with polygon
 try
-    test5 = sgt.User(userPosition, 'ID', 1);
+    test5 = sgt.User(userPosition, 'PolygonFile', polygonFile);
     
+    if test5.InBound
+        
+    else
+        testResults(5) = 1;
+    end
 catch
     testResults(5) = 1;
 end
 
-%% Test 6 - Constructor - test single user with multiple IDs
+%% Test 6 - Constructor - test multiple users with polygon
 try
-    test6 = sgt.User(userPosition, 'ID', [1, 2]);
+    test6 = sgt.User(userPosition3, 'PolygonFile', polygonFile);
     
-    testResults(6) = 1;
+    if test6(1).InBound && ~test6(2).InBound
+        
+    else
+        testResults(6) = 1;
+    end
 catch
-    
+    testResults(6) = 1;
 end
 
-%% Test 7 - Constructor - test multiple users with same number of IDs
+%% Test 7 - Constructor - test single user with single elevation
 try
-    test7 = sgt.User(userPosition2, 'ID', [1 2]);
+    test7 = sgt.User(userPosition, 'ElevationMask', myElevationMask);
     
+    if test7.ElevationMask == myElevationMask
+        
+    else
+        testResults(7) = 1;
+    end
 catch
     testResults(7) = 1;
 end
 
-%% Test 8 - Constructor - test multiple users with wrong number of IDs
+%% Test 8 - Constructor - test multiple users with single elevation
 try
-    test8 = sgt.User(userPosition2, 'ID', [1 2 3]);
+    test8 = sgt.User(userPosition2, 'ElevationMask', myElevationMask);
     
+    if (test8(1).ElevationMask == myElevationMask) && (test8(2).ElevationMask == myElevationMask)
+        
+    else
+        testResults(8) = 1;
+    end
+catch
     testResults(8) = 1;
-catch
-    
 end
 
-%% Test 9 - Constructor - test multiple users with single ID
+%% Test 9 - Constructor - test multiple users with same number of elevations
 try
-    test9 = sgt.User(userPosition2, 'ID', 1);
+    test9 = sgt.User(userPosition2, 'ElevationMask', myElevationMask2);
     
+    if (test9(1).ElevationMask == myElevationMask2(1)) && (test9(2).ElevationMask == myElevationMask2(2))
+        
+    else
+        testResults(9) = 1;
+    end
+catch
     testResults(9) = 1;
-catch
-    
-end
-
-%% Test 10 - Constructor - test single user with polygon
-try
-    test10 = sgt.User(userPosition, 'PolygonFile', polygonFile);
-    
-    if test10.InBound
-        
-    else
-        testResults(10) = 1;
-    end
-catch
-    testResults(10) = 1;
-end
-
-%% Test 11 - Constructor - test multiple users with polygon
-try
-    test11 = sgt.User(userPosition3, 'PolygonFile', polygonFile);
-    
-    if test11(1).InBound && ~test11(2).InBound
-        
-    else
-        testResults(11) = 1;
-    end
-catch
-    testResults(11) = 1;
-end
-
-%% Test 12 - Constructor - test single user with single elevation
-try
-    test12 = sgt.User(userPosition, 'ElevationMask', myElevationMask);
-    
-    if test12.ElevationMask == myElevationMask
-        
-    else
-        testResults(12) = 1;
-    end
-catch
-    testResults(12) = 1;
-end
-
-%% Test 13 - Constructor - test multiple users with single elevation
-try
-    test13 = sgt.User(userPosition2, 'ElevationMask', myElevationMask);
-    
-    if (test13(1).ElevationMask == myElevationMask) && (test13(2).ElevationMask == myElevationMask)
-        
-    else
-        testResults(13) = 1;
-    end
-catch
-    testResults(13) = 1;
-end
-
-%% Test 14 - Constructor - test single user with multiple elevations
-try
-    test14 = sgt.User(userPosition, 'ElevationMask', myElevationMask2);
-    
-    testResults(14) = 1;
-catch
-    
-end
-
-%% Test 15 - Constructor - test multiple users with same number of elevations
-try
-    test15 = sgt.User(userPosition2, 'ElevationMask', myElevationMask2);
-    
-    if (test15(1).ElevationMask == myElevationMask2(1)) && (test15(2).ElevationMask == myElevationMask2(2))
-        
-    else
-        testResults(15) = 1;
-    end
-catch
-    testResults(15) = 1;
-end
-
-%% Test 16 - Constructor - test multiple users with wrong number of elevations
-try
-    test16 = sgt.User(userPosition4, 'ElevationMask', myElevationMask2);
-    
-    testResults(16) = 1;
-catch
-    
 end
 
 %% Display test results

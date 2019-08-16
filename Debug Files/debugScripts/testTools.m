@@ -156,15 +156,6 @@ catch
     testResults(3) = 1;
 end
 
-%% Test 4 -  test broken matrix
-try
-    test4 = sgt.tools.generatePolygon('badusrconus.dat');
-    
-    testResults(4) = 1;
-catch
-    
-end
-
 %% Display test results
 if any(testResults)
     fprintf('---Failed---\n')

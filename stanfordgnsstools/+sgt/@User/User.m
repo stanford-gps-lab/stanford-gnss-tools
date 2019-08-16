@@ -1,12 +1,12 @@
 classdef User < matlab.mixin.Copyable
     % User 	a model for a user at a specific location.
-    %   A user is a container for a fixed location from which observations 
+    %   A user is a container for a fixed location from which observations
     %   or frame transformations can take place.
     %
     %   user = sgt.User(posLLH, varargin) creates user(s) at the (lat, lon,
     %   alt) positions specified in posLLH.  posLLH should be an Nx3 matrix
     %   for the creation of N users with each row containing the (lat, lon,
-    %   alt) of the user in [deg, deg, m]. For meta data concerning all 
+    %   alt) of the user in [deg, deg, m]. For meta data concerning all
     %   users, see sgt.UserGrid.
     %
     %   See Also: sgt.UserGrid, sgt.UserGrid.createUserGrid,
@@ -16,7 +16,7 @@ classdef User < matlab.mixin.Copyable
     %   -----
     %   ID - the ID of the user
     %   -----
-    %   PolygonFile - specifies the name of a polyfile that bounds a 
+    %   PolygonFile - specifies the name of a polyfile that bounds a
     %   geographic region. See sgt.tools.generatePolygon
     %   -----
     %   ElevationMask - Elevation mask of users [rad]. Default 5 degrees.
@@ -58,7 +58,7 @@ classdef User < matlab.mixin.Copyable
     % Constructor
     methods
         
-        function obj = User(posllh, varargin)
+        function obj = User(posLLH, varargin)
             
             % if no arguments, default to all zero
             if nargin == 0
@@ -71,21 +71,31 @@ classdef User < matlab.mixin.Copyable
             if nargin > 1
                 % Parse varargin
                 res = parseInput(varargin{:});
-                
             end
             
             % get the number of users
-            [Nusers, ~] = size(posllh);
+            [Nusers, numCoord] = size(posLLH);
+            
+            % Make sure posLLH is a row vector
+            if (numCoord ~= 3)
+                posLLH = posLLH';
+                [Nusers, numCoord] = size(posLLH);
+                if (numCoord ~= 3)
+                    error('Wrong number of elements for posLLH')
+                    % This will not catch a user inputting a 3x3 matrix
+                    % with posLLH as column vectors.
+                end
+            end
             
             % Shift longitude
-            posllh(:,2) = sgt.tools.lonShift(posllh(:,2));
+            posLLH(:,2) = sgt.tools.lonShift(posLLH(:,2));
             
             % Record lat and lon of input positions in radians
-            latRad = posllh(:,1)*pi/180;
-            lonRad = posllh(:,2)*pi/180;
+            latRad = posLLH(:,1)*pi/180;
+            lonRad = posLLH(:,2)*pi/180;
             
             % Convert the LLH positions to ECEF positions
-            posECEF = sgt.tools.llh2ecef(posllh);
+            posECEF = sgt.tools.llh2ecef(posLLH);
             
             % set user IDs
             ids = 1:Nusers;
@@ -100,7 +110,7 @@ classdef User < matlab.mixin.Copyable
             inBnds = false(Nusers,1);
             if (exist('res', 'var') == 1) && isfield(res, 'PolygonFile') && ~isempty(res.PolygonFile)
                 polygon = sgt.tools.generatePolygon(res.PolygonFile);
-                polycheck = inpolygon(posllh(:,2), posllh(:,1), polygon.Vertices(:,1), polygon.Vertices(:,2));
+                polycheck = inpolygon(posLLH(:,2), posLLH(:,1), polygon.Vertices(:,1), polygon.Vertices(:,2));
                 inBnds = (polycheck > 0);  % inpolygon returns 0.5 in some versions of MATLAB
             end
             
@@ -122,7 +132,7 @@ classdef User < matlab.mixin.Copyable
                 % directly just save the LLH and the ECEF positions to the
                 % user object
                 obj(i).ID = ids(i);
-                obj(i).PositionLLH = posllh(i,:)';
+                obj(i).PositionLLH = posLLH(i,:)';
                 obj(i).PositionECEF = posECEF(i,:)';
                 obj(i).InBound = inBnds(i);
                 obj(i).ElevationMask = elMask(i);

@@ -29,7 +29,6 @@ filePath = [pwd, '\testDirectory'];
 %% Test 1 - Constructor - Define a UserGrid with a single user
 try
     test1 = sgt.UserGrid(userPosition);
-    
 catch
     testResults(1) = 1;
 end
@@ -64,7 +63,6 @@ try
     if ~test4.Users.InBound
         testResults(4) = 1;
     end
-    
 catch
     testResults(4) = 1;
 end
@@ -83,7 +81,6 @@ end
 %% Test 6 - obj.createUserGrid - Create user grid with NumUsers
 try
     test6 = sgt.UserGrid.createUserGrid('NumUsers', numUsers);
-    
 catch
     testResults(6) = 1;
 end
@@ -91,7 +88,6 @@ end
 %% Test 7 - obj.createUserGrid - Create user grid with NumUsers and GridBoundary
 try
     test7 = sgt.UserGrid.createUserGrid('NumUsers', numUsers, 'GridBoundary', gridBoundary);
-    
 catch
     testResults(7) = 1;
 end
@@ -100,7 +96,6 @@ end
 
 try
     test8 = sgt.UserGrid.createUserGrid('NumUsers', numUsers, 'PolygonFile', polygonFile);
-    
 catch
     testResults(8) = 1;
 end
@@ -108,7 +103,6 @@ end
 %% Test 9 - obj.createUserGrid - Create user grid with GridStep
 try
     test9 = sgt.UserGrid.createUserGrid('GridStep', gridStep);
-    
 catch
     testResults(9) = 1;
 end
@@ -116,7 +110,6 @@ end
 %% Test 10 - obj.createUserGrid - Create user grid with GridStep and GridBoundary
 try
     test10 = sgt.UserGrid.createUserGrid('GridStep', gridStep, 'GridBoundary', gridBoundary2);
-    
 catch
     testResults(10) = 1;
 end
@@ -124,7 +117,6 @@ end
 %% Test 11 - obj.createUserGrid - Create user grid from LLHFile
 try
     test11 = sgt.UserGrid.createUserGrid('LLHFile', llhFile);
-    
 catch
     testResults(11) = 1;
 end
@@ -132,7 +124,6 @@ end
 %% Test 12 - obj.createUserGrid - Create user grid from LLHFile and include a PolygonFile
 try
     test12 = sgt.UserGrid.createUserGrid('LLHFile', llhFile, 'PolygonFile', polygonFile);
-    
 catch
     testResults(12) = 1;
 end
