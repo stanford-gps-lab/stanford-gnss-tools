@@ -89,11 +89,11 @@ classdef Satellite < matlab.mixin.Copyable
             
             % Parse and expand varargin arguments
             if nargin > 11
-                res = parseInput(varargin{:});
+                res = parsesgtSatelliteInput(varargin{:});
                 
                 % Expand
                 resFields = fieldnames(res);
-                checkInputs(res, resFields, Nsats);     % input sanity check
+                checksgtSatelliteInputs(res, resFields, Nsats);     % input sanity check
                 for i = 1:length(resFields)
                     if ~iscell(res.(resFields{i}))
                         res.(resFields{i}) = {res.(resFields{i})};
@@ -127,7 +127,6 @@ classdef Satellite < matlab.mixin.Copyable
     
     % Public Methods
     methods
-        % Get Position in specified frame at specified time
         satellitePosition = getPosition(obj, time, frame)
         plotOrbit(obj, varargin)
     end
@@ -138,10 +137,16 @@ classdef Satellite < matlab.mixin.Copyable
         obj = fromYuma(filename)
     end
     
+    % Protected Methods
+    methods (Access = protected)
+        res = parsesgtSatelliteInput(varargin)
+        checkInputs(res, resFields, Nsats)
+    end
+    
 end
 
 % Parse varargin
-function res = parseInput(varargin)
+function res = parsesgtSatelliteInput(varargin)
 % Initialize parser
 parser = inputParser;
 
@@ -156,7 +161,7 @@ res = parser.Results;
 end
 
 % Check for input errors
-function []  = checkInputs(res, resFields, Nsats)
+function []  = checksgtSatelliteInputs(res, resFields, Nsats)
 % Check that there are no res fields that contain more values than the
 % number of satellites
 if (max(numel(res.(resFields{:}))) > Nsats) && iscell(res.(resFields{:}))

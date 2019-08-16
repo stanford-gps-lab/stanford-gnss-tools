@@ -75,7 +75,7 @@ Mk = meanAnomaly + n0.*Tk;  % dim: SxT
 E0 = Mk + 100;  % dim: SxT
 Ek = Mk;
 i = 1;
-while (abs(Ek-E0) > 1e-12) && (i < 250)
+while (abs(Ek-E0) > 1e-12) & (i < 250)
     E0 = Ek;
     Ek = Mk + eccentricity.*sin(E0);
     i = i + 1;

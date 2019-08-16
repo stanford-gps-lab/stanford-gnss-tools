@@ -70,7 +70,7 @@ classdef User < matlab.mixin.Copyable
             
             if nargin > 1
                 % Parse varargin
-                res = parseInput(varargin{:});
+                res = parsesgtUserInput(varargin{:});
             end
             
             % get the number of users
@@ -103,7 +103,7 @@ classdef User < matlab.mixin.Copyable
                 ids = res.ID;
                 
                 % Check for varargin errors
-                checkInputs(res, Nusers)
+                checksgtUserInputs(res, Nusers)
             end
             
             % check which points are within the polygon
@@ -147,10 +147,16 @@ classdef User < matlab.mixin.Copyable
             end
         end
     end
+    
+    % Protected Methods
+    methods (Access = protected)
+       res = parsesgtUserInput(varargin)
+       checksgtUserInputs(res, Nusers)
+    end
 end
 
 % Parse varargin
-function res = parseInput(varargin)
+function res = parsesgtUserInput(varargin)
 % Initialize parser
 parser = inputParser;
 
@@ -176,7 +182,7 @@ res = parser.Results;
 end
 
 % Check inputs
-function checkInputs(res, Nusers)
+function checksgtUserInputs(res, Nusers)
 % Check that the number of IDs is the same as the number of users.
 if (numel(res.ID) ~= Nusers) && (numel(res.ID) > 1)
     error('Number of varargin inputs larger than the number of satellites specified.')

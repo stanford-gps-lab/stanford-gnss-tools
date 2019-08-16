@@ -107,7 +107,6 @@ classdef UserObservation < matlab.mixin.Copyable & matlab.mixin.SetGet
     methods (Access = protected)
         calculateObservationData(obj)
     end
-    
 end
 
 

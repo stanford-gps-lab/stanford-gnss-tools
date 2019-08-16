@@ -79,7 +79,7 @@ classdef UserGrid < matlab.mixin.Copyable
             % Parse and handle varargin
             if nargin > 1
                 % Parse varargin inputs
-                res = parseInput(varargin{:});
+                res = parsesgtUserGridInput(varargin{:});
                 
                 % Store polygon
                 if ~isempty(res.PolygonFile)
@@ -105,10 +105,15 @@ classdef UserGrid < matlab.mixin.Copyable
     methods (Static)
         obj = createUserGrid(varargin)
     end
+    
+    % Protected Methods
+    methods
+       res = parsesgtUserGridInput(varargin) 
+    end
 end
 
 % Parse varargin
-function res = parseInput(varargin)
+function res = parsesgtUserGridInput(varargin)
 % Initialize parser
 parser = inputParser;
 
