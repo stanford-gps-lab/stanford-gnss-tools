@@ -123,8 +123,6 @@ classdef SatellitePosition < matlab.mixin.Copyable
                     error('invalid position type');
             end
             
-            % create the output as an SxT matrix
-            obj(S,T) = sgt.SatellitePosition();
             for s = 1:S
                 for t = 1:T
                     obj(s,t).Satellite = satellite(s);

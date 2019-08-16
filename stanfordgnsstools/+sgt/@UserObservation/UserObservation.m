@@ -79,8 +79,6 @@ classdef UserObservation < matlab.mixin.Copyable & matlab.mixin.SetGet
             % a 1xT array of observations
             [~, T] = size(satellitePosition);
             
-            
-            obj(T) = sgt.UserObservation();
             for i = 1:T
                 % set the properties
                 obj(i).User = user;

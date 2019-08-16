@@ -149,6 +149,8 @@ classdef User < matlab.mixin.Copyable
     end
 end
 
+
+
 % Parse varargin
 function res = parseInput(varargin)
 % Initialize parser

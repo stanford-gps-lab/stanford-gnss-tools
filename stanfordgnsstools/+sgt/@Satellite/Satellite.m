@@ -84,10 +84,8 @@ classdef Satellite < matlab.mixin.Copyable
                 error('not enough input parameters');
             end
             
+            % Get number of satellites
             Nsats = length(prn);
-            
-            % create a list of satellites given the number of satellites
-            obj(Nsats) = sgt.Satellite();
             
             % Parse and expand varargin arguments
             if nargin > 11
