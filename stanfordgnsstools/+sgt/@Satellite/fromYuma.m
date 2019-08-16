@@ -1,4 +1,4 @@
-function sats = fromYuma(filename)
+function obj = fromYuma(filename)
 % fromYuma  reads in a yuma almanac file and creates a list of Satellites
 % based on the almanac parameters.
 %   sats = sgt.Satellite.fromYuma(filename) creates the satellite
@@ -25,13 +25,13 @@ end
 if iscell(filename)
     
     % loop through all the files
-    sats = cell(1, length(filename));
+    obj = cell(1, length(filename));
     for fi = 1:length(filename)
         % parse the file
         [prn, e, toa, inc, rora, sqrta, raan, w, m0, af0, af1] = parseFile(filename{fi});
         
         % create the satellite list and add to the output array
-        sats{fi} = sgt.Satellite(prn, e, toa, inc, rora, ...
+        obj{fi} = sgt.Satellite(prn, e, toa, inc, rora, ...
             sqrta, raan, w, m0, af0, af1);
     end
     
@@ -41,7 +41,7 @@ else
     [prn, e, toa, inc, rora, sqrta, raan, w, m0, af0, af1] = parseFile(filename);
     
     % create the satellite list
-    sats = sgt.Satellite(prn, e, toa, inc, rora, ...
+    obj = sgt.Satellite(prn, e, toa, inc, rora, ...
         sqrta, raan, w, m0, af0, af1);
 end
 

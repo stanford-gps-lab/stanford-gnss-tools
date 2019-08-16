@@ -1,7 +1,7 @@
-function userGrid = createUserGrid(varargin)
+function obj = createUserGrid(varargin)
 % createUserGrid    create a grid of users with specified inputs
 %
-%   user = sgt.UserGrid.createUserGrid(varargin)
+%   obj = sgt.UserGrid.createUserGrid(varargin)
 %   creates a user grid based on a number of possible input arguments
 %
 %   varargin:
@@ -79,7 +79,7 @@ function userGrid = createUserGrid(varargin)
 
 % handle the null argument
 if nargin < 1
-    userGrid = sgt.UserGrid();
+    obj = sgt.UserGrid();
     return;
 end
 
@@ -117,7 +117,7 @@ if (sum(inputLogic == [1 0 0 0 0]) == numFields)  % NumUsers
     posLLH(:,2) = sgt.tools.lonShift(posLLH(:,2));
     
     % create the users (the IDs will just be sequential)
-    userGrid = sgt.UserGrid(posLLH);
+    obj = sgt.UserGrid(posLLH);
     return;
     
 elseif (sum(inputLogic == [1 0 0 1 0]) == numFields)  % NumUsers + GridBoundary
@@ -143,7 +143,7 @@ elseif (sum(inputLogic == [1 0 0 1 0]) == numFields)  % NumUsers + GridBoundary
     posLLH(:,2) = sgt.tools.lonShift(posLLH(:,2));
     
     % create the users (the IDs will just be sequential)
-    userGrid = sgt.UserGrid(posLLH);
+    obj = sgt.UserGrid(posLLH);
     return;
     
 elseif (sum(inputLogic == [1 1 0 0 0]) == numFields)  % NumUsers + PolygonFile
@@ -173,7 +173,7 @@ elseif (sum(inputLogic == [1 1 0 0 0]) == numFields)  % NumUsers + PolygonFile
     posLLH(:,2) = sgt.tools.lonShift(posLLH(:,2));
     
     % create the users (the IDs will just be sequential)
-    userGrid = sgt.UserGrid(posLLH, 'PolygonFile', res.PolygonFile);
+    obj = sgt.UserGrid(posLLH, 'PolygonFile', res.PolygonFile);
     return;
     
 elseif (sum(inputLogic == [0 1 1 0 0]) == numFields)  % PolygonFile + GridStep
@@ -206,7 +206,7 @@ elseif (sum(inputLogic == [0 1 1 0 0]) == numFields)  % PolygonFile + GridStep
     
     % create the users (the IDs will just be sequential) and flag whether or
     % not they are within the polygon
-    userGrid = sgt.UserGrid(posLLH, 'PolygonFile', res.PolygonFile);
+    obj = sgt.UserGrid(posLLH, 'PolygonFile', res.PolygonFile);
     return;
     
 elseif (sum(inputLogic == [0 0 1 0 0]) == numFields)  % GridStep
@@ -236,7 +236,7 @@ elseif (sum(inputLogic == [0 0 1 0 0]) == numFields)  % GridStep
     posLLH(:,2) = sgt.tools.lonShift(posLLH(:,2));
     
     % create the users (the IDs will just be sequential)
-    userGrid = sgt.UserGrid(posLLH);
+    obj = sgt.UserGrid(posLLH);
     return;
     
 elseif (sum(inputLogic == [0 0 1 1 0]) == numFields)  % GridStep + GridBoundary
@@ -265,7 +265,7 @@ elseif (sum(inputLogic == [0 0 1 1 0]) == numFields)  % GridStep + GridBoundary
     posLLH(:,2) = sgt.tools.lonShift(posLLH(:,2));
     
     % create the users (the IDs will just be sequential)
-    userGrid = sgt.UserGrid(posLLH);
+    obj = sgt.UserGrid(posLLH);
     return;
     
 elseif (sum(inputLogic == [0 0 0 0 1]) == numFields)    % LLHFile
@@ -275,7 +275,7 @@ elseif (sum(inputLogic == [0 0 0 0 1]) == numFields)    % LLHFile
     posLLH(:,2) = sgt.tools.lonShift(posLLH(:,2));
     
     % Create the users (the IDs will just be sequential)
-    userGrid = sgt.UserGrid(posLLH);
+    obj = sgt.UserGrid(posLLH);
     return;
     
 elseif (sum(inputLogic == [0 1 0 0 1]) == numFields)    % PolygonFile + LLHFile
@@ -286,7 +286,7 @@ elseif (sum(inputLogic == [0 1 0 0 1]) == numFields)    % PolygonFile + LLHFile
     
     % create the users (the IDs will just be sequential) and flag whether or
     % not they are within the polygon
-    userGrid = sgt.UserGrid(posLLH, 'PolygonFile', res.PolygonFile);
+    obj = sgt.UserGrid(posLLH, 'PolygonFile', res.PolygonFile);
     return;
     
 else

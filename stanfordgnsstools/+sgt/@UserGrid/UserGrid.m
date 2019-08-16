@@ -103,7 +103,7 @@ classdef UserGrid < matlab.mixin.Copyable
     
     % Static Methods
     methods (Static)
-        userGrid = createUserGrid(varargin)
+        obj = createUserGrid(varargin)
     end
 end
 

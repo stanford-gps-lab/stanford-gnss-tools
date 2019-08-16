@@ -1,4 +1,4 @@
-function sats = fromAlmMatrix(alm, varargin)
+function obj = fromAlmMatrix(alm, varargin)
 % fromAlmMatrix     compatibility function to create a satellite list from
 % the `alm_param` matrix.
 %   sats = sgt.Satellite.fromAlmMatrix(alm) creates a list of
@@ -20,11 +20,11 @@ function sats = fromAlmMatrix(alm, varargin)
 
 if nargin < 2
     % call the satellite constructor with each of the columns separated out
-    sats = sgt.Satellite(alm(:,1), alm(:,2), alm(:,3), alm(:,4), ...
+    obj = sgt.Satellite(alm(:,1), alm(:,2), alm(:,3), alm(:,4), ...
         alm(:,5), alm(:,6), alm(:,7), alm(:,8), ...
         alm(:,9), alm(:,10), alm(:,11));
 else
-    sats = sgt.Satellite(alm(:,1), alm(:,2), alm(:,3), alm(:,4), ...
+    obj = sgt.Satellite(alm(:,1), alm(:,2), alm(:,3), alm(:,4), ...
         alm(:,5), alm(:,6), alm(:,7), alm(:,8), ...
         alm(:,9), alm(:,10), alm(:,11), varargin{:});
 end
