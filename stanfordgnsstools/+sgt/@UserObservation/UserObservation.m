@@ -19,7 +19,7 @@ classdef UserObservation < matlab.mixin.Copyable & matlab.mixin.SetGet
     %   https://github.com/stanford-gps-lab/stanford-gnss-tools
     
     % immutable properties
-    properties (SetAccess = immutable)
+    properties (SetAccess = protected)
         % User - the user for this observation
         User
         
