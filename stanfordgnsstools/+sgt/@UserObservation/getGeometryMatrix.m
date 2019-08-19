@@ -18,8 +18,8 @@ geometryMatrix{numObj, 1} = {};
 
 for i = 1:numObj
     % build the G matrix in the ENU frame
-    inview = obj(i).SatellitesInViewMask;  % need an in view mask
-    geometryMatrix{i} = [obj(i).LOSenu(inview,:) ones(obj(i).NumSatellitesInView, 1)];
+    inView = obj(i).SatellitesInViewMask;  % need an in view mask
+    geometryMatrix{i} = [obj(i).LOSenu(inView,:) ones(obj(i).NumSatellitesInView, 1)];
 end
 
 if (numObj == 1)
