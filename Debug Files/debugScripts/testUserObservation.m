@@ -21,102 +21,116 @@ satellitePosition2 = satellite.getPosition(time2, 'ECEF');
 equatorialUserObservation = sgt.UserObservation(equatorialUser, satellitePosition);
 equatorialUserObservation2 = sgt.UserObservation(equatorialUser, satellitePosition2);
 
-%% Test 1 - obj.getGeometryMatrix - single observation
+%% Test 1 - Constructor - single user at single point in time
 try
-    test1 = equatorialUserObservation.getGeometryMatrix;
+    test1 = sgt.UserObservation(equatorialUser, satellitePosition);
 catch
     testResults(1) = 1;
 end
 
-%% Test 2 - obj.getGeometryMatrix - multiple observations
+%% Test 2 - Constructor - single user at multiple points in time
 try
-    test2 = equatorialUserObservation2.getGeometryMatrix;
+    test2 = sgt.UserObservation(equatorialUser, satellitePosition2);
 catch
     testResults(2) = 1;
 end
 
-%% Test 3 - obj.getGDOP - single observation
+%% Test 3 - obj.getGeometryMatrix - single observation
 try
-    test3 = equatorialUserObservation.getGDOP;
+    test3 = equatorialUserObservation.getGeometryMatrix;
 catch
     testResults(3) = 1;
 end
 
-%% Test 4 - obj.getGDOP - multiple observations
+%% Test 4 - obj.getGeometryMatrix - multiple observations
 try
-    test4 = equatorialUserObservation2.getGDOP;
+    test4 = equatorialUserObservation2.getGeometryMatrix;
 catch
     testResults(4) = 1;
 end
 
-%% Test 5 - obj.getPDOP - single observation
+%% Test 5 - obj.getGDOP - single observation
 try
-    test5 = equatorialUserObservation.getPDOP;
+    test5 = equatorialUserObservation.getGDOP;
 catch
     testResults(5) = 1;
 end
 
-%% Test 6 - obj.getPDOP - multiple observations
+%% Test 6 - obj.getGDOP - multiple observations
 try
-    test6 = equatorialUserObservation2.getPDOP;
+    test6 = equatorialUserObservation2.getGDOP;
 catch
     testResults(6) = 1;
 end
 
-%% Test 7 - obj.getTDOP - single observation
+%% Test 7 - obj.getPDOP - single observation
 try
-    test7 = equatorialUserObservation.getTDOP;
+    test7 = equatorialUserObservation.getPDOP;
 catch
     testResults(7) = 1;
 end
 
-%% Test 8 - obj.getTDOP - multiple observations
+%% Test 8 - obj.getPDOP - multiple observations
 try
-    test8 = equatorialUserObservation2.getTDOP;
+    test8 = equatorialUserObservation2.getPDOP;
 catch
     testResults(8) = 1;
 end
 
-%% Test 9 - obj.getHDOP - single observation
+%% Test 9 - obj.getTDOP - single observation
 try
-    test9 = equatorialUserObservation.getHDOP;
+    test9 = equatorialUserObservation.getTDOP;
 catch
     testResults(9) = 1;
 end
 
-%% Test 10 - obj.getHDOP - multiple observations
+%% Test 10 - obj.getTDOP - multiple observations
 try
-    test10 = equatorialUserObservation2.getHDOP;
+    test10 = equatorialUserObservation2.getTDOP;
 catch
     testResults(10) = 1;
 end
 
-%% Test 11 - obj.getVDOP - single observation
+%% Test 11 - obj.getHDOP - single observation
 try
-    test11 = equatorialUserObservation.getVDOP;
+    test11 = equatorialUserObservation.getHDOP;
 catch
     testResults(11) = 1;
 end
 
-%% Test 12 - obj.getVDOP - multiple observations
+%% Test 12 - obj.getHDOP - multiple observations
 try
-    test12 = equatorialUserObservation2.getVDOP;
+    test12 = equatorialUserObservation2.getHDOP;
 catch
     testResults(12) = 1;
 end
 
-%% Test 13 - obj.plotSkyPlot -  single observation
+%% Test 13 - obj.getVDOP - single observation
 try
-    equatorialUserObservation.plotSkyPlot;
+    test13 = equatorialUserObservation.getVDOP;
 catch
     testResults(13) = 1;
 end
 
-%% Test 14 - obj.plotSkyPlot - multiple observations
+%% Test 14 - obj.getVDOP - multiple observations
+try
+    test14 = equatorialUserObservation2.getVDOP;
+catch
+    testResults(14) = 1;
+end
+
+%% Test 15 - obj.plotSkyPlot -  single observation
+try
+    equatorialUserObservation.plotSkyPlot;
+catch
+    testResults(15) = 1;
+end
+
+%% Test 16 - obj.plotSkyPlot - multiple observations
 try
     equatorialUserObservation2.plotSkyPlot;
 catch
-    testResults(14) = 1;
+    testResults(16) = 1;
 end
 
 %% Display test results
