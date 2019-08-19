@@ -62,9 +62,10 @@ classdef User < matlab.mixin.Copyable
             
             % if no arguments, default to all zero
             if nargin == 0
-                obj.PositionLLH = zeros(3,1);
-                obj.PositionECEF = zeros(3,1);
-                obj.ECEF2ENU = zeros(3,3);
+                obj.ID = 1;
+                obj.PositionLLH = [37.427127, -122.173243, 17];     % Stanford GPS Lab Location
+                obj.PositionECEF = sgt.tools.llh2ecef(obj.PositionLLH);
+                obj.ECEF2ENU = sgt.tools.ecef2enu(obj.PositionLLH);
                 return;
             end
             
@@ -89,10 +90,6 @@ classdef User < matlab.mixin.Copyable
             
             % Shift longitude
             posLLH(:,2) = sgt.tools.lonShift(posLLH(:,2));
-            
-            % Record lat and lon of input positions in radians
-            latRad = posLLH(:,1)*pi/180;
-            lonRad = posLLH(:,2)*pi/180;
             
             % Convert the LLH positions to ECEF positions
             posECEF = sgt.tools.llh2ecef(posLLH);
@@ -138,12 +135,7 @@ classdef User < matlab.mixin.Copyable
                 obj(i).ElevationMask = elMask(i);
                 
                 % precompute the matrix for the rotation from ECEF to ENU
-                lat = latRad(i);
-                lon = lonRad(i);
-                obj(i).ECEF2ENU = [
-                    -sin(lon)         ,  cos(lon)         , 0;
-                    -sin(lat)*cos(lon), -sin(lat)*sin(lon), cos(lat);
-                    cos(lat)*cos(lon),  cos(lat)*sin(lon), sin(lat)];
+                obj(i).ECEF2ENU = sgt.tools.ecef2enu(obj(i).PositionLLH);
             end
         end
     end
