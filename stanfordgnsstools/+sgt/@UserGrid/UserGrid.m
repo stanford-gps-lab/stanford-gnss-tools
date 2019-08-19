@@ -60,7 +60,7 @@ classdef UserGrid < matlab.mixin.Copyable
             if nargin < 1
                 obj.GridPositionLLH = [];
                 obj.GridPositionECEF = [];
-                obj.Users = [];
+                obj.Users = sgt.User();
                 return;
             end
             
