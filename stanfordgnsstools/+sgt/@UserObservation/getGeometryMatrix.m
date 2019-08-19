@@ -13,7 +13,6 @@ function geometryMatrix = getGeometryMatrix(obj)
 % Number of Observations
 numObj = length(obj);
 
-
 % Preallocate Geometry Matrix
 geometryMatrix{numObj, 1} = {};
 
