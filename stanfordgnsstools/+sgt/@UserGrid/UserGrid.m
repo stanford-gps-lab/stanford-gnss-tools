@@ -101,13 +101,13 @@ classdef UserGrid < matlab.mixin.Copyable
         saveUserGrid(obj, fileName, varargin)
     end
     
-    % Static Methods
-    methods (Static)
+    % Static and Private Methods
+    methods (Static, Access = private)
         obj = createUserGrid(varargin)
     end
     
     % Protected Methods
-    methods
+    methods (Access = protected)
        res = parsesgtUserGridInput(varargin) 
     end
 end
