@@ -63,8 +63,8 @@ classdef User < matlab.mixin.Copyable
             % if no arguments, default to all zero
             if nargin == 0
                 obj.ID = 1;
-                obj.PositionLLH = [37.427127, -122.173243, 17];     % Stanford GPS Lab Location
-                obj.PositionECEF = sgt.tools.llh2ecef(obj.PositionLLH);
+                obj.PositionLLH = [37.427127, -122.173243, 17]';     % Stanford GPS Lab Location
+                obj.PositionECEF = [sgt.tools.llh2ecef(obj.PositionLLH')]';
                 obj.ECEF2ENU = sgt.tools.ecef2enu(obj.PositionLLH);
                 return;
             end
