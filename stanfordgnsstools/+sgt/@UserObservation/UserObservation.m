@@ -18,7 +18,7 @@ classdef UserObservation < matlab.mixin.Copyable & matlab.mixin.SetGet
     %   Questions and comments should be directed to the project at:
     %   https://github.com/stanford-gps-lab/stanford-gnss-tools
     
-    % protected properties
+    % Protected Properties
     properties (SetAccess = protected)
         % User - the user for this observation
         User
@@ -26,14 +26,7 @@ classdef UserObservation < matlab.mixin.Copyable & matlab.mixin.SetGet
         % SatellitePositions - array of the satellite positions for this
         % observations
         SatellitePosition
-    end
-    
-    % properties computed based on constructor data
-    % NOTE: while these are dependent properties, only limiting it to
-    % private set access as these should be calculated when User or
-    % SatellitePositions change (right now they can't but haven't decided
-    % on the final implementation yet)
-    properties (SetAccess = private)
+
         % LOSecef - the ECEF line of sight vectors
         %   this is a Sx3 matrix containing the LOS unit vector in the ECEF
         %   frame to each of the S satellites as rows
