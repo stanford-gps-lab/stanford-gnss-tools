@@ -65,6 +65,8 @@ classdef UserObservation < matlab.mixin.Copyable & matlab.mixin.SetGet
             
             % handle the empty constructor for vector creation
             if nargin == 0
+                obj.SatellitePosition = sgt.SatellitePosition();
+                obj.User = sgt.User();
                 return;
             end
             
