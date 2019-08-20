@@ -213,6 +213,17 @@ catch
     testResults(16) = 1;
 end
 
+%% Test 17 - obj.fromAlmMatrix - test single satellite with config
+try
+    test17 = sgt.Satellite.fromAlmMatrix(alm, 'Config', config);
+    
+    if (~iscell(config.Satellite)) %|| any((size(config.Satellite) ~= [11,2]))
+        testResults(17) = 1;
+    end
+catch
+    testResults(17) = 1;
+end
+
 %% Display test results
 if any(testResults)
     fprintf('---Failed---\n')

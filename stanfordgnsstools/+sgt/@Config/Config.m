@@ -13,19 +13,13 @@ classdef Config < matlab.mixin.Copyable
     
     % Public Properties
     properties
-        % Satellite - Inputs to class Satellite
+        % Satellite - Inputs to constructor for sgt.Satellite
         Satellite
         
+        % SatelliteMethodfromAlmMatrix - Inputs to static constructor
+        % Satellite.fromAlmMatrix
+        SatelliteMethodfromAlmMatrix
+        
+        
     end
-    
-    % Constructor
-    methods
-        function obj = Config()
-            
-        end
-    end
-    
-    
-    
-    
 end
