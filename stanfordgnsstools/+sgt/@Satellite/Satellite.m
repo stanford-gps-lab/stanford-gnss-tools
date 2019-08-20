@@ -93,7 +93,7 @@ classdef Satellite < matlab.mixin.Copyable
                 
                 % Expand
                 resFields = fieldnames(res);
-                checksgtSatelliteInputs(res, resFields, Nsats);     % input sanity check
+%                 checksgtSatelliteInputs(res, resFields, Nsats);     % input sanity check
                 for i = 1:length(resFields)
                     if ~iscell(res.(resFields{i}))
                         res.(resFields{i}) = {res.(resFields{i})};
@@ -119,6 +119,11 @@ classdef Satellite < matlab.mixin.Copyable
                 obj(i).MeanAnomaly = meanAnomaly(i);
                 obj(i).AF0 = af0(i);
                 obj(i).AF1 = af1(i);
+            end
+            
+            % Add inputs to config
+            if (exist('res', 'var')) && (isa(res.Config{1}, 'sgt.Config'))
+                res.Config{1}.Satellite = 1;
             end
         end
         
@@ -153,6 +158,10 @@ parser = inputParser;
 % Constellation
 validConstellationFn = @(x) (ischar(x) || iscellstr(x)); %#ok<ISCLSTR>
 parser.addParameter('Constellation', 'GPS', validConstellationFn)
+
+% Config
+validConfigFn = @(x) (isa(x, 'sgt.Config'));
+parser.addParameter('Config', false, validConfigFn)
 
 % Run parser and set results
 parser.parse(varargin{:})
