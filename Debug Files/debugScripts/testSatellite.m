@@ -9,6 +9,7 @@ fprintf('Testing sgt.Satellite: ')
 
 testResults = [];
 %% Define test parameters
+% Constructor
 prn = 1;
 eccentricity = 0.0091;
 toa = 319488;
@@ -21,14 +22,19 @@ meanAnomaly = 1.5358;
 af0 = -7.6294e-5;
 af1 = -1.0914e-11;
 
+% obj.fromAlmMatrix
 alm = [prn, eccentricity, toa, inclination, rora, sqrta, raan, argumentOfPerigee,...
     meanAnomaly, af0, af1];
 alm2 = repmat(alm, [2,1]);
 alm3 = repmat(alm, [3,1]);
 
+% Polygon
 polygonFile = 'usrconus.dat';
 users = sgt.UserGrid.createUserGrid('NumUsers', 100, 'PolygonFile', polygonFile);
 time = 0;
+
+% sgt.Config
+config = sgt.Config;
 %% Test 1 - Constructor - single satellite
 try
     test1 = sgt.Satellite(prn, eccentricity, toa, inclination, rora, sqrta, raan, argumentOfPerigee,...
@@ -179,6 +185,32 @@ try
     satellites.plotOrbit(time, 'UserGrid', users, 'PolygonFile', polygonFile)
 catch
     testResults(14) = 1;
+end
+
+%% Test 15 - Constructor - Test single satellite with config
+try
+    test15 = sgt.Satellite(prn, eccentricity, toa, inclination, rora, sqrta, raan, argumentOfPerigee,...
+        meanAnomaly, af0, af1, 'Config', config);
+    
+    if (~iscell(config.Satellite)) || any((size(config.Satellite) ~= [11,2]))
+        testResults(15) = 1;
+    end
+catch
+    testResults(15) = 1;
+end
+
+%% Test 16 - Constructor - Test multiple satellites with config
+try
+    test16 = sgt.Satellite(prn*ones(2,1), eccentricity*ones(2,1), toa*ones(2,1),...
+        inclination*ones(2,1), rora*ones(2,1), sqrta*ones(2,1), raan*ones(2,1),...
+        argumentOfPerigee*ones(2,1), meanAnomaly*ones(2,1), af0*ones(2,1),...
+        af1*ones(2,1), 'Config', config);
+    
+    if (~iscell(config.Satellite)) || any((size(config.Satellite) ~= [11,2]))
+        testResults(16) = 1;
+    end
+catch
+    testResults(16) = 1;
 end
 
 %% Display test results
