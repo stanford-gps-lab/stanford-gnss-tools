@@ -1,4 +1,4 @@
-classdef UserObservation < matlab.mixin.Copyable & matlab.mixin.SetGet
+classdef UserObservation < matlab.mixin.Copyable
     % UserObservation   an container for an observation for a user.
     %   An observation ties a User and Satellites together at a specific
     %   time and provides data on the relationship between those two group.
@@ -64,7 +64,6 @@ classdef UserObservation < matlab.mixin.Copyable & matlab.mixin.SetGet
     
     % Constructor
     methods
-        
         function obj = UserObservation(user, satellitePosition)
             
             % handle the empty constructor for vector creation
@@ -92,7 +91,6 @@ classdef UserObservation < matlab.mixin.Copyable & matlab.mixin.SetGet
             % horizon
             obj.calculateRiseTime;
         end
-        
     end
     
     % Public Methods
