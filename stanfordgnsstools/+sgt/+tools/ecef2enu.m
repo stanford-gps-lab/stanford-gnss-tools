@@ -3,8 +3,8 @@ function ecef2enuMat = ecef2enu(posLLH)
 % posLLH is a 1x3 array [deg deg m]. ecef2enuMat is a 3x3 matrix.
 
 % Convert to radians
-latRad = posLLH(1).*180/pi;
-lonRad = posLLH(2).*180/pi;
+latRad = posLLH(1).*pi/180;
+lonRad = posLLH(2).*pi/180;
 
 % Preallocate
 ecef2enuMat = zeros(3,3);
