@@ -91,7 +91,6 @@ classdef UserObservation < matlab.mixin.Copyable & matlab.mixin.SetGet
             % Calculate the time(s) at which the satellites rise above the
             % horizon
             obj.calculateRiseTime;
-            
         end
         
     end
