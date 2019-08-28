@@ -30,7 +30,7 @@ else
 end
 
 if nargin > 2
-    res = parsesgtSatelliteInput(varargin{:});
+    res = parsefromAlmMatrixInput(varargin{:});
     
     if (exist('res', 'var')) && (isfield('res', 'Config')) && (isa(res.Config{1}, 'sgt.Config'))
         res.Config{1}.SatelliteMethodfromAlmMatrix = {'AlmMatrix', alm};
