@@ -26,7 +26,6 @@ af1 = -1.0914e-11;
 alm = [prn, eccentricity, toa, inclination, rora, sqrta, raan, argumentOfPerigee,...
     meanAnomaly, af0, af1];
 alm2 = repmat(alm, [2,1]);
-alm3 = repmat(alm, [3,1]);
 
 % Polygon
 polygonFile = 'usrconus.dat';
@@ -100,7 +99,7 @@ catch
 end
 
 %% Test 6 - obj.fromAlmMatrix - test varargin
-try
+% try
     test6 = sgt.Satellite.fromAlmMatrix(alm, 'Constellation', 'Galileo');
     
     if strcmp(test6.Constellation, 'Galileo')
@@ -108,9 +107,9 @@ try
     else
         testResults(6) = 1;
     end
-catch
-    testResults(6) = 1;
-end
+% catch
+%     testResults(6) = 1;
+% end
 
 %% Test 7 - obj.fromAlmMatrix - test multiple satellites with no varargin
 try

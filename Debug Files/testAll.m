@@ -8,7 +8,6 @@ clear; close all; clc;
 %   https://github.com/stanford-gps-lab/stanford-gnss-tools
 
 %% Get test file names to be run
-
 testDir = [pwd, '\debugScripts'];
 testList = dir(fullfile(testDir, '*.m'));
 
