@@ -49,12 +49,12 @@ obj.NumSatellitesInView = sum(svInView);
 %
 % compute elevation angles to the satellites in view
 %
-obj.ElevationAngles = asin(losenu(3,svInView)');
+obj.ElevationAngles = asin(losenu(3,:)');
 
 %
 % compute the azimuth angles to the satellites in view
 %
-obj.AzimuthAngles = atan2(losenu(1,svInView)', losenu(2,svInView)');
+obj.AzimuthAngles = atan2(losenu(1,:)', losenu(2,:)');
 
 %
 % compute the range to the satellites in view
