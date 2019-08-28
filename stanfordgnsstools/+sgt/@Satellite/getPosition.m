@@ -67,6 +67,10 @@ n0 = sqrt(CONST_MU_E ./ axis.^3);  % dim: SxT
 
 % Modification (for ICD-100)
 Tk = time - toa;  % dim: SxT
+Tk = mod(Tk,604800);
+if Tk>302400
+    Tk = Tk - 604800;
+end
 
 % Compute mean anomaly
 Mk = meanAnomaly + n0.*Tk;  % dim: SxT
