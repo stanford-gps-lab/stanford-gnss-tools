@@ -132,11 +132,5 @@ classdef SatellitePosition < matlab.mixin.Copyable
                 end
             end
         end
-    end
-    
-    % Public Methods
-    methods
-        getSatellite(obj, SatellitePRN)
-    end
-    
+    end    
 end
