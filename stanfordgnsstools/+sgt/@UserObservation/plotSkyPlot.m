@@ -22,8 +22,8 @@ pax.RTickLabel = {'90'; '70'; '50'; '30'; '10'};
 for i = 1:length(obj)
     
     % Plot the satellite positions on a polar plot
-    temp = [obj(i).SatellitePosition.Satellite]; temp2 = [temp.PRN]';
-    prnInView = temp2(obj(i).SatellitesInViewMask);
+    temp = [obj(i).SatellitePosition.SatellitePRN]';
+    prnInView = temp(obj(i).SatellitesInViewMask);
     svInView = obj(i).SatellitesInViewMask;
     polarscatter(obj(i).AzimuthAngles(svInView), 90 - obj(i).ElevationAngles(svInView).*180/pi, sz, prnInView, 'filled');
     
