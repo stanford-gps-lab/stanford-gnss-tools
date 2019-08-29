@@ -56,10 +56,6 @@ classdef UserObservation < matlab.mixin.Copyable
         % Range - the range to each of the satellites in view as a column
         % vector of length Sinview
         Range
-        
-        % RiseTime - the time at which each satellite comes above the
-        % horizon for each User.
-        RiseTime
     end
     
     % Constructor
@@ -86,10 +82,6 @@ classdef UserObservation < matlab.mixin.Copyable
                 % function of the user and the satellite positions
                 obj(i).calculateObservationData;
             end
-            
-            % Calculate the time(s) at which the satellites rise above the
-            % horizon
-            obj.calculateRiseTime;
         end
     end
     
@@ -102,12 +94,12 @@ classdef UserObservation < matlab.mixin.Copyable
         hdop = getHDOP(obj)
         vdop = getVDOP(obj)
         plotSkyPlot(obj)
+        riseTime = calculateRiseTime(obj, satellite);
     end
     
     % Protected Methods
     methods (Access = protected)
         calculateObservationData(obj)
-        calculateRiseTime(obj)
     end
 end
 
