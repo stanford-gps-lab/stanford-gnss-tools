@@ -151,6 +151,7 @@ classdef Satellite < matlab.mixin.Copyable
     methods (Static)
         obj = fromAlmMatrix(alm, varargin)
         obj = fromYuma(filename)
+        satelliteObject = getSatelliteObject(allSatelliteObjects, satellitePRN);
     end
     
     % Protected Methods
