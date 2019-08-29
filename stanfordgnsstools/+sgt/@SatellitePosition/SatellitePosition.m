@@ -32,10 +32,9 @@ classdef SatellitePosition < matlab.mixin.Copyable
     % calculated together and that is only guaranteed if all done in the
     % constructor or in an internal function
     properties (SetAccess = private)
-        % Satellite - the satellite this position refers to
-        %   Note that Satellite are objects, so this can be thought of as a
-        %   "pointer" to the satellite object
-        Satellite
+        % SatellitePRN - the PRN of the satellite this SatellitePosition
+        % refers to.
+        SatellitePRN
         
         % t - the time at which this position was calculated
         t
@@ -50,8 +49,8 @@ classdef SatellitePosition < matlab.mixin.Copyable
         ECI
     end
     
+    % Constructor
     methods
-        
         function obj = SatellitePosition(satellite, time, posType, pos)
             % allow for an empty constructor for list generation
             if nargin == 0
@@ -125,7 +124,7 @@ classdef SatellitePosition < matlab.mixin.Copyable
             
             for s = 1:S
                 for t = 1:T
-                    obj(s,t).Satellite = satellite(s);
+                    obj(s,t).SatellitePRN = satellite(s).PRN;
                     obj(s,t).t = time(t);
                     obj(s,t).LLH = posLLH(s,:,t)';
                     obj(s,t).ECEF = posECEF(s,:,t)';
@@ -134,4 +133,10 @@ classdef SatellitePosition < matlab.mixin.Copyable
             end
         end
     end
+    
+    % Public Methods
+    methods
+        getSatellite(obj, SatellitePRN)
+    end
+    
 end
