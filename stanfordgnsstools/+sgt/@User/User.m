@@ -59,7 +59,6 @@ classdef User < matlab.mixin.Copyable
     methods
         
         function obj = User(posLLH, varargin)
-            
             % if no arguments, default to all zero
             if nargin == 0
                 obj.ID = 1;
