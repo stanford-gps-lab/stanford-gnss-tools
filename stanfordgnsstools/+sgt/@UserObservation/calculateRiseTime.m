@@ -1,4 +1,4 @@
-function [] = calculateRiseTime(obj)
+function [] = calculateRiseTime(obj, satellite)
 % Calculate the time at which satellites rise above the horizon for this
 % user.
 
@@ -26,7 +26,6 @@ time = tempTime(1)-12000:tempTimeDiff:tempTime(end)-1;    % Full time vector
 timeLength = length(time);  % Length of time array
 
 % Calculate Satellite Positions over extended time
-satellite = [obj(1).SatellitePosition.Satellite];
 satellitePosition = satellite.getPosition(time);
 
 % Preallocate
