@@ -9,8 +9,18 @@ fprintf('Testing sgt.SatellitePosition: ')
 
 testResults = [];
 %% Define test parameters
+alm = 'current.alm';
 
-%% Test 1 - Constructor
+satellite = sgt.Satellite.fromYuma(alm);
+time = 0:300:600;
+
+%% Test 1 - Constructor - ECEF
+% try
+%     tempSatellitePosition = satellite.getPosition(time);
+%     pos = tempSatellitePosition
+% catch
+%    testResults(1) = 1; 
+% end
 
 %% Display test results
 if any(testResults)
