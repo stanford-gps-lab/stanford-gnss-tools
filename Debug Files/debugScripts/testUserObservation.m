@@ -12,7 +12,7 @@ testResults = [];
 userGrid = sgt.UserGrid.createUserGrid('NumUsers', 100);
 equatorialUser = userGrid.Users(42);
 time = 0;
-time2 = 0:100:500;
+time2 = 0:300:86400;
 
 satellite = sgt.Satellite.fromYuma('current.alm');
 satellitePosition = satellite.getPosition(time, 'ECEF');
@@ -131,6 +131,13 @@ try
     equatorialUserObservation2.plotSkyPlot;
 catch
     testResults(16) = 1;
+end
+
+%% Test 17 - obj.calcualteRiseTime(satellite) - Calculate rise time
+try
+    riseTime = equatorialUserObservation2.calculateRiseTime(equatorialUser, satellite);
+catch
+    testResults(17) = 1;
 end
 
 %% Display test results

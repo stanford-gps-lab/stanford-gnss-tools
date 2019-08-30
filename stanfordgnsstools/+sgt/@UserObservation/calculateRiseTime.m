@@ -1,4 +1,4 @@
-function [] = calculateRiseTime(obj, satellite)
+function riseTime = calculateRiseTime(obj, user, satellite)
 % Calculate the time at which satellites rise above the horizon for this
 % user.
 
@@ -15,35 +15,35 @@ numObj = length(obj);
 numSats = length(obj(1).SatellitesInViewMask);
 
 % Get unique vector of times and include times before simulation start
-tempTime = [obj.SatellitePosition];
-tempTime = unique([tempTime.t]');
-if (length(tempTime) > 1)
-    tempTimeDiff = tempTime(end) - tempTime(end-1);     % Assumes evenly distributed time array
-else
-    tempTimeDiff = 300;  % If one time is input, set a time difference for calculations
-end
-time = tempTime(1)-12000:tempTimeDiff:tempTime(end)-1;    % Full time vector
-timeLength = length(time);  % Length of time array
+currentTime = unique([obj.t]');
+tempTimeDiff = 300;  % If one time is input, set a time difference for calculations
+preTime = [currentTime(1)-12000:tempTimeDiff:currentTime(1)-1]';
+time = [preTime; currentTime];    % Full time vector
+preTimeLength = length(preTime);  % Length of time array
 
-% Calculate Satellite Positions over extended time
-satellitePosition = satellite.getPosition(time);
+% Calculate Satellite Positions over previous time
+satellitePosition = satellite.getPosition(preTime);
 
 % Preallocate
 [S, ~] = size(satellitePosition);
-elevationAngleMat = NaN(S, timeLength);
+preElevationAngleMat = NaN(S, preTimeLength);
 
 % Get elevation angles over extended time
-for i = 1:timeLength
+for i = 1:preTimeLength
     satellitePositionMat = [satellitePosition(:,i).ECEF];
-    losecef = satellitePositionMat - repmat(obj(1).User.PositionECEF, 1, S);
+    losecef = satellitePositionMat - repmat(user.PositionECEF, 1, S);
     r = vecnorm(losecef);
     losecef = losecef ./ repmat(r, 3, 1);
-    losenu = obj(1).User.ECEF2ENU * losecef;
-    elevationAngleMat(:,i) = asin(losenu(3,:)');
+    losenu = user.ECEF2ENU * losecef;
+    preElevationAngleMat(:,i) = asin(losenu(3,:)');
 end
 
+% Concatenate previous elevationAngleMat with already calculated current
+% elevation angles
+elevationAngleMat = [preElevationAngleMat, [obj.ElevationAngles]];
+
 % Get user elevation mask
-elevationMask = obj(1).User.ElevationMask;
+elevationMask = obj(1).ElevationMask;
 
 % Preallocate
 indRise = cell(numSats, 1);
@@ -91,11 +91,6 @@ for i = 1:numSats
         end
         
     end
-end
-
-% Temporary
-for i = 1:numObj
-    obj(i).RiseTime = riseTime;
 end
 end
 

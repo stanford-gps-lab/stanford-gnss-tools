@@ -100,7 +100,7 @@ classdef UserObservation < matlab.mixin.Copyable
         hdop = getHDOP(obj)
         vdop = getVDOP(obj)
         plotSkyPlot(obj)
-        riseTime = calculateRiseTime(obj, satellite);
+        riseTime = calculateRiseTime(obj, user, satellite);
     end
     
     % Protected Methods
