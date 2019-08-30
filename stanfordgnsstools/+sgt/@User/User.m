@@ -124,6 +124,8 @@ classdef User < matlab.mixin.Copyable
             end
             
             % create the user object for each site
+            % Note: obj cannot be preallocated if sgt.User is to be used to
+            % create future subclasses.
             for i = 1:Nusers
                 % directly just save the LLH and the ECEF positions to the
                 % user object
