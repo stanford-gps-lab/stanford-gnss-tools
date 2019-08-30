@@ -1,4 +1,4 @@
-function [] = calculateObservationData(obj)
+function [] = calculateObservationData(obj, user, satellitePosition)
 % calculateObservationData  compute all of the properties that depend on
 % the user and the satellite positions.  This includes the following:
 %   - LOS in ECEF and ENU coordinates
@@ -17,15 +17,15 @@ function [] = calculateObservationData(obj)
 %
 
 % get the number of satellites and their positions
-[S, ~] = size(obj.SatellitePosition);
-satellitePosition = [obj.SatellitePosition.ECEF];
+[S, ~] = size(satellitePosition);
+satellitePosition = [satellitePosition.ECEF];
 
 %
 % calculate the ECEF LOS
 %
 
 % compute the range to the sallites
-losecef = satellitePosition - repmat(obj.User.PositionECEF, 1, S);
+losecef = satellitePosition - repmat(user.PositionECEF, 1, S);
 
 % normalize by magnitude
 r = vecnorm(losecef);
@@ -35,14 +35,14 @@ obj.LOSecef = losecef';
 %
 % calculate the ENU LOS
 %
-losenu = obj.User.ECEF2ENU * losecef;
+losenu = user.ECEF2ENU * losecef;
 obj.LOSenu = losenu';
 
 %
 % determine the satellites in view
 %
 u = losenu(3,:);
-svInView = (u >= sin(obj.User.ElevationMask));
+svInView = (u >= sin(user.ElevationMask));
 obj.SatellitesInViewMask  = svInView';
 obj.NumSatellitesInView = sum(svInView);
 

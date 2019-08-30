@@ -20,12 +20,14 @@ classdef UserObservation < matlab.mixin.Copyable
     
     % Protected Properties
     properties (SetAccess = protected)
-        % User - the user for this observation
-        User
+        % UserID - the user for this observation
+        UserID
         
-        % SatellitePositions - array of the satellite positions for this
-        % observations
-        SatellitePosition
+        % SatellitePRN - PRN list of the satellites for this observation
+        SatellitePRN
+        
+        % t - Time at which the userObservation is recorded
+        t
 
         % LOSecef - the ECEF line of sight vectors
         %   this is a Sx3 matrix containing the LOS unit vector in the ECEF
@@ -36,6 +38,9 @@ classdef UserObservation < matlab.mixin.Copyable
         %   this is a Sx3 matrix containing the LOS unit vector in the ENU
         %   frame to each of the S satellites as rows
         LOSenu
+        
+        % EleveationMask - elevation mask angle for the user.
+        ElevationMask
         
         % SatellitesInViewMask - mask for which satellites are in view
         %   a logical array of length S indicating which satellite
@@ -64,8 +69,6 @@ classdef UserObservation < matlab.mixin.Copyable
             
             % handle the empty constructor for vector creation
             if nargin == 0
-                obj.SatellitePosition = sgt.SatellitePosition();
-                obj.User = sgt.User();
                 return;
             end
             
@@ -74,14 +77,17 @@ classdef UserObservation < matlab.mixin.Copyable
             [~, T] = size(satellitePosition);
             
             for i = 1:T
-                % set the properties
-                obj(i).User = user;
-                obj(i).SatellitePosition = satellitePosition(:,i);
+                obj(i).t = satellitePosition(1,i).t;
                 
                 % run the math to populate all of the properties that are a
                 % function of the user and the satellite positions
-                obj(i).calculateObservationData;
+                obj(i).calculateObservationData(user, satellitePosition(:,i));
             end
+            
+            % Set properties
+            [obj.UserID] = deal(user.ID);
+            [obj.SatellitePRN] = deal([satellitePosition(:,1).SatellitePRN]);
+            [obj.ElevationMask] = deal(user.ElevationMask);
         end
     end
     
@@ -99,7 +105,7 @@ classdef UserObservation < matlab.mixin.Copyable
     
     % Protected Methods
     methods (Access = protected)
-        calculateObservationData(obj)
+        calculateObservationData(obj, user, satellitePosition)
     end
 end
 

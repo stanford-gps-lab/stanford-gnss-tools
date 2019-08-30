@@ -19,11 +19,10 @@ function plotSkyPlot(obj)
 figure; polarscatter(NaN, NaN); hold on; sz = 75; pax = gca; 
 pax.ThetaDir = 'clockwise'; pax.ThetaZeroLocation = 'top'; pax.RTick = [0, 20, 40, 60, 80];
 pax.RTickLabel = {'90'; '70'; '50'; '30'; '10'};
-for i = 1:length(obj)
-    
+prn = obj(1).SatellitePRN';
+for i = 1:length(obj)  
     % Plot the satellite positions on a polar plot
-    temp = [obj(i).SatellitePosition.SatellitePRN]';
-    prnInView = temp(obj(i).SatellitesInViewMask);
+    prnInView = prn(obj(i).SatellitesInViewMask);
     svInView = obj(i).SatellitesInViewMask;
     polarscatter(obj(i).AzimuthAngles(svInView), 90 - obj(i).ElevationAngles(svInView).*180/pi, sz, prnInView, 'filled');
     
@@ -37,6 +36,6 @@ end
 rlim([0 90])
 
 % Plot the elevation mask
-polarplot(linspace(0,2*pi,100), 90 - obj(1).User.ElevationMask*180/pi.*ones(100,1), 'b--')
+polarplot(linspace(0,2*pi,100), 90 - obj(1).ElevationMask*180/pi.*ones(100,1), 'b--')
 
 end
