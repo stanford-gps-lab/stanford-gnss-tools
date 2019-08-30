@@ -76,18 +76,18 @@ classdef UserObservation < matlab.mixin.Copyable
             % a 1xT array of observations
             [~, T] = size(satellitePosition);
             
+            % Set properties
+            [obj.UserID] = deal(user.ID);
+            [obj.SatellitePRN] = deal([satellitePosition(:,1).SatellitePRN]);
+            [obj.ElevationMask] = deal(user.ElevationMask);
+            
             for i = 1:T
-                obj(i).t = satellitePosition(1,i).t;
+                obj(i).t = satellitePosition(1,i).t;    % Can't preallocate if subclasses are to be made from this class
                 
                 % run the math to populate all of the properties that are a
                 % function of the user and the satellite positions
                 obj(i).calculateObservationData(user, satellitePosition(:,i));
             end
-            
-            % Set properties
-            [obj.UserID] = deal(user.ID);
-            [obj.SatellitePRN] = deal([satellitePosition(:,1).SatellitePRN]);
-            [obj.ElevationMask] = deal(user.ElevationMask);
         end
     end
     
