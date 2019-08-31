@@ -23,6 +23,9 @@ classdef UserObservation < matlab.mixin.Copyable
         % UserID - the user for this observation
         UserID
         
+        % UserLL - Lat Lon of the user [deg deg]
+        UserLL
+        
         % SatellitePRN - PRN list of the satellites for this observation
         SatellitePRN
         
@@ -80,6 +83,7 @@ classdef UserObservation < matlab.mixin.Copyable
             [obj.UserID] = deal(user.ID);
             [obj.SatellitePRN] = deal([satellitePosition(:,1).SatellitePRN]);
             [obj.ElevationMask] = deal(user.ElevationMask);
+            [obj.UserLL] = deal(user.PositionLLH(1:2));
             
             for i = 1:T
                 obj(i).t = satellitePosition(1,i).t;    % Can't preallocate if subclasses are to be made from this class
