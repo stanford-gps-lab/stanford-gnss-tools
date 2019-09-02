@@ -8,8 +8,10 @@ classdef UniversalConstants
 %   https://github.com/stanford-gps-lab/stanford-gnss-tools
     
     properties (Constant)
+        % pi - as specified in IS-GPS-200H
         pi = 3.1415926535898;
         
+        % c - [m/s] speed of light as specified in IS-GPS-200H
+        c = 2.99792458e8;
     end
-    
 end
