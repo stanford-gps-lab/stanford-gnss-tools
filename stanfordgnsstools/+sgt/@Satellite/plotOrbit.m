@@ -103,9 +103,6 @@ sgtOmega = sgt.constants.EarthConstants.omega;
 % Number of satellites
 numSats = length(obj);
 
-% Preallocate satOrbit
-satPositions = sgt.SatellitePosition();
-
 % Get orbital period
 orbitalPeriod = 2*sgtPi*(obj(1).SqrtA^3)/sqrt(sgtMu);
 
