@@ -144,7 +144,8 @@ classdef Satellite < matlab.mixin.Copyable
     % Public Methods
     methods
         satellitePosition = getPosition(obj, time, frame)
-        plotOrbit(obj, varargin)
+        plotOrbit(obj, time, varargin)
+        F = animateOrbit(obj, time, varargin)
     end
     
     % Static Methods

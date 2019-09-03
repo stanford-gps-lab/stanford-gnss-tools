@@ -43,30 +43,33 @@ satOrbit = propagateOrbit(obj);
 satellitePositionECI = obj.getPosition(time, 'eci');
 
 % Plot satellite orbits with satellite at position at time 'time'
-figure; hold on;
+hold on; colorNum = NaN(numSats, 3);
 for i = 1:numSats
     % Plot orbits
-    h = plot3(satOrbit(1,:,i), satOrbit(2,:,i), satOrbit(3,:,i));
+%     h = plot3(satOrbit(1,:,i), satOrbit(2,:,i), satOrbit(3,:,i));
     
     % Consistent colors between orbits and satellite positions
-    colorNum = get(h, 'color');
+%     colorNum(i,:) = get(h, 'color');
     
     % Get satellite positions
-    plot3(satellitePositionECI(i).ECI(1), satellitePositionECI(i).ECI(2), satellitePositionECI(i).ECI(3), '.', 'MarkerSize', 15,  'color', colorNum)
+    h = plot3(satellitePositionECI(i).ECI(1), satellitePositionECI(i).ECI(2), satellitePositionECI(i).ECI(3), '.', 'MarkerSize', 15);%,  'color', colorNum(i,:))
+    colorNum(i,:) = get(h, 'color');
 end
 
 % Get rotation matrix for plotearth
-temp1 = obj(1).getPosition(time, 'ecef');
-temp1 = temp1.ECEF./norm(temp1.ECEF);
-temp2 = obj(1).getPosition(time, 'eci');
-temp2 = temp2.ECI./norm(temp2.ECI);
+% temp1 = obj(1).getPosition(time, 'ecef');
+% temp1 = temp1.ECEF./norm(temp1.ECEF);
+% temp2 = obj(1).getPosition(time, 'eci');
+% temp2 = temp2.ECI./norm(temp2.ECI);
 zRotFn = @(angle) [cos(angle) -sin(angle) 0; sin(angle) cos(angle) 0; 0 0 1];
-costFn = @(x) sum((temp1 - zRotFn(x)*temp2).^2);
-[zRotAngle, ~] = fminsearch(costFn, 1);
+% costFn = @(x) sum((temp1 - zRotFn(x)*temp2).^2);
+% [zRotAngle, derp] = fminsearch(costFn, 1)
+% rotMat = zRotFn(-zRotAngle);
+zRotAngle = sgt.constants.EarthConstants.omega*time;
 rotMat = zRotFn(zRotAngle);
 
 % Plot earth
-sgt.plotearth.earth_sphere(rotMat, 'm')
+sgt.plotearth.earth_sphere(zRotAngle, 'm')
 
 % Plot varargin variables
 if (~isempty(res.UserGrid))
@@ -95,7 +98,8 @@ if (~isempty(res)) && (isfield(res, 'LOS')) && (~isempty(res.UserGrid))
            if userObservation.SatellitesInViewMask(j)
                line([gridPositionsECI(1,i), satellitePositionECI(j).ECI(1)],...
                    [gridPositionsECI(2,i), satellitePositionECI(j).ECI(2)],...
-                   [gridPositionsECI(3,i), satellitePositionECI(j).ECI(3)])
+                   [gridPositionsECI(3,i), satellitePositionECI(j).ECI(3)],...
+                   'color', colorNum(j,:))
            end
        end
     end

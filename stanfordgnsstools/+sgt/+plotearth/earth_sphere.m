@@ -1,4 +1,4 @@
-function [xx,yy,zz] = earth_sphere(rotMat, varargin)
+function [xx,yy,zz] = earth_sphere(zRotAngle, varargin)
 %EARTH_SPHERE Generate an earth-sized sphere.
 %   [X,Y,Z] = EARTH_SPHERE(N) generates three (N+1)-by-(N+1)
 %   matrices so that SURFACE(X,Y,Z) produces a sphere equal to 
@@ -106,6 +106,8 @@ if nargout == 0
     
     %%% SGT Code %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     % Rotate Earth for plotting purposes (matches up ECI vectors with ECEF)
+    zRotFn = @(angle) [cos(angle) -sin(angle) 0; sin(angle) cos(angle) 0; 0 0 1];
+    rotMat = zRotFn(zRotAngle);
     vecSize = length(x);
     earthPointsECEF = [x(:), y(:), z(:)]';
     earthPointsECI = rotMat*earthPointsECEF;
@@ -129,7 +131,12 @@ if nargout == 0
     xlabel(['X [' units ']'])
     ylabel(['Y [' units ']'])
     zlabel(['Z [' units ']'])
-    view(127.5,30)
+%     view(127.5,30)
+    %%% SGT CODE %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    az = zRotAngle*180/pi + 90;
+    view(az, 45)
+    
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 else
     xx = x; yy = y; zz = z;
 end
