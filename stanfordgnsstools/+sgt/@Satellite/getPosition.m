@@ -90,13 +90,12 @@ end
 cosEk = cos(Ek);
 sinEk = sin(Ek);
 
-% c1 = 1 - eccen .* cos_Ek;
 % Ek_dot = n0./c1;
 
 % Compute true anomaly
 c1 = 1 - eccentricity.*cosEk;
 c2 = sqrt(1 - eccentricity.^2);
-vk = atan2(c2.*sinEk./c1, cosEk-eccentricity./c1)  % dim: SxT
+vk = atan2(c2.*sinEk./c1, cosEk-eccentricity./c1);  % dim: SxT
 % vk_dot = Ek_dot.*c2./c1;
 
 % Process for different frames
@@ -119,6 +118,7 @@ if (strcmpi('eci', frame))
     
     satellitePosition = sgt.SatellitePosition(obj, time(1,:), lower(frame), squeeze(pos));
     return;
+    
 else
     % Compute argument of latitude
     phik = vk + argumentOfPerigee;  % dim: SxT
@@ -148,31 +148,25 @@ else
     Omegakdot = rora - CONST_OMEGA_E;
     
     Omegak = raan + Omegakdot.*Tk - CONST_OMEGA_E * mod(toa, 604800);
+    
+    % build the position matrix to output the data
+    pos = zeros(S, 3, T);
+    
+    % populate the X, Y, Z information to create the Sx3xT matrix needed for
+    % the SatellitePosition constructor
+    pos(:,1,:) = xkOrbital.*cos(Omegak); - ykOrbital.*cos(ik).*sin(Omegak);
+    pos(:,2,:) = xkOrbital.*sin(Omegak) + ykOrbital.*cos(ik).*cos(Omegak);
+    pos(:,3,:) = ykOrbital.*sin(ik);
+    
+    % create the satellite position matrix
+    % NOTE: need to squeeze the posecef matrix to remove any singleton
+    % dimensions since that's how the constructor for SatellitePosition is
+    % built
+    satellitePosition = sgt.SatellitePosition(obj, time(1,:), lower(frame), squeeze(pos));
+    return;
+    
 end
-
-cosOmegak = cos(Omegak);
-sinOmegak = sin(Omegak);
-cosik = cos(ik);
-sinik = sin(ik);
-
-% build the position matrix to output the data
-pos = zeros(S, 3, T);
-
-% populate the X, Y, Z information to create the Sx3xT matrix needed for
-% the SatellitePosition constructor
-pos(:,1,:) = xkOrbital.*cos(Omegak); - ykOrbital.*cos(ik).*sin(Omegak);
-pos(:,2,:) = xkOrbital.*sin(Omegak) + ykOrbital.*cos(ik).*cos(Omegak);
-pos(:,3,:) = ykOrbital.*sin(ik);
-
-% create the satellite position matrix
-% NOTE: need to squeeze the posecef matrix to remove any singleton
-% dimensions since that's how the constructor for SatellitePosition is
-% built
-satellitePosition = sgt.SatellitePosition(obj, time(1,:), lower(frame), squeeze(pos));
-
-
-
-
+end
 
 % original code for creating the position vector:
 %sv_xyz = [xxk.*cosO - yyk.*cosi.*sinO, xxk.*sinO + yyk.*cosi.*cosO, yyk.*sini];

@@ -12,6 +12,9 @@ function plotOrbit(obj, time, varargin)
 %   -----
 %   'PolygonFile' - A polygon file that contains the information necessary
 %   to create a geographic boundary
+%   -----
+%   'LOS' - (True/False) Plot line of site vectors from users to the
+%   satellites in view
 
 % Copyright 2019 Stanford University GPS Laboratory
 %   This file is part of the Stanford GNSS Tools which is released
@@ -34,22 +37,31 @@ numSats = length(obj);
 res = parseInput(varargin{:});
 
 % Propagate satellite orbits for plotting purposes
-satOrbit = propagateOrbit(obj, time);
+satOrbit = propagateOrbit(obj);
 
 % Plot satellite orbits with satellite at position at time 'time'
 figure; hold on;
 for i = 1:numSats
     % Plot orbits
-    h = plot3(satOrbit(:,1,i), satOrbit(:,2,i), satOrbit(:,3,i));
+    h = plot3(satOrbit(1,:,i), satOrbit(2,:,i), satOrbit(3,:,i));
     
     % Consistent colors between orbits and satellite positions
     colorNum = get(h, 'color');
     
     % Get satellite positions
-    satPosition = obj(i).getPosition(time, 'ecef');
-    plot3(satPosition.ECEF(1), satPosition.ECEF(2), satPosition.ECEF(3), '.', 'MarkerSize', 15,  'color', colorNum)
+    satPosition = obj(i).getPosition(time, 'eci');
+    plot3(satPosition.ECI(1), satPosition.ECI(2), satPosition.ECI(3), '.', 'MarkerSize', 15,  'color', colorNum)
 end
-sgt.plotearth.earth_sphere('m')
+% Get rotation matrix for plotearth
+temp1 = obj(1).getPosition(time, 'ecef');
+temp1 = temp1.ECEF./norm(temp1.ECEF);
+temp2 = obj(1).getPosition(time, 'eci');
+temp2 = temp2.ECI./norm(temp2.ECI);
+zRotFn = @(angle) [cos(angle) -sin(angle) 0; sin(angle) cos(angle) 0; 0 0 1];
+costFn = @(x) sum((temp1 - zRotFn(x)*temp2).^2);
+[zRotAngle, ~] = fminsearch(costFn, 1);
+rotMat = zRotFn(zRotAngle);
+sgt.plotearth.earth_sphere(rotMat, 'm')
 
 % Plot varargin variables
 if (~isempty(res.UserGrid))
@@ -83,6 +95,10 @@ parser.addParameter('PolygonFile', [], validPolygonFileFn)
 validUserGridFn = @(x) (isa(x, 'sgt.UserGrid'));
 parser.addParameter('UserGrid', [], validUserGridFn)
 
+% LOS
+validLOSFn = @(x) (islogical(x));
+parser.addParameter('LOS', false, validLOSFn);
+
 % Run parser and set results
 parser.parse(varargin{:})
 res = parser.Results;
@@ -90,7 +106,7 @@ res = parser.Results;
 end
 
 % Propagate Orbit for plotting purposes
-function satOrbit = propagateOrbit(obj, time)
+function satOrbit = propagateOrbit(obj)
 % Create a cell matrix comprised of M Nx3 matrices where M is the total
 % number of satellites, N is the number of discrete points in time, and the
 % three columns represent the XYZ position in ECEF.
@@ -110,22 +126,26 @@ orbitalPeriod = 2*sgtPi*(obj(1).SqrtA^3)/sqrt(sgtMu);
 timeProp = [0:1000:ceil(orbitalPeriod)+1000]';
 
 % Preallocate satOrbit
-satOrbit = NaN(length(timeProp), 3, numSats);
+satOrbit = NaN(3, length(timeProp), numSats);
 
 % Get positions of satelite i for all times
 satPositions = obj.getPosition(timeProp, 'ECI')';
 
-% Convert necessary information to a nice matrix to work with
-for i = 1:numSats
-    % Create rotation matrix to covert to an 'ECEF' frame at the instant
-    % the plot is called
-    rotMat = [cos((time - obj(i).TOA)*sgtOmega), -sin((time - obj(i).TOA)*sgtOmega), 0;...
-        sin((time - obj(i).TOA)*sgtOmega), cos((time - obj(i).TOA)*sgtOmega), 0;...
-        0, 0, 1];
-    
-    % Get satellite orbits
-    satOrbit(:,:,i) = [satPositions(:,i).ECI]'*rotMat;
-end
+% Output satOrbit matrix
+satOrbit = reshape([satPositions.ECI], [3, length(timeProp), numSats]);
+% 
+% % Convert necessary information to a nice matrix to work with
+% for i = 1:numSats
+%     omegakDot = obj(i).RateOfRightAscension - sgtOmega;
+%     
+%     % Create rotation matrix to covert to an 'ECEF' frame at the instant
+%     % the plot is called
+%     rotMat = [cos((time - obj(i).TOA)*omegakDot), -sin((time - obj(i).TOA)*omegakDot), 0;...
+%         sin((time - obj(i).TOA)*omegakDot), cos((time - obj(i).TOA)*omegakDot), 0;...
+%         0, 0, 1];
+%     
+%     % Get satellite orbits
+%     satOrbit(:,:,i) = rotMat*[satPositions(:,i).ECI];
 % end
 
 

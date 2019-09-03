@@ -1,4 +1,4 @@
-function [xx,yy,zz] = earth_sphere(varargin)
+function [xx,yy,zz] = earth_sphere(rotMat, varargin)
 %EARTH_SPHERE Generate an earth-sized sphere.
 %   [X,Y,Z] = EARTH_SPHERE(N) generates three (N+1)-by-(N+1)
 %   matrices so that SURFACE(X,Y,Z) produces a sphere equal to 
@@ -103,6 +103,16 @@ if nargout == 0
     props.EdgeColor = 'none';
     props.FaceLighting = 'phong';
     props.Cdata = topo2;
+    
+    %%% SGT Code %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    % Rotate Earth for plotting purposes (matches up ECI vectors with ECEF)
+    vecSize = length(x);
+    earthPointsECEF = [x(:), y(:), z(:)]';
+    earthPointsECI = rotMat*earthPointsECEF;
+    x = reshape(earthPointsECI(1,:), [vecSize, vecSize]);
+    y = reshape(earthPointsECI(2,:), [vecSize, vecSize]);
+    z = reshape(earthPointsECI(3,:), [vecSize, vecSize]);
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
     % Create the sphere with Earth topography and adjust colormap
     surface(x,y,z,props,'parent',cax)
