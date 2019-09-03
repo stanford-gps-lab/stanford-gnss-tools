@@ -12,7 +12,7 @@ function satellitePosition = getPosition(obj, time, frame)
 %   positions defined as SatellitePosition. Each satellite at each time
 %   contains an array which will be [X; Y; Z] for 'ECEF' and
 %   [Latitude; Longitude; Altitude] for 'LLH'.
-%   Current frames supported are: 'ECEF', 'LLH'
+%   Current frames supported are: 'ECEF', 'LLH', 'ECI'
 %
 % See also: sgt.SatellitePosition
 
@@ -46,7 +46,7 @@ T = length(time);
 
 % extract and expand satellite properties that will be needed
 sqrt_a = [obj(:).SqrtA]';
-axis = repmat(sqrt_a.^2, 1, T);
+semiMajorAxis = repmat(sqrt_a.^2, 1, T);
 toa = repmat([obj(:).TOA]', 1, T);
 eccentricity = repmat([obj(:).Eccentricity]', 1, T);
 meanAnomaly = repmat([obj(:).MeanAnomaly]', 1, T);
@@ -63,10 +63,11 @@ time = repmat(time, S, 1);
 %
 
 % Compute mean motion
-n0 = sqrt(CONST_MU_E ./ axis.^3);  % dim: SxT
+n0 = sqrt(CONST_MU_E ./ semiMajorAxis.^3);  % dim: SxT
 
 % Modification (for ICD-100)
 Tk = time - toa;  % dim: SxT
+% Deal with week crossovers
 Tk = mod(Tk,604800);
 if Tk>302400
     Tk = Tk - 604800;
@@ -75,16 +76,17 @@ end
 % Compute mean anomaly
 Mk = meanAnomaly + n0.*Tk;  % dim: SxT
 
-% Compute eccentric anomaly
+% Compute eccentric anomaly using Newton's method
 E0 = Mk + 100;  % dim: SxT
 Ek = Mk;
 i = 1;
-while (abs(Ek-E0) > 1e-12) & (i < 250)
+while all(all((abs(Ek-E0) > 1e-12))) && (i < 250)
     E0 = Ek;
-    Ek = Mk + eccentricity.*sin(E0);
+    Ek = E0 - (E0 - eccentricity.*sin(E0) - Mk)./(1 - eccentricity.*cos(E0));
     i = i + 1;
 end
 
+% Compute once
 cosEk = cos(Ek);
 sinEk = sin(Ek);
 
@@ -92,39 +94,59 @@ sinEk = sin(Ek);
 % Ek_dot = n0./c1;
 
 % Compute true anomaly
+c1 = 1 - eccentricity.*cosEk;
 c2 = sqrt(1 - eccentricity.^2);
-vk = atan2(c2.*sinEk, cosEk-eccentricity);  % dim: SxT
+vk = atan2(c2.*sinEk./c1, cosEk-eccentricity./c1)  % dim: SxT
 % vk_dot = Ek_dot.*c2./c1;
 
-% Compute argument of latitude
-phik = vk + argumentOfPerigee;  % dim: SxT
-
-% Compute corrected argument of latitude
-uk = phik;  % dim: SxT
-% uk_dot = vk_dot;
-
-% Compute corrected radius
-rk = axis.*(1 - eccentricity.*cosEk);  % dim: SxT
-% rk_dot = axis.*eccen.*Ek_dot.*sin_Ek;
-
-% Compute corrected inclination
-ik = inclination;  % dim: SxT
-
-cosuk = cos(uk);
-sinuk = sin(uk);
-
-% Compute position in orbital plane
-xkOrbital = rk.*cosuk;  % dim: SxT
-% xxk_dot = rk_dot.*cos_uk - uk_dot.*rk.*sin_uk;
-
-ykOrbital = rk.*sinuk;  % dim: SxT
-% yyk_dot = rk_dot.*sin_uk + uk_dot.*rk.*cos_uk;
-
-% Compute corrected longitude of ascending node
-Omegakdot = rora - CONST_OMEGA_E;
+% Process for different frames
 if (strcmpi('eci', frame))
-    Omegak = raan - CONST_OMEGA_E * mod(toa, 604800);
+    rk = semiMajorAxis.*(1 - eccentricity.^2)./(1 + eccentricity.*cos(vk));
+    
+    xkOrbital = rk.*cos(vk);
+    ykOrbital = rk.*sin(vk);
+    
+    % build the position matrix to output the data
+    pos = zeros(S, 3, T);
+    
+    % populate the X, Y, Z information to create the Sx3xT matrix needed for
+    % the SatellitePosition constructor
+    pos(:,1,:) = xkOrbital.*(cos(raan).*cos(argumentOfPerigee) - sin(raan).*sin(argumentOfPerigee).*cos(inclination))...
+        + ykOrbital.*(-cos(raan).*sin(argumentOfPerigee) - sin(raan).*cos(argumentOfPerigee).*cos(inclination));
+    pos(:,2,:) = xkOrbital.*(sin(raan).*cos(argumentOfPerigee) + cos(raan).*sin(argumentOfPerigee).*cos(inclination))...
+        + ykOrbital.*(-sin(raan).*sin(argumentOfPerigee) + cos(raan).*cos(argumentOfPerigee).*cos(inclination));
+    pos(:,3,:) = xkOrbital.*sin(argumentOfPerigee).*sin(inclination) + ykOrbital.*cos(argumentOfPerigee).*sin(inclination);
+    
+    satellitePosition = sgt.SatellitePosition(obj, time(1,:), lower(frame), squeeze(pos));
+    return;
 else
+    % Compute argument of latitude
+    phik = vk + argumentOfPerigee;  % dim: SxT
+    
+    % Compute corrected argument of latitude (Corrections to be optional later)
+    uk = phik;  % dim: SxT
+    % uk_dot = vk_dot;
+    
+    % Compute corrected radius
+    rk = semiMajorAxis.*(1 - eccentricity.*cosEk);  % dim: SxT
+    % rk_dot = axis.*eccen.*Ek_dot.*sin_Ek;
+    
+    % Compute corrected inclination
+    ik = inclination;  % dim: SxT
+    
+    cosuk = cos(uk);
+    sinuk = sin(uk);
+    
+    % Compute position in orbital plane
+    xkOrbital = rk.*cosuk;  % dim: SxT
+    % xxk_dot = rk_dot.*cos_uk - uk_dot.*rk.*sin_uk;
+    
+    ykOrbital = rk.*sinuk;  % dim: SxT
+    % yyk_dot = rk_dot.*sin_uk + uk_dot.*rk.*cos_uk;
+    
+    % Compute corrected longitude of ascending node
+    Omegakdot = rora - CONST_OMEGA_E;
+    
     Omegak = raan + Omegakdot.*Tk - CONST_OMEGA_E * mod(toa, 604800);
 end
 
@@ -138,9 +160,9 @@ pos = zeros(S, 3, T);
 
 % populate the X, Y, Z information to create the Sx3xT matrix needed for
 % the SatellitePosition constructor
-pos(:,1,:) = xkOrbital.*cosOmegak - ykOrbital.*cosik.*sinOmegak;
-pos(:,2,:) = xkOrbital.*sinOmegak + ykOrbital.*cosik.*cosOmegak;
-pos(:,3,:) = ykOrbital.*sinik;
+pos(:,1,:) = xkOrbital.*cos(Omegak); - ykOrbital.*cos(ik).*sin(Omegak);
+pos(:,2,:) = xkOrbital.*sin(Omegak) + ykOrbital.*cos(ik).*cos(Omegak);
+pos(:,3,:) = ykOrbital.*sin(ik);
 
 % create the satellite position matrix
 % NOTE: need to squeeze the posecef matrix to remove any singleton
