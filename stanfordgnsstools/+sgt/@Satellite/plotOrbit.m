@@ -39,6 +39,9 @@ res = parseInput(varargin{:});
 % Propagate satellite orbits for plotting purposes
 satOrbit = propagateOrbit(obj);
 
+% Get current satellite positions in ECI
+satellitePositionECI = obj.getPosition(time, 'eci');
+
 % Plot satellite orbits with satellite at position at time 'time'
 figure; hold on;
 for i = 1:numSats
@@ -49,9 +52,9 @@ for i = 1:numSats
     colorNum = get(h, 'color');
     
     % Get satellite positions
-    satPosition = obj(i).getPosition(time, 'eci');
-    plot3(satPosition.ECI(1), satPosition.ECI(2), satPosition.ECI(3), '.', 'MarkerSize', 15,  'color', colorNum)
+    plot3(satellitePositionECI(i).ECI(1), satellitePositionECI(i).ECI(2), satellitePositionECI(i).ECI(3), '.', 'MarkerSize', 15,  'color', colorNum)
 end
+
 % Get rotation matrix for plotearth
 temp1 = obj(1).getPosition(time, 'ecef');
 temp1 = temp1.ECEF./norm(temp1.ECEF);
@@ -61,22 +64,40 @@ zRotFn = @(angle) [cos(angle) -sin(angle) 0; sin(angle) cos(angle) 0; 0 0 1];
 costFn = @(x) sum((temp1 - zRotFn(x)*temp2).^2);
 [zRotAngle, ~] = fminsearch(costFn, 1);
 rotMat = zRotFn(zRotAngle);
+
+% Plot earth
 sgt.plotearth.earth_sphere(rotMat, 'm')
 
 % Plot varargin variables
 if (~isempty(res.UserGrid))
     % Plot user locations on map
-    plot3(res.UserGrid.GridPositionECEF(:,1), res.UserGrid.GridPositionECEF(:,2), res.UserGrid.GridPositionECEF(:,3), 'r.', 'MarkerSize', 10)
+    user = res.UserGrid.Users;
+    gridPositionsECI = rotMat*res.UserGrid.GridPositionECEF';
+    plot3(gridPositionsECI(1,:), gridPositionsECI(2,:), gridPositionsECI(3,:), 'r.', 'MarkerSize', 10)
 end
 if (~isempty(res.PolygonFile))
     polygonLLH = load(res.PolygonFile);
     polygonECEF = sgt.tools.llh2ecef([polygonLLH(:,1),...
         polygonLLH(:,2), 2e5*ones(length(polygonLLH),1)]);
-    fill3(polygonECEF(:,1), polygonECEF(:,2), polygonECEF(:,3), 'c', 'FaceAlpha', 0.5)
+    poloygonECI = rotMat*polygonECEF';
+    fill3(poloygonECI(1,:), poloygonECI(2,:), poloygonECI(3,:), 'c', 'FaceAlpha', 0.5)
     
     inBound = [res.UserGrid.Users(:).InBound];
     if (sum(inBound) > 0)
         plot3(res.UserGrid.GridPositionECEF(inBound,1), res.UserGrid.GridPositionECEF(inBound,2), res.UserGrid.GridPositionECEF(inBound,3), 'b.', 'MarkerSize', 10)
+    end
+end
+if (~isempty(res)) && (isfield(res, 'LOS')) && (~isempty(res.UserGrid))
+    satellitePositionECEF = obj.getPosition(time, 'ecef');
+    for i = 1:length(user)
+       userObservation = sgt.UserObservation(user(i), satellitePositionECEF);
+       for j = 1:length(satellitePositionECEF)
+           if userObservation.SatellitesInViewMask(j)
+               line([gridPositionsECI(1,i), satellitePositionECI(j).ECI(1)],...
+                   [gridPositionsECI(2,i), satellitePositionECI(j).ECI(2)],...
+                   [gridPositionsECI(3,i), satellitePositionECI(j).ECI(3)])
+           end
+       end
     end
 end
 

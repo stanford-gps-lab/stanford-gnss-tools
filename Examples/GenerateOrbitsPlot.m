@@ -12,6 +12,8 @@ clear; close all; clc;
 %% Set Parameters
 almanac = 'current.alm';    % Yuma File
 time = 0;     % [s]
+posLLH = [0 0 0];
+userGrid = sgt.UserGrid(posLLH);
 
 % %% Test
 % % alm = [1, 0.8, 0, 30*pi/180, 0, sqrt(8e6), 50*pi/180, 20*pi/180, 30*pi/180, 0, 0];
@@ -24,8 +26,8 @@ time = 0;     % [s]
 satellite = sgt.Satellite.fromYuma(almanac);
 
 %% Plot Orbits
-satellite.plotOrbit(time);
+satellite.plotOrbit(time, 'UserGrid', userGrid, 'LOS', true);
 % set(gca,'Color','k')
 
-time2 = 86400/2;
-satellite.plotOrbit(time2);
+% time2 = 86400/2;
+% satellite.plotOrbit(time2, 'UserGrid', userGrid);
