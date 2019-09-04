@@ -12,7 +12,7 @@ clear; close all; clc;
 %% Set Parameters
 posLLH = [37.427127, -122.173243, 17];  % [deg deg m] Stanford GPS Lab location
 almanac = 'forGNSS2019.alm';    % Yuma File
-time = 327720;     % [s]
+time = 327900 - 43200:10:327900 + 43200;     % [s]
 
 %% Build User Grid
 user = sgt.User(posLLH);
@@ -26,5 +26,23 @@ satellitePosition = satellite.getPosition(time);
 %% Calculate User Observations
 userObservation = sgt.UserObservation(user, satellitePosition);
 
-%% Plot Skyplot
-userObservation.plotSkyPlot;
+%% Animate Orbits
+F = satellite.animateOrbit(time, 'User', user, 'LOS', true);
+
+%% Movie time
+fig = figure;
+movie(fig, F)
+
+%% Write video
+v = VideoWriter('MyMovie4.avi');
+v.Quality = 95;
+v.FrameRate = 120;
+open(v);
+for i = 1:length(F)
+    i
+   writeVideo(v, F(i)); 
+end
+close(v);
+
+% time2 = 86400/2;
+% satellite.plotOrbit(time2, 'UserGrid', userGrid);

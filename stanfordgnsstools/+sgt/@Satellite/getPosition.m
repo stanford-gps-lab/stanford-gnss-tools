@@ -154,7 +154,7 @@ else
     
     % populate the X, Y, Z information to create the Sx3xT matrix needed for
     % the SatellitePosition constructor
-    pos(:,1,:) = xkOrbital.*cos(Omegak); - ykOrbital.*cos(ik).*sin(Omegak);
+    pos(:,1,:) = xkOrbital.*cos(Omegak) - ykOrbital.*cos(ik).*sin(Omegak);
     pos(:,2,:) = xkOrbital.*sin(Omegak) + ykOrbital.*cos(ik).*cos(Omegak);
     pos(:,3,:) = ykOrbital.*sin(ik);
     

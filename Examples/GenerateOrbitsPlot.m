@@ -10,29 +10,21 @@
 clear; close all; clc;
 
 %% Set Parameters
-almanac = 'current.alm';    % Yuma File
-time =17000:100:20000;     % [s]
-filename = 'myVideo';
-posLLH = [0 0 0];
-userGrid = sgt.UserGrid(posLLH);
-% time = 0;
+posLLH = [37.427127, -122.173243, 17];  % [deg deg m] Stanford GPS Lab location
+almanac = 'forGNSS2019.alm';    % Yuma File
+time = 327720;     % [s]
 
-% %% Test
-% % alm = [1, 0.8, 0, 30*pi/180, 0, sqrt(8e6), 50*pi/180, 20*pi/180, 30*pi/180, 0, 0];
-% satellite = sgt.Satellite.fromYuma(almanac);
-% satellite = satellite(1);
-% satPos = satellite.getPosition(time, 'ECI');
-% satPos.ECI
+%% Build User Grid
+user = sgt.User(posLLH);
 
 %% Build Satellite Constellation
 satellite = sgt.Satellite.fromYuma(almanac);
 
-%% Plot Orbits
-F = satellite.animateOrbit(time, 'UserGrid', userGrid, 'LOS', true);
+%% Calculate Satellite Positions
+satellitePosition = satellite.getPosition(time);
 
-%% Movie time
-fig = figure;
-movie(fig, F)
+%% Calculate User Observations
+userObservation = sgt.UserObservation(user, satellitePosition);
 
-% time2 = 86400/2;
-% satellite.plotOrbit(time2, 'UserGrid', userGrid);
+%% Plot Orbits with User Position
+satellite.plotOrbit(time, 'User', user, 'LOS', true)

@@ -57,25 +57,27 @@ for i = 1:numSats
 end
 
 % Get rotation matrix for plotearth
-% temp1 = obj(1).getPosition(time, 'ecef');
-% temp1 = temp1.ECEF./norm(temp1.ECEF);
-% temp2 = obj(1).getPosition(time, 'eci');
-% temp2 = temp2.ECI./norm(temp2.ECI);
 zRotFn = @(angle) [cos(angle) -sin(angle) 0; sin(angle) cos(angle) 0; 0 0 1];
-% costFn = @(x) sum((temp1 - zRotFn(x)*temp2).^2);
-% [zRotAngle, derp] = fminsearch(costFn, 1)
-% rotMat = zRotFn(-zRotAngle);
 zRotAngle = sgt.constants.EarthConstants.omega*time;
 rotMat = zRotFn(zRotAngle);
 
 % Plot earth
 sgt.plotearth.earth_sphere(zRotAngle, 'm')
+set(gca, 'Color', 'k')
+axLim = 4e7;
+axis([-axLim axLim -axLim axLim -axLim axLim])
 
 % Plot varargin variables
 if (~isempty(res.UserGrid))
     % Plot user locations on map
     user = res.UserGrid.Users;
     gridPositionsECI = rotMat*res.UserGrid.GridPositionECEF';
+    plot3(gridPositionsECI(1,:), gridPositionsECI(2,:), gridPositionsECI(3,:), 'r.', 'MarkerSize', 10)
+end
+if (~isempty(res.User))
+    % Plot user locations on map
+    user = res.User;
+    gridPositionsECI = rotMat*user.PositionECEF;
     plot3(gridPositionsECI(1,:), gridPositionsECI(2,:), gridPositionsECI(3,:), 'r.', 'MarkerSize', 10)
 end
 if (~isempty(res.PolygonFile))
@@ -90,7 +92,7 @@ if (~isempty(res.PolygonFile))
         plot3(res.UserGrid.GridPositionECEF(inBound,1), res.UserGrid.GridPositionECEF(inBound,2), res.UserGrid.GridPositionECEF(inBound,3), 'b.', 'MarkerSize', 10)
     end
 end
-if (~isempty(res)) && (isfield(res, 'LOS')) && (~isempty(res.UserGrid))
+if (~isempty(res)) && (isfield(res, 'LOS')) && ((~isempty(res.UserGrid)) || (~isempty(res.User)))
     satellitePositionECEF = obj.getPosition(time, 'ecef');
     for i = 1:length(user)
        userObservation = sgt.UserObservation(user(i), satellitePositionECEF);
@@ -119,6 +121,10 @@ parser.addParameter('PolygonFile', [], validPolygonFileFn)
 % UserGrid
 validUserGridFn = @(x) (isa(x, 'sgt.UserGrid'));
 parser.addParameter('UserGrid', [], validUserGridFn)
+
+% User
+validUserFn = @(x) (isa(x, 'sgt.User'));
+parser.addParameter('User', [], validUserFn)
 
 % LOS
 validLOSFn = @(x) (islogical(x));
@@ -158,20 +164,4 @@ satPositions = obj.getPosition(timeProp, 'ECI')';
 
 % Output satOrbit matrix
 satOrbit = reshape([satPositions.ECI], [3, length(timeProp), numSats]);
-% 
-% % Convert necessary information to a nice matrix to work with
-% for i = 1:numSats
-%     omegakDot = obj(i).RateOfRightAscension - sgtOmega;
-%     
-%     % Create rotation matrix to covert to an 'ECEF' frame at the instant
-%     % the plot is called
-%     rotMat = [cos((time - obj(i).TOA)*omegakDot), -sin((time - obj(i).TOA)*omegakDot), 0;...
-%         sin((time - obj(i).TOA)*omegakDot), cos((time - obj(i).TOA)*omegakDot), 0;...
-%         0, 0, 1];
-%     
-%     % Get satellite orbits
-%     satOrbit(:,:,i) = rotMat*[satPositions(:,i).ECI];
-% end
-
-
 end
