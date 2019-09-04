@@ -9,6 +9,8 @@
 %   https://github.com/stanford-gps-lab/stanford-gnss-tools
 clear; close all; clc;
 
+% Test note: TOW:231840
+
 %% Set Parameters
 posLLH = [37.427127, -122.173243, 17];  % [deg deg m] Stanford GPS Lab location
 almanac = 'current.alm';    % Yuma File
