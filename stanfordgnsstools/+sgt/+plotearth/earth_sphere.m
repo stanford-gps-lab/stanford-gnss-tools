@@ -105,15 +105,15 @@ if nargout == 0
     props.Cdata = topo2;
     
     %%% SGT Code %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    % Rotate Earth for plotting purposes (matches up ECI vectors with ECEF)
-    zRotFn = @(angle) [cos(angle) -sin(angle) 0; sin(angle) cos(angle) 0; 0 0 1];
-    rotMat = zRotFn(zRotAngle);
-    vecSize = length(x);
-    earthPointsECEF = [x(:), y(:), z(:)]';
-    earthPointsECI = rotMat*earthPointsECEF;
-    x = reshape(earthPointsECI(1,:), [vecSize, vecSize]);
-    y = reshape(earthPointsECI(2,:), [vecSize, vecSize]);
-    z = reshape(earthPointsECI(3,:), [vecSize, vecSize]);
+%     % Rotate Earth for plotting purposes (matches up ECI vectors with ECEF)
+%     zRotFn = @(angle) [cos(angle) -sin(angle) 0; sin(angle) cos(angle) 0; 0 0 1];
+%     rotMat = zRotFn(zRotAngle);
+%     vecSize = length(x);
+%     earthPointsECEF = [x(:), y(:), z(:)]';
+%     earthPointsECI = rotMat*earthPointsECEF;
+%     x = reshape(earthPointsECI(1,:), [vecSize, vecSize]);
+%     y = reshape(earthPointsECI(2,:), [vecSize, vecSize]);
+%     z = reshape(earthPointsECI(3,:), [vecSize, vecSize]);
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
     % Create the sphere with Earth topography and adjust colormap
@@ -131,11 +131,11 @@ if nargout == 0
     xlabel(['X [' units ']'])
     ylabel(['Y [' units ']'])
     zlabel(['Z [' units ']'])
-    %     view(127.5,30)
+        view(127.5,30)
     %%% SGT CODE %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     %     az = zRotAngle*180/pi + 90;
     %     view(az, 45)
-    view(-122.173243, 30);
+%     view(-122.173243, 30);
     
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 else
