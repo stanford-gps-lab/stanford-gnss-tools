@@ -1,4 +1,4 @@
-function satellitePosition = getPosition(obj, time, frame)
+function satellitePosition = getPosition(obj, time, frame, geo)
 % getPosition   get the SatellitePosition of the satellite for a given time
 %   compute the SatellitePosition of the satellite from the alamanac data
 %   that defines the orbit of the satellite for a given time or a set of
@@ -25,6 +25,11 @@ function satellitePosition = getPosition(obj, time, frame)
 % Set frame if frame not specified
 if nargin < 3
     frame = 'ECEF';
+end
+
+% Set geo flag if not specified
+if nargin < 4
+    geo = false;
 end
 
 % Get constants needed
@@ -77,13 +82,17 @@ end
 Mk = meanAnomaly + n0.*Tk;  % dim: SxT
 
 % Compute eccentric anomaly
-E0 = Mk + 100;  % dim: SxT
-Ek = Mk;
-i = 1;
-while all(all((abs(Ek-E0) > 1e-12))) && (i < 250)
-    E0 = Ek;
-    Ek=Mk + eccentricity.*sin(E0);
-    i = i + 1;
+if geo
+    Ek = Mk;
+else
+    E0 = Mk + 100;  % dim: SxT
+    Ek = Mk;
+    i = 1;
+    while all(all((abs(Ek-E0) > 1e-12))) && (i < 250)
+        E0 = Ek;
+        Ek=Mk + eccentricity.*sin(E0);
+        i = i + 1;
+    end
 end
 
 % Compute once

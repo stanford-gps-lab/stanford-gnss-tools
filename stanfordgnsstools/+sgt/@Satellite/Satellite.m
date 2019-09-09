@@ -143,7 +143,7 @@ classdef Satellite < matlab.mixin.Copyable
     
     % Public Methods
     methods
-        satellitePosition = getPosition(obj, time, frame)
+        satellitePosition = getPosition(obj, time, frame, geo)
         plotOrbit(obj, time, varargin)
         F = animateOrbit(obj, time, varargin)
     end
@@ -152,7 +152,8 @@ classdef Satellite < matlab.mixin.Copyable
     methods (Static)
         obj = fromAlmMatrix(alm, varargin)
         obj = fromYuma(filename)
-        satelliteObject = getSatelliteObject(allSatelliteObjects, satellitePRN);
+        obj = getSatelliteObject(allSatelliteObjects, satellitePRN);
+        obj = fromGEO(prn, longitude, af0, af1, constellation)
     end
     
     % Protected Methods
