@@ -12,7 +12,7 @@ clear; close all; clc;
 %% Set Parameters
 posLLH = [37.427127, -122.173243, 17];  % [deg deg m] Stanford GPS Lab location
 almanac = 'forGNSS2019.alm';    % Yuma File
-time = 327900 - 43200:10:327900 + 43200;     % [s]
+time = 327900 - 43200:100:327900 + 43200;     % [s]
 
 %% Build User Grid
 user = sgt.User(posLLH);
@@ -36,7 +36,7 @@ movie(fig, F)
 %% Write video
 v = VideoWriter('MyMovie4.avi');
 v.Quality = 95;
-v.FrameRate = 120;
+v.FrameRate = 30;
 open(v);
 for i = 1:length(F)
     i
