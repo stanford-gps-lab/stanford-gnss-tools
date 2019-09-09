@@ -76,13 +76,13 @@ end
 % Compute mean anomaly
 Mk = meanAnomaly + n0.*Tk;  % dim: SxT
 
-% Compute eccentric anomaly using Newton's method
+% Compute eccentric anomaly
 E0 = Mk + 100;  % dim: SxT
 Ek = Mk;
 i = 1;
 while all(all((abs(Ek-E0) > 1e-12))) && (i < 250)
     E0 = Ek;
-    Ek = E0 - (E0 - eccentricity.*sin(E0) - Mk)./(1 - eccentricity.*cos(E0));
+    Ek=Mk + eccentricity.*sin(E0);
     i = i + 1;
 end
 
@@ -95,7 +95,7 @@ sinEk = sin(Ek);
 % Compute true anomaly
 c1 = 1 - eccentricity.*cosEk;
 c2 = sqrt(1 - eccentricity.^2);
-vk = atan2(c2.*sinEk./c1, cosEk-eccentricity./c1);  % dim: SxT
+vk = atan2(c2.*sinEk, cosEk-eccentricity);  % dim: SxT
 % vk_dot = Ek_dot.*c2./c1;
 
 % Process for different frames
