@@ -78,13 +78,7 @@ classdef UserObservation < matlab.mixin.Copyable
             % NOTE: satPos is a SatellitePosition object which will return
             % a 1xT array of observations
             [~, T] = size(satellitePosition);
-            
-            % Set properties
-            [obj.UserID] = deal(user.ID);
-            [obj.SatellitePRN] = deal([satellitePosition(:,1).SatellitePRN]);
-            [obj.ElevationMask] = deal(user.ElevationMask);
-            [obj.UserLL] = deal(user.PositionLLH(1:2));
-            
+
             for i = 1:T
                 obj(i).t = satellitePosition(1,i).t;    % Can't preallocate if subclasses are to be made from this class
                 
@@ -92,6 +86,12 @@ classdef UserObservation < matlab.mixin.Copyable
                 % function of the user and the satellite positions
                 obj(i).calculateObservationData(user, satellitePosition(:,i));
             end
+            
+            % Set properties
+            [obj.UserID] = deal(user.ID);
+            [obj.SatellitePRN] = deal([satellitePosition(:,1).SatellitePRN]);
+            [obj.ElevationMask] = deal(user.ElevationMask);
+            [obj.UserLL] = deal(user.PositionLLH(1:2));
         end
     end
     
