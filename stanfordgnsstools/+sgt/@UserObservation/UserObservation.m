@@ -89,7 +89,7 @@ classdef UserObservation < matlab.mixin.Copyable
             
             % Set properties
             [obj.UserID] = deal(user.ID);
-            [obj.SatellitePRN] = deal([satellitePosition(:,1).SatellitePRN]);
+            [obj.SatellitePRN] = deal([satellitePosition(:,1).SatellitePRN]');
             [obj.ElevationMask] = deal(user.ElevationMask);
             [obj.UserLL] = deal(user.PositionLLH(1:2));
         end
