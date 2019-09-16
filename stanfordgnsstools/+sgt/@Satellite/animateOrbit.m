@@ -10,7 +10,7 @@ if (length(time) == 1)
 end
 
 % Plot Orbits and add to animation
-movFigure = figure;
+figure('units','normalized','outerposition',[0 0 1 1]);
 F(length(time)) = struct('cdata',[],'colormap',[]);
 for i = 1:length(time)
     cla reset;

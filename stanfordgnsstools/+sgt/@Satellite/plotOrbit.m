@@ -45,14 +45,13 @@ satellitePositionECI = obj.getPosition(time, 'eci');
 % Plot satellite orbits with satellite at position at time 'time'
 hold on; colorNum = NaN(numSats, 3);
 for i = 1:numSats
-    % Plot orbits
-%     h = plot3(satOrbit(1,:,i), satOrbit(2,:,i), satOrbit(3,:,i));
-    
-    % Consistent colors between orbits and satellite positions
+%     Plot orbits
+%     h = plot3(satOrbit(1,:,i), satOrbit(2,:,i), satOrbit(3,:,i), 'b', 'linewidth', 0.001);
+%     Consistent colors between orbits and satellite positions
 %     colorNum(i,:) = get(h, 'color');
     
     % Get satellite positions
-    h = plot3(satellitePositionECI(i).ECI(1), satellitePositionECI(i).ECI(2), satellitePositionECI(i).ECI(3), '.', 'MarkerSize', 15);%,  'color', colorNum(i,:))
+    h = plot3(satellitePositionECI(i).ECI(1), satellitePositionECI(i).ECI(2), satellitePositionECI(i).ECI(3), 'b.', 'MarkerSize', 10);%, 'color', colorNum(i,:))
     colorNum(i,:) = get(h, 'color');
 end
 
@@ -64,8 +63,13 @@ rotMat = zRotFn(zRotAngle);
 % Plot earth
 sgt.plotearth.earth_sphere(zRotAngle, 'm')
 set(gca, 'Color', 'k')
-axLim = 4e7;
-axis([-axLim axLim -axLim axLim -axLim axLim])
+% axLim = 4e7;
+% axis([-axLim axLim -axLim axLim -axLim axLim])
+temp1 = min([satellitePositionECI.ECI],[],2);
+temp2 = max([satellitePositionECI.ECI],[],2);
+xlim([temp1(1), temp2(1)])
+ylim([temp1(2), temp2(2)])
+zlim([temp1(3), temp2(3)])
 
 % Plot varargin variables
 if (~isempty(res.UserGrid))

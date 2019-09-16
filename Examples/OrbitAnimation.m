@@ -12,13 +12,23 @@ clear; close all; clc;
 %% Set Parameters
 posLLH = [37.427127, -122.173243, 17];  % [deg deg m] Stanford GPS Lab location
 almanac = 'forGNSS2019.alm';    % Yuma File
-time = 327900 - 43200:100:327900 + 43200;     % [s]
+time = 327900 - 43200:10:327900 + 43200;     % [s]
+time = time(1:end-2);
+time = time(1:1000);
 
 %% Build User Grid
 user = sgt.User(posLLH);
 
 %% Build Satellite Constellation
-satellite = sgt.Satellite.fromYuma(almanac);
+% satellite = sgt.Satellite.fromYuma(almanac);
+pppSatellite = pppanal.constbuilders.createWalkerConstellation(1000*1000, 200);
+satellite(length(pppSatellite)) = sgt.Satellite;
+for i = 1:length(pppSatellite)
+   satellite(i) = sgt.Satellite(pppSatellite(i).PRN, pppSatellite(i).Eccentricity,...
+       pppSatellite(i).TOA, pppSatellite(i).Inclination, pppSatellite(i).RateOfRightAscension,...
+       pppSatellite(i).SqrtA, pppSatellite(i).RightAscension, pppSatellite(i).ArgumentOfPerigee,...
+       pppSatellite(i).MeanAnomaly, pppSatellite(i).AF0, pppSatellite(i).AF1);
+end
 
 %% Calculate Satellite Positions
 satellitePosition = satellite.getPosition(time);
@@ -30,11 +40,11 @@ userObservation = sgt.UserObservation(user, satellitePosition);
 F = satellite.animateOrbit(time, 'User', user, 'LOS', true);
 
 %% Movie time
-fig = figure;
-movie(fig, F)
+% fig = figure;
+% movie(fig, F)
 
 %% Write video
-v = VideoWriter('MyMovie4.avi');
+v = VideoWriter('MyMovie8.avi');
 v.Quality = 95;
 v.FrameRate = 30;
 open(v);
