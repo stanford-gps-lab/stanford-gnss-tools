@@ -13,7 +13,9 @@ classdef EarthConstants
 		mu = 3.986005e14;      	% Gravitational Parameter (mu = G*M_earth) [m^3/s^2]
 		omega = 7.2921151467e-5; 	% mean angular velocity [rad/s]
 		J_2 = 1.0826300e-3;        	% second zonal harmonic [-]
-		E2 = 0.006694385000;      	% eccentricity^ 2[-]
+        e = 0.0818191908425;    % eccentricity
+% 		E2 = 0.006694385000;      	% eccentricity^ 2[-]
+        e2 = 0.0818191908425^2;     % eccentricity^2
         f = 1.0/298.257223563;      % f - Earth's flattening constant
 
         SiderealDay = 2*pi / sgt.constants.EarthConstants.omega;   % sidereal day in [seconds]
