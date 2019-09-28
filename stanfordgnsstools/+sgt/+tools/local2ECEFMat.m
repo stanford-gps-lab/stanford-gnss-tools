@@ -1,6 +1,6 @@
 function rotMat = local2ECEFMat(latb, lonb)
 % This function creates a rotation matrix that converts vectors in the
-% local frame into vectors in the ECEF frame. latb and lonb are the
+% local frame (NED) into vectors in the ECEF frame. latb and lonb are the
 % geodetic latitude [deg] and longitude [deg], respectively. This function
 % references eq. 2.150 in Groves 2nd ed.
 

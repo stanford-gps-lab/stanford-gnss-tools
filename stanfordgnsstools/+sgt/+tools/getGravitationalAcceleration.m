@@ -3,11 +3,63 @@ function grav = getGravitationalAcceleration(posECEF)
 % ECEF frame. grav is returned as a vector in the ECEF frame. This function
 % references eq 2.138 in Groves 2nd ed.
 
-% Convert geodetic latitude, longitude, and height to geodetic
+% Convert posECEF to vertical vector
+[a, b] = size(posECEF);
+if b > a
+   posECEF = posECEF'; 
+end
+
+% Convert geocentric latitude, longitude, and height to geodetic
 [latb, hb] = sgt.tools.getGeodeticLatitudeAndHeight(posECEF);
 lonb = atan2(posECEF(2), posECEF(1));
 
 % Calculate the gravitation acceleration in the ECEF frame.
-grav = ((sgt.tools.getGeocentricSurfaceRadius(latb)^2)/...
-    ((sgt.tools.getGeocentricSurfaceRadius(latb) + hb)^2))*...
-    sgt.tools.getEllipsoidGravitationalAcceleration(latb, lonb);
+grav = ((getGeocentricSurfaceRadius(latb)^2)/...
+    ((getGeocentricSurfaceRadius(latb) + hb)^2))*...
+    getEllipsoidGravitationalAcceleration(latb, lonb, posECEF);
+end
+
+function reSe = getGeocentricSurfaceRadius(latb)
+% This function gets the geocentric radius at the surface of the earth
+% according to equation 2.137 in Groves 2nd edition. lat is the geodetic
+% latitude input in [deg].
+reSe = getRE(latb)*sqrt((cos(latb*pi/180)^2) + ((1 - sgt.constants.EarthConstants.e2)^2)*(sin(latb*pi/180)^2));
+end
+
+function RE = getRE(lat)
+% This function gets the transverse radius of curviture as it relates to
+% the geodetic latitude. (Not sure if its geocentric or geodetic). lat is 
+% input in degrees. Eq 2.106 in Groves 2nd edition
+RE = sgt.constants.EarthConstants.R/sqrt(1 - sgt.constants.EarthConstants.e2*(sin(lat*pi/180)^2));
+end
+
+function gravEllipsoid = getEllipsoidGravitationalAcceleration(latb, lonb, posECEF)
+% This function finds the gravitation acceleration on the surface of an
+% ellipsoid given the geodetic latitude. gravEllipsoid is given in the ECEF
+% frame. This function references equation 2.132 in Groves 2nd ed.
+
+% Get rotation matrix from local to ECEF frame
+Cne = sgt.tools.local2ECEFMat(latb, lonb);
+
+% Get gravity at ellipsoid in the ECEF frame
+g0e = getGravityEllipsoid(latb)*Cne*[0;0;1];
+
+% Get skew symmetric earth rotation in the ECEF frame
+Omegaiee = sgt.tools.vec2skewSym([0, 0, sgt.constants.EarthConstants.omega]);
+
+% Vector to the surface of the Earth under the body
+rSeVec = getGeocentricSurfaceRadius(latb)*posECEF/norm(posECEF);
+
+% Calculate gravitational acceleration at the ellipsoid
+gravEllipsoid = g0e + Omegaiee*Omegaiee*rSeVec;
+end
+
+function g0 = getGravityEllipsoid(latb)
+% This function fetches g0 with respect to the earth using the equation
+% specified in the WGS84 datum (eq 2.134 from Groves). lat is the
+% geodetic latitude and is input in [deg]. This does not take into
+% account centripital accleration.
+% getEllipsoidGravitationalAcceleration accounts for centripetal
+% acceleration.
+g0 = 9.7803253359*(1 + 0.001931853*(sin(latb*pi/180)^2))/(sqrt(1 - sgt.constants.EarthConstants.e2*(sin(latb*pi/180)^2)));
+end
