@@ -14,23 +14,9 @@ end
 lonb = atan2(posECEF(2), posECEF(1));
 
 % Calculate the gravitation acceleration in the ECEF frame.
-grav = ((getGeocentricSurfaceRadius(latb)^2)/...
-    ((getGeocentricSurfaceRadius(latb) + hb)^2))*...
+grav = ((sgt.tools.getGeocentricSurfaceRadius(latb)^2)/...
+    ((sgt.tools.getGeocentricSurfaceRadius(latb) + hb)^2))*...
     getEllipsoidGravitationalAcceleration(latb, lonb, posECEF);
-end
-
-function reSe = getGeocentricSurfaceRadius(latb)
-% This function gets the geocentric radius at the surface of the earth
-% according to equation 2.137 in Groves 2nd edition. lat is the geodetic
-% latitude input in [deg].
-reSe = getRE(latb)*sqrt((cos(latb*pi/180)^2) + ((1 - sgt.constants.EarthConstants.e2)^2)*(sin(latb*pi/180)^2));
-end
-
-function RE = getRE(lat)
-% This function gets the transverse radius of curviture as it relates to
-% the geodetic latitude. (Not sure if its geocentric or geodetic). lat is 
-% input in degrees. Eq 2.106 in Groves 2nd edition
-RE = sgt.constants.EarthConstants.R/sqrt(1 - sgt.constants.EarthConstants.e2*(sin(lat*pi/180)^2));
 end
 
 function gravEllipsoid = getEllipsoidGravitationalAcceleration(latb, lonb, posECEF)
@@ -48,7 +34,7 @@ g0e = getGravityEllipsoid(latb)*Cne*[0;0;1];
 Omegaiee = sgt.tools.vec2skewSym([0, 0, sgt.constants.EarthConstants.omega]);
 
 % Vector to the surface of the Earth under the body
-rSeVec = getGeocentricSurfaceRadius(latb)*posECEF/norm(posECEF);
+rSeVec = sgt.tools.getGeocentricSurfaceRadius(latb)*posECEF/norm(posECEF);
 
 % Calculate gravitational acceleration at the ellipsoid
 gravEllipsoid = g0e + Omegaiee*Omegaiee*rSeVec;
