@@ -11,7 +11,7 @@ end
 
 % Convert geocentric latitude, longitude, and height to geodetic
 [latb, hb] = sgt.tools.getGeodeticLatitudeAndHeight(posECEF);
-lonb = atan2(posECEF(2), posECEF(1));
+lonb = atan2(posECEF(2), posECEF(1))*180/pi;
 
 % Calculate the gravitation acceleration in the ECEF frame.
 grav = ((sgt.tools.getGeocentricSurfaceRadius(latb)^2)/...
