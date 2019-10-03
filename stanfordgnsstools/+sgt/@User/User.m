@@ -40,6 +40,10 @@ classdef User < matlab.mixin.Copyable
         % users are defined by an Nx3 matrix.
         PositionECEF
         
+        % VelocityECEF - ECEF velocity of the user [m/s]. N users are
+        % defined by an Nx3 matrix.
+        VelocityECEF
+        
         % ECEF2ENU - the rotation matrix from ECEF to ENU for this user
         ECEF2ENU
         
@@ -64,6 +68,7 @@ classdef User < matlab.mixin.Copyable
                 obj.ID = 1;
                 obj.PositionLLH = [37.427127, -122.173243, 17]';     % Stanford GPS Lab Location
                 obj.PositionECEF = [sgt.tools.llh2ecef(obj.PositionLLH')]';
+                obj.VelocityECEF = [0, 0, 0]';
                 obj.ECEF2ENU = sgt.tools.ecef2enu(obj.PositionLLH);
                 return;
             end
@@ -123,6 +128,13 @@ classdef User < matlab.mixin.Copyable
                 elMask = obj(1).ElevationMask * ones(Nusers, 1);
             end
             
+            % Velocity ECEF
+            if (exist('res', 'var') == 1) && isfield(res, 'VelocityECEF') && ~isempty(res.VelocityECEF)
+                velECEF = res.VelocityECEF;
+            else
+                velECEF = zeros(Nusers, 3);
+            end
+            
             % create the user object for each site
             % Note: obj cannot be preallocated if sgt.User is to be used to
             % create future subclasses.
@@ -132,6 +144,7 @@ classdef User < matlab.mixin.Copyable
                 obj(i).ID = ids(i);
                 obj(i).PositionLLH = posLLH(i,:)';
                 obj(i).PositionECEF = posECEF(i,:)';
+                obj(i).VelocityECEF = velECEF(i,:)';
                 obj(i).InBound = inBnds(i);
                 obj(i).ElevationMask = elMask(i);
                 
@@ -164,6 +177,10 @@ parser.addParameter('PolygonFile', [], validPolygonFileFn);
 % ElevationMask
 validElevationMaskFn = @(x) (isnumeric(x)) & all((abs(x) < 90*pi/180));
 parser.addParameter('ElevationMask', 5*pi/180, validElevationMaskFn);
+
+% Velocity
+validVelocityECEFFn = @(x) (isnumeric(x));
+parser.addParameter('VelocityECEF', [0 0 0], validVelocityECEFFn);
 
 % Varargins that may be passed through UserGrid
 parser.addParameter('GridName', []);

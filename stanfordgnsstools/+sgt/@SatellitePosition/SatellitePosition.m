@@ -8,7 +8,7 @@ classdef SatellitePosition < matlab.mixin.Copyable
     %   'llh' or 'ecef') with the position given by pos. The constructor
     %   will automatically compute the other position type so that the
     %   resulting SatellitePosition contains both types of positions. For a
-    %   single satellite, time and pos, the result is a single 
+    %   single satellite, time and pos, the result is a single
     %   SatellitePosition. If satellite is an array of S satellite and time
     %   is a scalar, position must be an Sx3 matrix of the position of each
     %   S satellites at the given time and the output will be a Sx1 array.
@@ -47,11 +47,14 @@ classdef SatellitePosition < matlab.mixin.Copyable
         
         % ECI - the ECI position of the sat at the given time
         ECI
+        
+        % VelECEF - Velocity in ECEF
+        VelECEF
     end
     
     % Constructor
     methods
-        function obj = SatellitePosition(satellite, time, posType, pos)
+        function obj = SatellitePosition(satellite, time, posType, pos, vel)
             % allow for an empty constructor for list generation
             if nargin == 0
                 return;
@@ -76,6 +79,10 @@ classdef SatellitePosition < matlab.mixin.Copyable
             % easier later
             pos3D = zeros(S, 3, T);
             pos3D(1:S, 1:3, 1:T) = pos;
+            if (nargin > 4)
+                vel3D = zeros(S, 3, T);
+                vel3D(1:S, 1:3, 1:T) = vel;
+            end
             
             % need to convert the data from one frame to the other
             switch lower(posType)
@@ -98,6 +105,7 @@ classdef SatellitePosition < matlab.mixin.Copyable
                     
                 case 'ecef'
                     posECEF = pos3D;
+                    velECEF = vel3D;
                     
                     % do some permutation and reshaping to be able to
                     % compute everything at once and then undo those
@@ -128,9 +136,10 @@ classdef SatellitePosition < matlab.mixin.Copyable
                     obj(s,t).t = time(t);
                     obj(s,t).LLH = posLLH(s,:,t)';
                     obj(s,t).ECEF = posECEF(s,:,t)';
+                    obj(s,t).VelECEF = velECEF(s,:,t)';
                     obj(s,t).ECI = posECI(s,:,t)';
                 end
             end
         end
-    end    
+    end
 end

@@ -61,9 +61,12 @@ classdef UserObservation < matlab.mixin.Copyable
         % NumSatellitesInView - the number of satellites in view
         NumSatellitesInView
         
-        % Range - the range to each of the satellites in view as a column
-        % vector of length Sinview
+        % Range - [m] the range to each of the satellites in view as a 
+        % column vector of length Sinview
         Range
+        
+        % RangeRate - [m/s] rangerate to each satellite
+        RangeRate
     end
     
     % Constructor

@@ -99,13 +99,14 @@ end
 cosEk = cos(Ek);
 sinEk = sin(Ek);
 
-% Ek_dot = n0./c1;
-
 % Compute true anomaly
 c1 = 1 - eccentricity.*cosEk;
 c2 = sqrt(1 - eccentricity.^2);
 vk = atan2(c2.*sinEk, cosEk-eccentricity);  % dim: SxT
-% vk_dot = Ek_dot.*c2./c1;
+
+% Compute velocity terms
+Ek_dot = n0./c1;
+vk_dot = Ek_dot.*c2./c1;
 
 % Process for different frames
 if (strcmpi('eci', frame))
@@ -134,11 +135,11 @@ else
     
     % Compute corrected argument of latitude (Corrections to be optional later)
     uk = phik;  % dim: SxT
-    % uk_dot = vk_dot;
+    uk_dot = vk_dot;
     
     % Compute corrected radius
     rk = semiMajorAxis.*(1 - eccentricity.*cosEk);  % dim: SxT
-    % rk_dot = axis.*eccen.*Ek_dot.*sin_Ek;
+    rk_dot = semiMajorAxis.*eccentricity.*Ek_dot.*sinEk;
     
     % Compute corrected inclination
     ik = inclination;  % dim: SxT
@@ -148,10 +149,10 @@ else
     
     % Compute position in orbital plane
     xkOrbital = rk.*cosuk;  % dim: SxT
-    % xxk_dot = rk_dot.*cos_uk - uk_dot.*rk.*sin_uk;
+    xxk_dot = rk_dot.*cosuk - uk_dot.*rk.*sinuk;
     
     ykOrbital = rk.*sinuk;  % dim: SxT
-    % yyk_dot = rk_dot.*sin_uk + uk_dot.*rk.*cos_uk;
+    yyk_dot = rk_dot.*sinuk + uk_dot.*rk.*cosuk;
     
     % Compute corrected longitude of ascending node
     Omegakdot = rora - CONST_OMEGA_E;
@@ -160,6 +161,7 @@ else
     
     % build the position matrix to output the data
     pos = zeros(S, 3, T);
+    vel = pos;
     
     % populate the X, Y, Z information to create the Sx3xT matrix needed for
     % the SatellitePosition constructor
@@ -167,11 +169,17 @@ else
     pos(:,2,:) = xkOrbital.*sin(Omegak) + ykOrbital.*cos(ik).*cos(Omegak);
     pos(:,3,:) = ykOrbital.*sin(ik);
     
+    vel(:,1,:) = xxk_dot.*cos(Omegak) - Omegakdot.*xkOrbital.*sin(Omegak) - ...
+        yyk_dot.*cos(ik).*sin(Omegak) - Omegakdot.*ykOrbital.*cos(ik).*cos(Omegak);
+    vel(:,2,:) = xxk_dot.*sin(Omegak) + Omegakdot.*xkOrbital.*cos(Omegak) + ...
+        yyk_dot.*cos(ik).*cos(Omegak) - Omegakdot.*ykOrbital.*cos(ik).*sin(Omegak);
+    vel(:,3,:) = yyk_dot.*sin(ik);
+    
     % create the satellite position matrix
     % NOTE: need to squeeze the posecef matrix to remove any singleton
     % dimensions since that's how the constructor for SatellitePosition is
     % built
-    satellitePosition = sgt.SatellitePosition(obj, time(1,:), lower(frame), squeeze(pos));
+    satellitePosition = sgt.SatellitePosition(obj, time(1,:), lower(frame), squeeze(pos), squeeze(vel));
     return;
     
 end

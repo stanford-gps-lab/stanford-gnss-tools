@@ -18,17 +18,20 @@ function [] = calculateObservationData(obj, user, satellitePosition)
 
 % get the number of satellites and their positions
 [S, ~] = size(satellitePosition);
+satelliteVelocity = [satellitePosition.VelECEF];
 satellitePosition = [satellitePosition.ECEF];
 
 %
 % calculate the ECEF LOS
 %
 
-% compute the range to the sallites
+% compute the range and range rate to the sallites
 losecef = satellitePosition - repmat(user.PositionECEF, 1, S);
+velecef = satelliteVelocity - repmat(user.VelocityECEF, 1, S);
 
 % normalize by magnitude
 r = vecnorm(losecef);
+rangeRate = vecnorm(velecef);
 losecef = losecef ./ repmat(r, 3, 1);
 obj.LOSecef = losecef';
 
@@ -60,3 +63,4 @@ obj.AzimuthAngles = atan2(losenu(1,:)', losenu(2,:)');
 % compute the range to the satellites in view
 %
 obj.Range = r';
+obj.RangeRate = rangeRate';
