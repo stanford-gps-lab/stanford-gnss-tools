@@ -188,7 +188,6 @@ parser.addParameter('GridName', []);
 % Run parser and set results
 parser.parse(varargin{:})
 res = parser.Results;
-
 end
 
 % Check inputs
