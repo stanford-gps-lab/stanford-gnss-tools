@@ -7,6 +7,12 @@ function varargout = getGeodeticLatitudeAndHeight(posECEF)
 % if nargout == 1: varargout = geodeticLatitude
 % if nargout == 2: varargout = [geodeticLatitude, geodeticHeight]
 
+% Copyright 2019 Stanford University GPS Laboratory
+%   This file is part of the Stanford GNSS Tools which is released
+%   under the MIT License. See `LICENSE.txt` for full license details.
+%   Questions and comments should be directed to the project at:
+%   https://github.com/stanford-gps-lab/stanford-gnss-tools
+
 % C.18
 Betaebe = sqrt(posECEF(1)^2 + posECEF(2)^2);
 

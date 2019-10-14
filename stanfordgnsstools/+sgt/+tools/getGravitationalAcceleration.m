@@ -3,6 +3,12 @@ function grav = getGravitationalAcceleration(posECEF)
 % ECEF frame. grav is returned as a vector in the ECEF frame. This function
 % references eq 2.138 in Groves 2nd ed.
 
+% Copyright 2019 Stanford University GPS Laboratory
+%   This file is part of the Stanford GNSS Tools which is released
+%   under the MIT License. See `LICENSE.txt` for full license details.
+%   Questions and comments should be directed to the project at:
+%   https://github.com/stanford-gps-lab/stanford-gnss-tools
+
 % Convert posECEF to vertical vector
 [a, b] = size(posECEF);
 if b > a
