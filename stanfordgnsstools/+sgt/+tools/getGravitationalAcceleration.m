@@ -53,5 +53,5 @@ function g0 = getGravityEllipsoid(latb)
 % account centripital accleration.
 % getEllipsoidGravitationalAcceleration accounts for centripetal
 % acceleration.
-g0 = 9.7803253359*(1 + 0.001931853*(sin(latb*pi/180)^2))/(sqrt(1 - sgt.constants.EarthConstants.e2*(sin(latb*pi/180)^2)));
+g0 = sgt.constants.EarthConstants.g0*(1 + 0.001931853*(sin(latb*pi/180)^2))/(sqrt(1 - sgt.constants.EarthConstants.e2*(sin(latb*pi/180)^2)));
 end

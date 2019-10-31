@@ -17,6 +17,7 @@ classdef EarthConstants
 % 		E2 = 0.006694385000;      	% eccentricity^ 2[-]
         e2 = 0.0818191908425^2;     % eccentricity^2
         f = 1.0/298.257223563;      % f - Earth's flattening constant
+        g0 = 9.7803253359;  % gravity acceleration at 0 latitude [m/s^2]
 
         SiderealDay = 2*pi / sgt.constants.EarthConstants.omega;   % sidereal day in [seconds]
 	end
