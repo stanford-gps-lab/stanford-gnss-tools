@@ -31,9 +31,9 @@ velecef = satelliteVelocity - repmat(user.VelocityECEF, 1, S);
 
 % normalize by magnitude
 r = vecnorm(losecef);
-rangeRate = vecnorm(velecef);
 losecef = losecef ./ repmat(r, 3, 1);
 obj.LOSecef = losecef';
+rangeRate = dot(velecef', losecef', 2);
 
 %
 % calculate the ENU LOS
@@ -63,4 +63,4 @@ obj.AzimuthAngles = atan2(losenu(1,:)', losenu(2,:)');
 % compute the range to the satellites in view
 %
 obj.Range = r';
-obj.RangeRate = rangeRate';
+obj.RangeRate = rangeRate;
