@@ -25,5 +25,4 @@ rotMat(2,1) = -sin(latbRad)*sin(lonbRad);
 rotMat(2,2) = cos(lonbRad);
 rotMat(2,3) = -cos(latbRad)*sin(lonbRad);
 rotMat(3,1) = cos(latbRad);
-rotMat(3,2) = 0;
 rotMat(3,3) = -sin(latbRad);
