@@ -25,3 +25,7 @@ if (quat(1) < 1e-3) % Not sure if 0.1 is the correct value to use here
     quat(3) = (rotMat(2,1) + rotMat(1,2))/(4*quat(2));
     quat(4) = (rotMat(3,1) + rotMat(1,3))/(4*quat(2));
 end
+
+% Normalize quaternion
+normQuat = norm(quat);
+quat = quat./normQuat;
