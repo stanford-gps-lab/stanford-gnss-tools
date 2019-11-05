@@ -13,5 +13,9 @@ classdef UniversalConstants
         
         % c - [m/s] speed of light as specified in IS-GPS-200H
         c = 2.99792458e8;
+        
+        % ft2m - Conversion factor multiplied with ft to convert to meters.
+        % Derived from 'distdim' MATLAB function.
+        ft2m = 0.304800609601219;
     end
 end
