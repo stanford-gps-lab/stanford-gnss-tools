@@ -1,6 +1,7 @@
 function quatOut = quatMult(quat1, quat2)
-% quatMult performs a quaternion multiplication using eq. E.15 from Groves
-% 2nd Ed. If quat1 and quat2 are of size 4xN, quatOut is of size 4xN.
+% quatOut = quatMult(quat1, quat2) performs a quaternion multiplication 
+% using eq. E.15 from Groves 2nd Ed. If quat1 and quat2 are of size 4xN,
+% quatOut is of size 4xN.
 
 % Copyright 2019 Stanford University GPS Laboratory
 %   This file is part of the Stanford GNSS Tools which is released
