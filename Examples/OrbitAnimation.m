@@ -20,15 +20,7 @@ time = time(1:1000);
 user = sgt.User(posLLH);
 
 %% Build Satellite Constellation
-% satellite = sgt.Satellite.fromYuma(almanac);
-pppSatellite = pppanal.constbuilders.createWalkerConstellation(1000*1000, 200);
-satellite(length(pppSatellite)) = sgt.Satellite;
-for i = 1:length(pppSatellite)
-   satellite(i) = sgt.Satellite(pppSatellite(i).PRN, pppSatellite(i).Eccentricity,...
-       pppSatellite(i).TOA, pppSatellite(i).Inclination, pppSatellite(i).RateOfRightAscension,...
-       pppSatellite(i).SqrtA, pppSatellite(i).RightAscension, pppSatellite(i).ArgumentOfPerigee,...
-       pppSatellite(i).MeanAnomaly, pppSatellite(i).AF0, pppSatellite(i).AF1);
-end
+satellite = sgt.Satellite.fromYuma(almanac);
 
 %% Calculate Satellite Positions
 satellitePosition = satellite.getPosition(time);

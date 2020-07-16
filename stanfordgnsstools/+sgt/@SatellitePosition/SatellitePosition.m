@@ -126,6 +126,7 @@ classdef SatellitePosition < matlab.mixin.Copyable
                     posECEF = NaN(r,c,d);
                     posLLH = NaN(r,c,d);
                     posECI = pos3D;
+                    % TODO: input velocity
                 otherwise
                     error('invalid position type');
             end
