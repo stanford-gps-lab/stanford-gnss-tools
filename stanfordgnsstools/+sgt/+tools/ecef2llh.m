@@ -59,7 +59,7 @@ h = p./cos(lat) - r_N;
 oldH = -1e-9; 		% the old height value
 num = z./p;			% atan2 numerator (constant for all iterations)
 
-while abs(h - oldH) > 1e-4
+while any(abs(h - oldH) > 1e-4)
     
     % save the old height
     oldH = h;
